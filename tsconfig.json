@@ -1,5 +1,4 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
@@ -11,10 +10,9 @@
     "strict": true,
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-   
-   /*  "paths": {
-      "nostr-web-components/*": ["./src/lib/*"]
-    } */
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "types": ["svelte"]
   },
-  "exclude": ["src/lib/index.ts"] // 除外対象
+  "exclude": ["src/lib/index.ts"]
 }
