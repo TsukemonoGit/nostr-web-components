@@ -23,8 +23,7 @@ jobs:
       # 追加: ビルド実行
       - run: npm run build
 
-      # 追加: 型定義ビルド（もし分けているなら適宜修正）
-      - run: npm run build:types
+  
 
       # ビルドが成功したら公開
       - run: npm publish --provenance --access public
