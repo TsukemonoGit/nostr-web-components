@@ -1,4 +1,4 @@
-<svelte:options customElement="nostr-container" />
+<svelte:options customElement={{ tag: 'nostr-container', shadow: 'none' }} />
 
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
@@ -71,6 +71,8 @@
 		}
 	});
 </script>
+
+svelte
 
 <div bind:this={containerEl}>
 	<slot />
