@@ -80,7 +80,7 @@
 				<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
 			{:else}{part.content}{/if}
 		{:else if part.type === 'url'}
-			<Link {themeClass} href={part.url}>{part.content}</Link>
+			<Link {themeClass} href={part.content}>{part.content}</Link>
 		{:else if part.type === TokenType.CUSTOM_EMOJI}
 			<CustomEmoji {part} />
 		{:else}<span class="break-words whitespace-pre-wrap" style="word-break: break-word;"
