@@ -12,12 +12,21 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      # Setup .npmrc file to publish to npm
+
       - uses: actions/setup-node@v4
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
+
       - run: npm ci
+
+      # 追加: ビルド実行
+      - run: npm run build
+
+      # 追加: 型定義ビルド（もし分けているなら適宜修正）
+      - run: npm run build:types
+
+      # ビルドが成功したら公開
       - run: npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
