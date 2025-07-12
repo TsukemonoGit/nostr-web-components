@@ -10,6 +10,10 @@
 		"preview": "vite preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
 	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/TsukemonoGit/nostr-web-components"
+	},
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
