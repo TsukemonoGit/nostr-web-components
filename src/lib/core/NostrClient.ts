@@ -20,7 +20,11 @@ export class NostrClient {
 		};
 		this.rxNostr = createRxNostr({ verifier, eoseTimeout: config.timeout || 5000 });
 		this.rxNostr.setDefaultRelays(this.config.relays || defaultRelays);
-		console.log(this.rxNostr.getDefaultRelays());
+		//	console.log(this.rxNostr.getDefaultRelays());
+
+		// this.rxNostr.createConnectionStateObservable().subscribe((packet) => {
+		// 	console.log(`${packet.from} の接続状況が ${packet.state} に変化しました。`);
+		// });
 	}
 
 	async fetchByFilters(
@@ -28,8 +32,13 @@ export class NostrClient {
 		relays?: string[],
 		expectSingle = false
 	): Promise<NostrEvent[]> {
+		const currentRelays = this.rxNostr.getDefaultRelays();
+
+		if (Object.keys(currentRelays).length === 0) {
+			this.rxNostr.setDefaultRelays(this.config.relays || defaultRelays);
+		}
 		const rxReq = createRxBackwardReq();
-		//console.log('fetch', filters, relays);
+		//console.log('fetch', filters, relays, this.rxNostr.getAllRelayStatus());
 		return new Promise(async (resolve, reject) => {
 			const events: NostrEvent[] = [];
 			const timeout = setTimeout(
@@ -38,10 +47,6 @@ export class NostrClient {
 				},
 				(this.config.timeout || 5000) + 5000
 			);
-
-			if (!this.rxNostr) {
-				await new Promise((resolve) => setTimeout(resolve, 1000));
-			}
 
 			const subscription = (
 				(relays || []).length > 0
@@ -80,6 +85,7 @@ export class NostrClient {
 	}
 	async fetchNote(noteId: string, relays?: string[]): Promise<NostrEvent | null> {
 		let actualNoteId = noteId;
+
 		try {
 			if (noteId.startsWith('nevent') || noteId.startsWith('note')) {
 				const decoded = nip19.decode(noteId);
@@ -96,7 +102,7 @@ export class NostrClient {
 		if (this.noteCache.has(actualNoteId)) {
 			return this.noteCache.get(actualNoteId)!;
 		}
-
+		console.log(actualNoteId, relays);
 		const results = await this.fetchByFilters([{ ids: [actualNoteId], limit: 1 }], relays, true);
 		const event = results[0] ?? null;
 

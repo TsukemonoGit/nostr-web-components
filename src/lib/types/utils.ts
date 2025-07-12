@@ -1,9 +1,6 @@
 import { type Event as NostrEvent } from 'nostr-typedef';
 import type { UserProfile } from 'nostr-web-components/types/index.js';
 // src/types/utils.ts
-export interface NostrTag {
-	[key: string]: string;
-}
 
 export interface ParsedContent {
 	text: string;

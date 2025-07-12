@@ -28,8 +28,6 @@
 	}
 
 	async function setupClient() {
-		if (!relaysArray || relaysArray.length === 0) return;
-
 		const currentClient = get(nostrClient);
 		if (currentClient) {
 			currentClient.disconnect();
@@ -53,12 +51,12 @@
 		}
 	}
 
-	$: if (relaysArray && relaysArray.length > 0) {
+	$: if (relaysArray) {
 		setupClient();
 	}
 
 	onMount(() => {
-		if (relaysArray && relaysArray.length > 0) {
+		if (relaysArray) {
 			setupClient();
 		}
 	});
@@ -71,8 +69,6 @@
 		}
 	});
 </script>
-
-svelte
 
 <div bind:this={containerEl}>
 	<slot />

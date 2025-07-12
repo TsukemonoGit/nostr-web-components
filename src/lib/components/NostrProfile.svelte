@@ -2,6 +2,7 @@
 <svelte:options customElement="nostr-profile" />
 
 <script lang="ts">
+	import { onMount, tick } from 'svelte';
 	import type { UserProfile } from 'nostr-web-components/types/index.ts';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
@@ -18,24 +19,39 @@
 	export let display: 'card' | 'compact' | 'name' = 'card';
 	export let className: string = '';
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
+
 	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
 	let loading = false;
 	let profile: UserProfile | null = null;
 	let error: string | null = null;
+	let mounted = false;
 
 	async function loadProfile() {
-		if (loading || !id) return;
+		if (loading || !id || !mounted) {
+			if (!id) {
+				error = 'Profile ID is required';
+			}
+			return;
+		}
 
 		loading = true;
 		error = null;
 
 		try {
 			const client = await ensureClient(relays);
+			if (!client) {
+				error = 'Nostr client not available';
+				loading = false;
+				return;
+			}
+
+			//	console.log('Loading profile for:', id);
 			profile = await client.fetchProfile(id, relays);
 			if (!profile) {
 				error = 'Profile not found';
 			}
+			//console.log('Profile loaded:', profile);
 		} catch (e: any) {
 			error = e.message || 'Error loading profile';
 		} finally {
@@ -43,76 +59,101 @@
 		}
 	}
 
-	$: if (id) loadProfile();
+	// カスタム要素のマウント処理
+	onMount(async () => {
+		// カスタム要素の場合、次のティックまで待機
+		await tick();
+		mounted = true;
+
+		// マウント後にIDが存在する場合はloadProfileを実行
+		if (id) {
+			loadProfile();
+		}
+	});
+
+	// IDが変更された場合の処理（マウント後のみ）
+	$: if (mounted && id) {
+		loadProfile();
+	}
 
 	// 動的URLを生成
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 </script>
 
-{className}
-{#if display === 'card'}
-	<ProfileLayout1
-		class={`${className}`}
-		{themeClass}
-		{noLink}
-		showPlaceholders={loading || !profile}
-	>
-		{#snippet link()}
-			<!-- svelte-ignore a11y_consider_explicit_label -->
-			<a
-				href={linkUrl}
-				{target}
-				referrerpolicy="no-referrer"
-				class="external-link"
-				title="Open in new tab"
-			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="24"
-					height="24"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="lucide lucide-external-link-icon lucide-external-link"
+<!-- デバッグ用表示
+{#if mounted}
+	<div style="font-size: 12px; color: #666; margin-bottom: 8px;">
+		ID: {id} | Loading: {loading} | Error: {error} | Profile: {profile ? 'loaded' : 'null'}
+	</div>
+{/if}
+ -->
+{#if mounted}
+	{#if display === 'card'}
+		<ProfileLayout1
+			class={`${className}`}
+			{themeClass}
+			{noLink}
+			showPlaceholders={loading || !profile}
+		>
+			{#snippet link()}
+				<!-- svelte-ignore a11y_consider_explicit_label -->
+				<a
+					href={linkUrl}
+					{target}
+					referrerpolicy="no-referrer"
+					class="external-link"
+					title="Open in new tab"
 				>
-					<path d="M15 3h6v6" />
-					<path d="M10 14 21 3" />
-					<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-				</svg>
-			</a>
-		{/snippet}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-external-link-icon lucide-external-link"
+					>
+						<path d="M15 3h6v6" />
+						<path d="M10 14 21 3" />
+						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+					</svg>
+				</a>
+			{/snippet}
 
-		{#snippet avatar()}
-			<UserAvatar src={profile?.picture} />
-		{/snippet}
+			{#snippet avatar()}
+				<UserAvatar src={profile?.picture} />
+			{/snippet}
 
-		{#snippet name()}
-			{#if profile?.name}
-				<span class="username">{profile.name}</span>
-			{/if}
-		{/snippet}
+			{#snippet name()}
+				{#if profile?.name}
+					<span class="username">{profile.name}</span>
+				{/if}
+			{/snippet}
 
-		{#snippet about()}
-			{#if profile}
-				<Content text={profile.about || ''} tags={profile.tags} />
-			{/if}
-		{/snippet}
+			{#snippet about()}
+				{#if profile}
+					<Content text={profile.about || ''} tags={profile.tags} />
+				{/if}
+			{/snippet}
 
-		{#snippet error()}
-			<span>Error: {error}</span>
-		{/snippet}
-	</ProfileLayout1>
-{:else if display === 'compact'}
-	<!---->
-{:else if noLink}
-	<span>@{profile?.name || profile?.display_name || 'Unknown User'}</span>
+			{#snippet error()}
+				<span>Error: {error}</span>
+			{/snippet}
+		</ProfileLayout1>
+	{:else if display === 'compact'}
+		<!---->
+	{:else if noLink}
+		<span>@{profile?.name || profile?.display_name || 'Unknown User'}</span>
+	{:else}
+		<Link {themeClass} href={linkUrl}
+			>@{profile?.name || profile?.display_name || 'Unknown User'}</Link
+		>
+	{/if}
 {:else}
-	<Link {themeClass} href={linkUrl}
-		>@{profile?.name || profile?.display_name || 'Unknown User'}</Link
-	>
+	<div>Initializing...</div>
 {/if}
 
 <style>

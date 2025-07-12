@@ -2,6 +2,7 @@
 <svelte:options customElement="nostr-note" />
 
 <script lang="ts">
+	import { onMount, tick } from 'svelte';
 	import 'nostr-web-components/style.css';
 	import type { NostrEvent } from 'nostr-tools';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
@@ -19,6 +20,7 @@
 	export let className: string = '';
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
 	export let height: string | undefined = undefined;
+
 	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
 	let loading = true;
@@ -26,10 +28,13 @@
 	let note: NostrEvent | null = null;
 	let metadata: { name?: string; picture?: string } | null = null;
 	let metadataLoading = false;
+	let mounted = false;
 
 	async function loadNote() {
-		if (!id) {
-			error = 'Note ID or nevent is required';
+		if (!id || !mounted) {
+			if (!id) {
+				error = 'Note ID or nevent is required';
+			}
 			loading = false;
 			return;
 		}
@@ -39,14 +44,16 @@
 		note = null;
 		metadata = null;
 
-		const client = await ensureClient(relays);
-		if (!client) {
-			error = 'Nostr client not available';
-			loading = false;
-			return;
-		}
-
 		try {
+			const client = await ensureClient(relays);
+			if (!client) {
+				error = 'Nostr client not available';
+				loading = false;
+				return;
+			}
+
+			//	console.log('Client ready:', client);
+
 			// 1. まずnoteを取得
 			const fetchedNote = await client.fetchNote(id, relays);
 			if (!fetchedNote) {
@@ -56,6 +63,7 @@
 				return;
 			}
 
+			//console.log('Note fetched:', fetchedNote);
 			note = fetchedNote;
 			loading = false;
 
@@ -85,65 +93,89 @@
 		}
 	}
 
-	$: if (id) {
+	// カスタム要素のマウント処理
+	onMount(async () => {
+		// カスタム要素の場合、次のティックまで待機
+		await tick();
+		mounted = true;
+
+		// マウント後にIDが存在する場合はloadNoteを実行
+		if (id) {
+			loadNote();
+		}
+	});
+
+	// IDが変更された場合の処理（マウント後のみ）
+	$: if (mounted && id) {
 		loadNote();
 	}
 
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 </script>
 
-<NoteLayout1 class={className} {themeClass} {noLink} {height} showPlaceholders={loading || !note}>
-	{#snippet link()}
-		<!-- svelte-ignore a11y_consider_explicit_label -->
-		<a
-			href={linkUrl}
-			{target}
-			referrerpolicy="no-referrer"
-			class="external-link"
-			title="Open in new tab"
-		>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				class="lucide lucide-external-link-icon lucide-external-link"
+<!-- デバッグ用表示
+{#if mounted}
+	<div style="font-size: 12px; color: #666; margin-bottom: 8px;">
+		ID: {id} | Loading: {loading} | Error: {error} | Note: {note ? 'loaded' : 'null'}
+	</div>
+{/if} -->
+
+{#if id && mounted}
+	<NoteLayout1 class={className} {themeClass} {noLink} {height} showPlaceholders={loading || !note}>
+		{#snippet link()}
+			<!-- svelte-ignore a11y_consider_explicit_label -->
+			<a
+				href={linkUrl}
+				{target}
+				referrerpolicy="no-referrer"
+				class="external-link"
+				title="Open in new tab"
 			>
-				<path d="M15 3h6v6" />
-				<path d="M10 14 21 3" />
-				<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-			</svg>
-		</a>
-	{/snippet}
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="24"
+					height="24"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-external-link-icon lucide-external-link"
+				>
+					<path d="M15 3h6v6" />
+					<path d="M10 14 21 3" />
+					<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+				</svg>
+			</a>
+		{/snippet}
 
-	{#snippet avatar()}
-		<UserAvatar src={metadata?.picture} />
-	{/snippet}
+		{#snippet avatar()}
+			<UserAvatar src={metadata?.picture} />
+		{/snippet}
 
-	{#snippet name()}
-		<NameDisplay name={metadata?.name} />
-	{/snippet}
+		{#snippet name()}
+			<NameDisplay name={metadata?.name} />
+		{/snippet}
 
-	{#snippet createdAt()}
-		{#if note}
-			<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span>
-		{/if}
-	{/snippet}
+		{#snippet createdAt()}
+			{#if note}
+				<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span>
+			{/if}
+		{/snippet}
 
-	{#snippet content()}
-		{#if note}<Content text={note.content} {themeClass} tags={note.tags} />
-		{/if}
-	{/snippet}
+		{#snippet content()}
+			{#if note}<Content text={note.content} {themeClass} tags={note.tags} />
+			{/if}
+		{/snippet}
 
-	{#snippet error()}
-		<span>Error: {error}</span>
-	{/snippet}
-</NoteLayout1>
+		{#snippet error()}
+			<span>Error: {error}</span>
+		{/snippet}
+	</NoteLayout1>
+{:else if !mounted}
+	<div>Initializing...</div>
+{/if}
 
 <style>
 	:host {
