@@ -65,7 +65,10 @@
 			</div>
 
 			{#if about || showPlaceholders}
-				<div class="profile-about" style={`max-height: ${height}; overflow-y: auto;`}>
+				<div
+					class="profile-about"
+					style={`${height ? `max-height: ${height}; overflow-y: auto;` : 'overflow-y:hidden'}`}
+				>
 					{#if about}
 						{@render about()}
 					{:else if showPlaceholders}

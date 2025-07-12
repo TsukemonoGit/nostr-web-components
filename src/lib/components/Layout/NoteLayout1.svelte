@@ -75,7 +75,7 @@
 
 				<div
 					class="note-body"
-					style={`${height ? `max-height: ${height}; overflow-y: auto;` : ''}`}
+					style={`${height ? `max-height: ${height}; overflow-y: auto;` : 'overflow-y:hidden'}`}
 				>
 					{#if content}
 						{@render content()}

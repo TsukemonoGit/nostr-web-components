@@ -1,16 +1,17 @@
-<!-- svelte-ignore options_missing_custom_element -->
-<svelte:options customElement="nostr-note" />
+<svelte:options customElement="nostr-note" accessors={true} />
 
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
 	import 'nostr-web-components/style.css';
 	import type { NostrEvent } from 'nostr-tools';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
+
 	import NoteLayout1 from './Layout/NoteLayout1.svelte';
 	import NameDisplay from './Layout/NameDisplay.svelte';
 	import UserAvatar from './Layout/UserAvatar.svelte';
 	import Content from './content/Content.svelte';
+
+	import { connected } from 'nostr-web-components/core/connected.js'; // initialize呼び出し用アクション
 
 	export let id: string = '';
 	export let relays: string[] = [];
@@ -21,24 +22,42 @@
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
 	export let height: string | undefined = undefined;
 
+	let themeClass = '';
 	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
-	let loading = true;
+	let loading = false;
 	let error: string | null = null;
 	let note: NostrEvent | null = null;
 	let metadata: { name?: string; picture?: string } | null = null;
 	let metadataLoading = false;
 	let mounted = false;
 
+	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
+
+	function initialize() {
+		console.log('[nostr-note] initialize called');
+		console.log('[nostr-note] id =', id);
+
+		if (mounted || !id) {
+			console.warn('[nostr-note] Skipping initialize: mounted =', mounted, ', id =', id);
+			return;
+		}
+		mounted = true;
+		loadNote();
+	}
+
+	$: if (mounted && id) {
+		console.log('[nostr-note] reactive loadNote() triggered by id =', id);
+		loadNote();
+	}
+
 	async function loadNote() {
-		if (!id || !mounted) {
-			if (!id) {
-				error = 'Note ID or nevent is required';
-			}
-			loading = false;
+		if (!id || loading) {
+			console.warn('[nostr-note] loadNote() skipped: loading =', loading, ', id =', id);
 			return;
 		}
 
+		console.log('[nostr-note] Loading note for id:', id);
 		loading = true;
 		error = null;
 		note = null;
@@ -46,81 +65,58 @@
 
 		try {
 			const client = await ensureClient(relays);
+			console.log('[nostr-note] Client obtained:', client);
+
 			if (!client) {
 				error = 'Nostr client not available';
-				loading = false;
+				console.error('[nostr-note] Client is null');
 				return;
 			}
 
-			//	console.log('Client ready:', client);
-
-			// 1. まずnoteを取得
 			const fetchedNote = await client.fetchNote(id, relays);
+			console.log('[nostr-note] Fetched note:', fetchedNote);
+
 			if (!fetchedNote) {
 				error = 'Note not found';
-				note = null;
-				loading = false;
 				return;
 			}
 
-			//console.log('Note fetched:', fetchedNote);
 			note = fetchedNote;
-			loading = false;
 
-			// 2. noteが取得できたら、metadataを非同期で取得
 			loadMetadata(fetchedNote.pubkey);
 		} catch (e: any) {
 			error = e.message || 'Error loading note';
-			note = null;
+			console.error('[nostr-note] Exception:', e);
+		} finally {
 			loading = false;
+			console.log('[nostr-note] loading complete');
 		}
 	}
 
 	async function loadMetadata(pubkey: string) {
+		console.log('[nostr-note] Fetching metadata for pubkey:', pubkey);
 		if (metadataLoading) return;
 		metadataLoading = true;
 
 		try {
 			const client = await ensureClient(relays);
-			if (!client) return;
+			if (!client) {
+				console.error('[nostr-note] Metadata client unavailable');
+				return;
+			}
 
-			// metadataを取得（kind 0イベント）
 			metadata = await client.fetchProfile(pubkey, relays);
+			console.log('[nostr-note] Metadata fetched:', metadata);
 		} catch (e) {
-			console.warn('Failed to load metadata:', e);
+			console.warn('[nostr-note] Failed to load metadata:', e);
 		} finally {
 			metadataLoading = false;
 		}
 	}
-
-	// カスタム要素のマウント処理
-	onMount(async () => {
-		// カスタム要素の場合、次のティックまで待機
-		await tick();
-		mounted = true;
-
-		// マウント後にIDが存在する場合はloadNoteを実行
-		if (id) {
-			loadNote();
-		}
-	});
-
-	// IDが変更された場合の処理（マウント後のみ）
-	$: if (mounted && id) {
-		loadNote();
-	}
-
-	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 </script>
 
-<!-- デバッグ用表示
-{#if mounted}
-	<div style="font-size: 12px; color: #666; margin-bottom: 8px;">
-		ID: {id} | Loading: {loading} | Error: {error} | Note: {note ? 'loaded' : 'null'}
-	</div>
-{/if} -->
-
-{#if id && mounted}
+<!-- Web Components として mount 時に initialize() を実行 -->
+<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
 	<NoteLayout1 class={className} {themeClass} {noLink} {height} showPlaceholders={loading || !note}>
 		{#snippet link()}
 			<!-- svelte-ignore a11y_consider_explicit_label -->
@@ -150,32 +146,18 @@
 			</a>
 		{/snippet}
 
-		{#snippet avatar()}
-			<UserAvatar src={metadata?.picture} />
-		{/snippet}
-
-		{#snippet name()}
-			<NameDisplay name={metadata?.name} />
-		{/snippet}
-
+		{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
+		{#snippet name()}<NameDisplay name={metadata?.name} />{/snippet}
 		{#snippet createdAt()}
-			{#if note}
-				<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span>
-			{/if}
+			{#if note}<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span
+				>{/if}
 		{/snippet}
-
 		{#snippet content()}
-			{#if note}<Content text={note.content} {themeClass} tags={note.tags} />
-			{/if}
+			{#if note}<Content text={note.content} {themeClass} tags={note.tags} />{/if}
 		{/snippet}
-
-		{#snippet error()}
-			<span>Error: {error}</span>
-		{/snippet}
+		{#snippet error()}<span>Error: {error}</span>{/snippet}
 	</NoteLayout1>
-{:else if !mounted}
-	<div>Initializing...</div>
-{/if}
+</div>
 
 <style>
 	:host {
@@ -188,14 +170,10 @@
 		--error-bg: #f8d7da;
 		--error-border: #f5c2c7;
 		--error-text: #842029;
-
-		/* 追加: リンクカラー */
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
 	}
-
-	.theme-dark,
-	:host(.dark) {
+	.theme-dark {
 		--bg-color: #1e1e1e;
 		--text-color: #ddd;
 		--border-color: #444;
@@ -205,14 +183,10 @@
 		--error-bg: #4b1c1f;
 		--error-border: #8a1f2e;
 		--error-text: #ffb3b3;
-
-		/* 追加: ダークテーマ用リンクカラー */
 		--link-color: #8ab4f8;
 		--link-hover-color: #a3d0ff;
 	}
-
-	:host(.theme-light),
-	:host(.light) {
+	.theme-light {
 		--bg-color: #fff;
 		--text-color: #222;
 		--border-color: #ddd;
@@ -222,32 +196,18 @@
 		--error-bg: #f8d7da;
 		--error-border: #f5c2c7;
 		--error-text: #842029;
-
-		/* ライトテーマ用リンクカラー */
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
 	}
-
 	.external-link {
-		width: 100%;
-		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0;
-		border: none;
-		background: transparent;
-		color: #007aff;
 		text-decoration: none;
-		cursor: pointer;
-	}
-	.external-link svg {
-		width: 20px;
-		height: 20px;
-		stroke-width: 2;
+		padding: 0;
+		color: var(--link-color);
 	}
 	.external-link:hover {
-		background-color: rgba(0, 0, 0, 0.05);
-		border-radius: 4px;
+		color: var(--link-hover-color);
 	}
 </style>

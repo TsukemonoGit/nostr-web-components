@@ -1,17 +1,17 @@
-<!-- svelte-ignore options_missing_custom_element -->
-<svelte:options customElement="nostr-profile" />
+<svelte:options customElement="nostr-profile" accessors={true} />
 
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
 	import type { UserProfile } from 'nostr-web-components/types/index.ts';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
+
 	import ProfileLayout1 from './Layout/ProfileLayout1.svelte';
 	import Content from './content/Content.svelte';
 	import Link from './content/Link.svelte';
 	import UserAvatar from './Layout/UserAvatar.svelte';
+	import { connected } from 'nostr-web-components/core/connected.js';
 
-	export let id: string = ''; // npub
+	export let id: string = '';
 	export let relays: string[] = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
@@ -20,74 +20,51 @@
 	export let className: string = '';
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
 
-	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
-
 	let loading = false;
 	let profile: UserProfile | null = null;
 	let error: string | null = null;
+
 	let mounted = false;
 
+	let themeClass = '';
+	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
+
+	// 接続時の初期化処理（onMountの代替）
+	function initialize() {
+		if (mounted || !id) return;
+		mounted = true;
+		loadProfile();
+	}
+
+	// IDが変化したときにも再読込
+	$: if (mounted && id) {
+		loadProfile();
+	}
+
 	async function loadProfile() {
-		if (loading || !id || !mounted) {
-			if (!id) {
-				error = 'Profile ID is required';
-			}
-			return;
-		}
+		if (loading || !id) return;
 
 		loading = true;
 		error = null;
 
 		try {
 			const client = await ensureClient(relays);
-			if (!client) {
-				error = 'Nostr client not available';
-				loading = false;
-				return;
-			}
-
-			//	console.log('Loading profile for:', id);
 			profile = await client.fetchProfile(id, relays);
 			if (!profile) {
 				error = 'Profile not found';
 			}
-			//console.log('Profile loaded:', profile);
 		} catch (e: any) {
-			error = e.message || 'Error loading profile';
+			error = e?.message || 'Error loading profile';
 		} finally {
 			loading = false;
 		}
 	}
 
-	// カスタム要素のマウント処理
-	onMount(async () => {
-		// カスタム要素の場合、次のティックまで待機
-		await tick();
-		mounted = true;
-
-		// マウント後にIDが存在する場合はloadProfileを実行
-		if (id) {
-			loadProfile();
-		}
-	});
-
-	// IDが変更された場合の処理（マウント後のみ）
-	$: if (mounted && id) {
-		loadProfile();
-	}
-
-	// 動的URLを生成
+	let linkUrl: string | null = null;
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 </script>
 
-<!-- デバッグ用表示
-{#if mounted}
-	<div style="font-size: 12px; color: #666; margin-bottom: 8px;">
-		ID: {id} | Loading: {loading} | Error: {error} | Profile: {profile ? 'loaded' : 'null'}
-	</div>
-{/if}
- -->
-{#if mounted}
+<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
 	{#if display === 'card'}
 		<ProfileLayout1
 			class={`${className}`}
@@ -152,9 +129,7 @@
 			>@{profile?.name || profile?.display_name || 'Unknown User'}</Link
 		>
 	{/if}
-{:else}
-	<div>Initializing...</div>
-{/if}
+</div>
 
 <style>
 	:host {
