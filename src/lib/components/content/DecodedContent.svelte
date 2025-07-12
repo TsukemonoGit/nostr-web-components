@@ -16,7 +16,10 @@
 
 <div class="inline overflow-hidden">
 	{#if decoded.type === 'npub' || decoded.type === 'nprofile'}
-		<nostr-profile id={decoded.type === 'npub' ? decoded.data : decoded.data.pubkey} {theme}
+		<nostr-profile
+			display="name"
+			id={decoded.type === 'npub' ? decoded.data : decoded.data.pubkey}
+			{theme}
 		></nostr-profile>
 	{:else if decoded.type === 'nevent' || decoded.type === 'note'}
 		<nostr-note id={decoded.type === 'note' ? decoded.data : decoded.data.author} {theme}

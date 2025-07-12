@@ -202,7 +202,6 @@
 	.events-container {
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
 	}
 
 	.event-item:last-child {

@@ -162,7 +162,7 @@
 		border: 1px solid var(--border-color);
 		border-radius: 6px;
 		padding: 12px;
-		margin: 10px 0;
+
 		background-color: var(--bg-color);
 		color: var(--text-color);
 		font-family: sans-serif;
