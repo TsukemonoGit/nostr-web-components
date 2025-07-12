@@ -15,7 +15,11 @@
     "types": ["svelte"],
     "declaration": true,
     "emitDeclarationOnly": true,
-    "outDir": "./dist/types"
+    "outDir": "./dist/types",
+    "baseUrl": ".",
+    "paths": {
+      "nostr-web-components/*": ["./src/lib/*"]
+    }
   },
   "include": [
     "src/lib/**/*"
