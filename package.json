@@ -4,8 +4,8 @@
 	"scripts": {
 		"prepare": "npm run build",
 		"dev": "vite",
+		"build": "vite build",
 		"build:types": "tsc --project tsconfig.json",
-		"build": "vite build && npm run build:types",
 		"build:pages": "tsc && vite build --mode pages",
 		"preview": "vite preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"

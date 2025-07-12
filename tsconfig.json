@@ -12,7 +12,19 @@
     "moduleResolution": "NodeNext",
     "target": "ES2022",
     "lib": ["ES2022", "DOM"],
-    "types": ["svelte"]
+    "types": ["svelte"],
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist/types"
   },
-  "exclude": ["src/lib/index.ts"]
+  "include": [
+    "src/lib/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "eslint.config.js",
+    "svelte.config.js",
+    "vite.config.js"
+  ]
 }
