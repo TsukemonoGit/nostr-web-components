@@ -9,6 +9,9 @@
 
 <style>
 	a {
+		white-space: pre-wrap;
+		word-break: normal;
+		word-break: break-word;
 		color: var(--link-color);
 		text-decoration: underline;
 	}

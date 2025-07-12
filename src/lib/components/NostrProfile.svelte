@@ -16,7 +16,7 @@
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
-	export let display: 'card' | 'compact' | 'name' = 'card';
+	export let display: 'card' /*  | 'compact' */ | 'name' = 'card';
 	export let className: string = '';
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
 
@@ -64,64 +64,66 @@
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 </script>
 
-<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
+<div use:connected={initialize} class=" {themeClass} {className}">
 	{#if display === 'card'}
-		<ProfileLayout1
-			class={`${className}`}
-			{themeClass}
-			{noLink}
-			showPlaceholders={loading || !profile}
-		>
-			{#snippet link()}
-				<!-- svelte-ignore a11y_consider_explicit_label -->
-				<a
-					href={linkUrl}
-					{target}
-					referrerpolicy="no-referrer"
-					class="external-link"
-					title="Open in new tab"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide lucide-external-link-icon lucide-external-link"
+		<div class="nostr-wrapper">
+			<ProfileLayout1
+				class={`${className}`}
+				{themeClass}
+				{noLink}
+				showPlaceholders={loading || !profile}
+			>
+				{#snippet link()}
+					<!-- svelte-ignore a11y_consider_explicit_label -->
+					<a
+						href={linkUrl}
+						{target}
+						referrerpolicy="no-referrer"
+						class="external-link"
+						title="Open in new tab"
 					>
-						<path d="M15 3h6v6" />
-						<path d="M10 14 21 3" />
-						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-					</svg>
-				</a>
-			{/snippet}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="lucide lucide-external-link-icon lucide-external-link"
+						>
+							<path d="M15 3h6v6" />
+							<path d="M10 14 21 3" />
+							<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+						</svg>
+					</a>
+				{/snippet}
 
-			{#snippet avatar()}
-				<UserAvatar src={profile?.picture} />
-			{/snippet}
+				{#snippet avatar()}
+					<UserAvatar src={profile?.picture} />
+				{/snippet}
 
-			{#snippet name()}
-				{#if profile?.name}
-					<span class="username">{profile.name}</span>
-				{/if}
-			{/snippet}
+				{#snippet name()}
+					{#if profile?.name}
+						<span class="username">{profile.name}</span>
+					{/if}
+				{/snippet}
 
-			{#snippet about()}
-				{#if profile}
-					<Content text={profile.about || ''} tags={profile.tags} />
-				{/if}
-			{/snippet}
+				{#snippet about()}
+					{#if profile}
+						<Content text={profile.about || ''} tags={profile.tags} />
+					{/if}
+				{/snippet}
 
-			{#snippet error()}
-				<span>Error: {error}</span>
-			{/snippet}
-		</ProfileLayout1>
-	{:else if display === 'compact'}
-		<!---->
+				{#snippet error()}
+					<span>Error: {error}</span>
+				{/snippet}
+			</ProfileLayout1>
+		</div>
+		<!--{:else if display === 'compact'}
+		-->
 	{:else if noLink}
 		<span>@{profile?.name || profile?.display_name || 'Unknown User'}</span>
 	{:else}
