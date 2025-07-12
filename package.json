@@ -27,8 +27,9 @@
 	"type": "module",
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"require": "./dist/index.js"
+			"import": "./dist/index.js",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
 		},
 		"./style.css": "./dist/nostr-web-components.css"
 	},
