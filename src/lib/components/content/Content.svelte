@@ -66,34 +66,20 @@
 	};
 </script>
 
-<div class="content">
-	{#each parts as part}{#if part.type === 'nip19'}{@const decoded = nip19Decode(
-				part.metadata!.plainNip19 as string
-			)}{decoded?.type}
-			{#if decoded}
-				<DecodedContent {decoded} {part} {theme} {themeClass} />
-			{:else}{part.content}{/if}
-		{:else if part.type === TokenType.LEGACY_REFERENCE && part.metadata && part.metadata.tagType && part.metadata.referenceId}
-			{@const decoded = arekore(
-				part.metadata.tagType as string,
-				part.metadata.referenceId as string
-			)}
-			{#if decoded}
-				<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
-			{:else}{part.content}{/if}
-		{:else if part.type === 'url'}
-			<Link {themeClass} href={part.content}>{part.content}</Link>
-		{:else if part.type === TokenType.CUSTOM_EMOJI}
-			<CustomEmoji {part} />
-		{:else}<span class="break-words whitespace-pre-wrap" style="word-break: break-word;"
-				>{part.content}</span
-			>{/if}{/each}
-</div>
-
-<style>
-	.content {
-		white-space: pre-wrap;
-		word-break: normal;
-		word-break: break-word;
-	}
-</style>
+{#each parts as part}{#if part.type === 'nip19'}{@const decoded = nip19Decode(
+			part.metadata!.plainNip19 as string
+		)}{#if decoded}
+			<DecodedContent {decoded} {part} {theme} {themeClass} />
+		{:else}{part.content}{/if}
+	{:else if part.type === TokenType.LEGACY_REFERENCE && part.metadata && part.metadata.tagType && part.metadata.referenceId}
+		{@const decoded = arekore(part.metadata.tagType as string, part.metadata.referenceId as string)}
+		{#if decoded}
+			<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
+		{:else}{part.content}{/if}
+	{:else if part.type === 'url'}
+		<Link {themeClass} href={part.content}>{part.content}</Link>
+	{:else if part.type === TokenType.CUSTOM_EMOJI}
+		<CustomEmoji {part} />
+	{:else}<span class="break-words whitespace-pre-wrap" style="word-break: break-word;"
+			>{part.content}</span
+		>{/if}{/each}

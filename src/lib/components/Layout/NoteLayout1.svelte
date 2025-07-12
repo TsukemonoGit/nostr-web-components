@@ -217,8 +217,8 @@
 
 	.note-body {
 		white-space: pre-wrap;
-		line-height: 1.4;
-		margin-top: 4px;
+		word-break: normal;
+		word-break: break-word;
 	}
 
 	.placeholder {

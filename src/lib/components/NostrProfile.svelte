@@ -64,7 +64,7 @@
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 </script>
 
-<div use:connected={initialize} class=" {themeClass} {className}">
+<div use:connected={initialize} class="profile {themeClass} {className}">
 	{#if display === 'card'}
 		<div class="nostr-wrapper">
 			<ProfileLayout1
@@ -126,8 +126,7 @@
 		-->
 	{:else if noLink}
 		<span>@{profile?.name || profile?.display_name || 'Unknown User'}</span>
-	{:else}
-		<Link {themeClass} href={linkUrl}
+	{:else}<Link {themeClass} href={linkUrl}
 			>@{profile?.name || profile?.display_name || 'Unknown User'}</Link
 		>
 	{/if}
@@ -214,5 +213,8 @@
 	.external-link:hover {
 		background-color: rgba(0, 0, 0, 0.05);
 		border-radius: 4px;
+	}
+	.profile {
+		width: fit-content;
 	}
 </style>
