@@ -10,8 +10,17 @@
 	export let relays: string[] = [];
 	export let className: string = '';
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
-	export let limit: number = 50;
-
+	export let limit: any = 50;
+	// 変換された数値を格納する変数
+	let parsedLimit = 50;
+	$: {
+		try {
+			const n = Number(limit);
+			parsedLimit = Number.isFinite(n) && n > 0 ? Math.floor(n) : 50;
+		} catch {
+			parsedLimit = 50;
+		}
+	}
 	let themeClass = '';
 	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
@@ -21,11 +30,11 @@
 	let mounted = false;
 
 	function initialize() {
-		console.log('[nostr-list] initialize called');
-		console.log('[nostr-list] filters =', filters);
+		//console.log('[nostr-list] initialize called');
+		//	console.log('[nostr-list] filters =', filters);
 
 		if (mounted) {
-			console.warn('[nostr-list] Skipping initialize: already mounted');
+			//	console.warn('[nostr-list] Skipping initialize: already mounted');
 			return;
 		}
 		mounted = true;
@@ -33,7 +42,7 @@
 	}
 
 	$: if (mounted && filters) {
-		console.log('[nostr-list] reactive loadEvents() triggered by filters =', filters);
+		//console.log('[nostr-list] reactive loadEvents() triggered by filters =', filters);
 		loadEvents();
 	}
 
@@ -62,7 +71,7 @@
 
 		try {
 			const client = await ensureClient(relays);
-			console.log('[nostr-list] Client obtained:', client);
+			//console.log('[nostr-list] Client obtained:', client);
 
 			if (!client) {
 				error = 'Nostr client not available';
@@ -73,24 +82,23 @@
 			// limitを各filterに適用
 			const limitedFilters = parsedFilters.map((filter) => ({
 				...filter,
-				limit: filter.limit || limit
+				limit: filter.limit || parsedLimit
 			}));
-
-			const fetchedEvents = await client.fetchByFilters(limitedFilters, relays);
-			console.log('[nostr-list] Fetched events:', fetchedEvents);
+			//console.log(limitedFilters);
+			const fetchedEvents = await client.fetchByFilters(limitedFilters, relays, false);
+			//	console.log('[nostr-list] Fetched events:', fetchedEvents);
 
 			if (!fetchedEvents) {
 				error = 'Failed to fetch events';
 				return;
 			}
 
-			// 重複を除去し、created_atで降順ソート
-			const uniqueEvents = fetchedEvents
-				.filter((event, index, self) => index === self.findIndex((e) => e.id === event.id))
-				.slice(0, limit);
-
-			events = uniqueEvents.sort((a, b) => b.created_at - a.created_at);
-			console.log('[nostr-list] Processed events:', events.length);
+			events = fetchedEvents.sort((a, b) => b.created_at - a.created_at);
+			//	console.log(limit);
+			if (parsedLimit > 0) {
+				events = events.slice(0, parsedLimit);
+			}
+			//console.log('[nostr-list] Processed events:', events.length);
 		} catch (e: any) {
 			error = e?.message || 'Failed to fetch events';
 			console.error('[nostr-list] Exception:', e);

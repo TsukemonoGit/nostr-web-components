@@ -35,8 +35,8 @@
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 
 	function initialize() {
-		console.log('[nostr-note] initialize called');
-		console.log('[nostr-note] id =', id);
+		//console.log('[nostr-note] initialize called');
+		//	console.log('[nostr-note] id =', id);
 
 		if (mounted || !id) {
 			console.warn('[nostr-note] Skipping initialize: mounted =', mounted, ', id =', id);
@@ -53,11 +53,11 @@
 
 	async function loadNote() {
 		if (!id || loading) {
-			console.warn('[nostr-note] loadNote() skipped: loading =', loading, ', id =', id);
+			//	console.warn('[nostr-note] loadNote() skipped: loading =', loading, ', id =', id);
 			return;
 		}
 
-		console.log('[nostr-note] Loading note for id:', id);
+		//console.log('[nostr-note] Loading note for id:', id);
 		loading = true;
 		error = null;
 		note = null;
@@ -65,7 +65,7 @@
 
 		try {
 			const client = await ensureClient(relays);
-			console.log('[nostr-note] Client obtained:', client);
+			//console.log('[nostr-note] Client obtained:', client);
 
 			if (!client) {
 				error = 'Nostr client not available';
@@ -117,7 +117,7 @@
 	$: replyUserList = note?.tags
 		?.filter((tag) => tag[0] === 'p' && typeof tag[1] === 'string')
 		?.map((tag) => tag[1]);
-	$: console.log(replyUserList);
+	//$: console.log(replyUserList);
 </script>
 
 <!-- Web Components として mount 時に initialize() を実行 -->
