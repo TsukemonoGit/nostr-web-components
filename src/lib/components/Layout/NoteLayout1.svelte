@@ -13,6 +13,7 @@
 		content?: Snippet;
 		error?: Snippet;
 		themeClass?: string;
+		height?: string | undefined;
 	}
 
 	let {
@@ -26,11 +27,11 @@
 		createdAt,
 		content,
 		error,
-		themeClass
+		themeClass,
+		height
 	}: Props = $props();
 </script>
 
-{className}
 {#if hasError}
 	<div class="note-error {className}">
 		{#if error}
@@ -72,7 +73,10 @@
 					</div>
 				</div>
 
-				<div class="note-body">
+				<div
+					class="note-body"
+					style={`${height ? `max-height: ${height}; overflow-y: auto;` : ''}`}
+				>
 					{#if content}
 						{@render content()}
 					{:else if showPlaceholders}

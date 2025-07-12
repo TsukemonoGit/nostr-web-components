@@ -1,5 +1,5 @@
 {
-	"name": "s",
+	"name": "@konemono/nostr-web-components",
 	"version": "0.0.1",
 	"scripts": {
 		"prepare": "npm run build",

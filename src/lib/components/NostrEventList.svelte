@@ -1,3 +1,5 @@
+<svelte:options customElement="nostr-list" />
+
 <script lang="ts">
 	import { onMount } from 'svelte';
 

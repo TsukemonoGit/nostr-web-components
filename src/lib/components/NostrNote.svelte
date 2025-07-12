@@ -18,6 +18,7 @@
 	export let noLink: boolean = false;
 	export let className: string = '';
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
+	export let height: string | undefined = undefined;
 	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
 	let loading = true;
@@ -91,7 +92,7 @@
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 </script>
 
-<NoteLayout1 class={className} {themeClass} {noLink} showPlaceholders={loading || !note}>
+<NoteLayout1 class={className} {themeClass} {noLink} {height} showPlaceholders={loading || !note}>
 	{#snippet link()}
 		<!-- svelte-ignore a11y_consider_explicit_label -->
 		<a
