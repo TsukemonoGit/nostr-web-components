@@ -74,7 +74,7 @@
 			}
 
 			const fetchedNote = await client.fetchNote(id, relays);
-			console.log('[nostr-note] Fetched note:', fetchedNote);
+			//	console.log('[nostr-note] Fetched note:', fetchedNote);
 
 			if (!fetchedNote) {
 				error = 'Note not found';
@@ -94,7 +94,7 @@
 	}
 
 	async function loadMetadata(pubkey: string) {
-		console.log('[nostr-note] Fetching metadata for pubkey:', pubkey);
+		//	console.log('[nostr-note] Fetching metadata for pubkey:', pubkey);
 		if (metadataLoading) return;
 		metadataLoading = true;
 
@@ -106,7 +106,7 @@
 			}
 
 			metadata = await client.fetchProfile(pubkey, relays);
-			console.log('[nostr-note] Metadata fetched:', metadata);
+			//	console.log('[nostr-note] Metadata fetched:', metadata);
 		} catch (e) {
 			console.warn('[nostr-note] Failed to load metadata:', e);
 		} finally {

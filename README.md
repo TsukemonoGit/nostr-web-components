@@ -20,6 +20,7 @@ npm install nostr-web-components
 <nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
 	<nostr-note id="note1abc..."></nostr-note>
 	<nostr-profile id="npub1xyz..."></nostr-profile>
+	<nostr-list filters='[{"kinds":[1],"limit":10}]'></nostr-list>
 </nostr-container>
 ```
 
@@ -28,6 +29,7 @@ npm install nostr-web-components
 ```html
 <nostr-note id="note1abc..." relays='["wss://relay.damus.io"]'></nostr-note>
 <nostr-profile id="npub1xyz..." relays='["wss://nos.lol"]'></nostr-profile>
+<nostr-list filters='[{"kinds":[1],"limit":10}]' relays='["wss://relay.damus.io"]'></nostr-list>
 ```
 
 ### JavaScript API
@@ -41,6 +43,7 @@ const client = new NostrClient({
 
 const note = await client.fetchNote('note1abc...');
 const profile = await client.fetchProfile('npub1xyz...');
+const events = await client.fetchByFilters([{ kinds: [1], limit: 10 }]);
 ```
 
 ## Components
@@ -62,6 +65,27 @@ Displays a Nostr note.
 - `id`: Note ID (note1... or nevent1... format)
 - `nevent`: Alternative to id for nevent format
 - `relays`: Optional relay configuration (overrides container)
+- `href`: Custom URL template (use `{id}` placeholder)
+- `target`: Link target attribute (default: `_blank`)
+- `noLink`: Boolean to disable link functionality
+- `theme`: Theme mode - `light`, `dark`, or `auto` (default)
+- `height`: Custom height for the note container
+
+**Examples:**
+
+```html
+<!-- Basic note -->
+<nostr-note id="note1abc..."></nostr-note>
+
+<!-- Custom URL template -->
+<nostr-note id="note1abc..." href="https://njump.me/{id}"></nostr-note>
+
+<!-- Dark theme -->
+<nostr-note id="note1abc..." theme="dark"></nostr-note>
+
+<!-- No link functionality -->
+<nostr-note id="note1abc..." noLink="true"></nostr-note>
+```
 
 ### `<nostr-profile>`
 
@@ -95,6 +119,68 @@ Displays a Nostr profile.
 
 <!-- Custom click handler -->
 <nostr-profile id="npub1xyz..." onclick="console.log('Profile clicked')"></nostr-profile>
+```
+
+### `<nostr-list>`
+
+Displays a list of Nostr events based on filters.
+
+**Attributes:**
+
+- `filters`: JSON string of Nostr filters array
+- `relays`: Optional relay configuration (overrides container)
+- `theme`: Theme mode - `light`, `dark`, or `auto` (default)
+- `limit`: Maximum number of events to fetch (default: 50)
+
+**Examples:**
+
+```html
+<!-- Basic timeline -->
+<nostr-list filters='[{"kinds":[1],"limit":10}]'></nostr-list>
+
+<!-- Posts from specific author -->
+<nostr-list filters='[{"kinds":[1],"authors":["npub1xyz..."],"limit":5}]'></nostr-list>
+
+<!-- Multiple filters -->
+<nostr-list
+	filters='[
+	{"kinds":[1],"limit":10},
+	{"kinds":[6],"limit":5}
+]'
+></nostr-list>
+
+<!-- Custom relays and theme -->
+<nostr-list
+	filters='[{"kinds":[1],"limit":20}]'
+	relays='["wss://relay.damus.io"]'
+	theme="dark"
+	limit="30"
+>
+</nostr-list>
+```
+
+## Filter Examples
+
+Common filter patterns for `<nostr-list>`:
+
+```javascript
+// Text notes (kind 1)
+[{ kinds: [1], limit: 10 }][
+	// Posts from specific authors
+	{ kinds: [1], authors: ['npub1...', 'npub2...'], limit: 5 }
+][
+	// Posts with specific hashtags
+	{ kinds: [1], '#t': ['nostr', 'bitcoin'], limit: 10 }
+][
+	// Posts from the last hour
+	{ kinds: [1], since: Math.floor(Date.now() / 1000) - 3600, limit: 20 }
+][
+	// Replies to a specific note
+	{ kinds: [1], '#e': ['note1abc...'], limit: 10 }
+][
+	// Multiple kinds
+	{ kinds: [1, 6, 7], limit: 15 }
+];
 ```
 
 ## Development

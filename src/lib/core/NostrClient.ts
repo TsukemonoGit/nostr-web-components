@@ -33,7 +33,7 @@ export class NostrClient {
 		expectSingle = false
 	): Promise<NostrEvent[]> {
 		const currentRelays = this.rxNostr.getDefaultRelays();
-		console.log(currentRelays);
+		//console.log(currentRelays);
 		if (Object.keys(currentRelays).length === 0) {
 			this.rxNostr.setDefaultRelays(this.config.relays || defaultRelays);
 		}
@@ -85,7 +85,7 @@ export class NostrClient {
 	}
 	async fetchNote(noteId: string, relays?: string[]): Promise<NostrEvent | null> {
 		let actualNoteId = noteId;
-		console.log('fetchnote');
+		//	console.log('fetchnote');
 		try {
 			if (noteId.startsWith('nevent') || noteId.startsWith('note')) {
 				const decoded = nip19.decode(noteId);
