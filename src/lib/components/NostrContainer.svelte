@@ -1,3 +1,5 @@
+<svelte:options customElement="nostr-container" />
+
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import type { NostrClientConfig } from 'nostr-web-components/index.ts';
