@@ -85,6 +85,7 @@
 				</div>
 			</div>
 		</div>
+		{#if !noLink && link}<div class="note-link">{@render link()}</div>{/if}
 	</div>
 {/if}
 
