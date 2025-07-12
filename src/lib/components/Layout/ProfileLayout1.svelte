@@ -33,10 +33,6 @@
 </script>
 
 <div class="nostr-wrapper {className} {themeClass}">
-	{#if !noLink && link}
-		<div class="profile-link">{@render link()}</div>
-	{/if}
-
 	<div class="profile-content">
 		<div class="profile-avatar">
 			{#if avatar}
@@ -78,6 +74,8 @@
 			{/if}
 		</div>
 	</div>
+	{#if !noLink && link}
+		<div class="profile-link">{@render link()}</div>{/if}
 </div>
 
 <style>
@@ -151,13 +149,14 @@
 		color: var(--error-text);
 		border-radius: 6px;
 	}
-
+	.nostr-wrapper {
+		position: relative;
+	}
 	.profile-link {
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: 32px;
-		height: 32px;
+		overflow: visible;
 	}
 
 	.profile-content {

@@ -44,10 +44,6 @@
 	</div>
 {:else}
 	<div class="nostr-wrapper {className} {themeClass}">
-		{#if !noLink && link}
-			<div class="note-link">{@render link()}</div>
-		{/if}
-
 		<div class="note-content">
 			<div class="note-avatar">
 				{#if avatar}
@@ -155,13 +151,12 @@
 		position: absolute;
 		top: 0;
 		right: 0;
-		width: 32px;
-		height: 32px;
+		overflow: visible;
 	}
 	.nostr-wrapper {
 		border: 1px solid var(--border-color);
 		border-radius: 6px;
-		padding: 12px;
+		padding: 6px;
 
 		background-color: var(--bg-color);
 		color: var(--text-color);

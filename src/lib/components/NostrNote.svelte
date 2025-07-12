@@ -47,7 +47,7 @@
 	}
 
 	$: if (mounted && id) {
-		console.log('[nostr-note] reactive loadNote() triggered by id =', id);
+		//console.log('[nostr-note] reactive loadNote() triggered by id =', id);
 		loadNote();
 	}
 
