@@ -1,0 +1,49 @@
+:host {
+	--bg-color: #fff;
+	--text-color: #222;
+	--border-color: #ddd;
+	--name-color: #333;
+	--time-color: #888;
+	--placeholder-color: #e0e0e0;
+	--error-bg: #f8d7da;
+	--error-border: #f5c2c7;
+	--error-text: #842029;
+
+	/* 追加: リンクカラー */
+	--link-color: #1a0dab;
+	--link-hover-color: #551a8b;
+}
+
+.theme-dark,
+:host(.dark) {
+	--bg-color: #1e1e1e;
+	--text-color: #ddd;
+	--border-color: #444;
+	--name-color: #eee;
+	--time-color: #aaa;
+	--placeholder-color: #333;
+	--error-bg: #4b1c1f;
+	--error-border: #8a1f2e;
+	--error-text: #ffb3b3;
+
+	/* 追加: ダークテーマ用リンクカラー */
+	--link-color: #8ab4f8;
+	--link-hover-color: #a3d0ff;
+}
+
+:host(.theme-light),
+:host(.light) {
+	--bg-color: #fff;
+	--text-color: #222;
+	--border-color: #ddd;
+	--name-color: #333;
+	--time-color: #888;
+	--placeholder-color: #e0e0e0;
+	--error-bg: #f8d7da;
+	--error-border: #f5c2c7;
+	--error-text: #842029;
+
+	/* ライトテーマ用リンクカラー */
+	--link-color: #1a0dab;
+	--link-hover-color: #551a8b;
+}
