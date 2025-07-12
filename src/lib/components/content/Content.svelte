@@ -7,14 +7,16 @@
 
 	import { parseNaddr } from 'nostr-web-components/utils/utils.js';
 	import Link from './Link.svelte';
+	import DecodedContent from './DecodedContent.svelte';
 
 	interface Props {
 		text: string;
 		tags: string[][];
 		themeClass?: string;
+		theme?: string;
 	}
 
-	let { text, tags, themeClass }: Props = $props();
+	let { text, tags, themeClass, theme }: Props = $props();
 
 	let parts: Token[] = $derived(parseContent(text, tags));
 
@@ -67,9 +69,9 @@
 <div class="content">
 	{#each parts as part}{#if part.type === 'nip19'}{@const decoded = nip19Decode(
 				part.metadata!.plainNip19 as string
-			)}
+			)}{decoded?.type}
 			{#if decoded}
-				<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
+				<DecodedContent {decoded} {part} {theme} {themeClass} />
 			{:else}{part.content}{/if}
 		{:else if part.type === TokenType.LEGACY_REFERENCE && part.metadata && part.metadata.tagType && part.metadata.referenceId}
 			{@const decoded = arekore(

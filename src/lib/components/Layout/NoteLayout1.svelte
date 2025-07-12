@@ -14,6 +14,7 @@
 		error?: Snippet;
 		themeClass?: string;
 		height?: string | undefined;
+		replyUser?: Snippet;
 	}
 
 	let {
@@ -28,7 +29,8 @@
 		content,
 		error,
 		themeClass,
-		height
+		height,
+		replyUser
 	}: Props = $props();
 </script>
 
@@ -72,6 +74,8 @@
 						{/if}
 					</div>
 				</div>
+
+				<div class="mention-container">{@render replyUser?.()}</div>
 
 				<div
 					class="note-body"
@@ -192,7 +196,6 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
 	}
 
 	.note-header {
@@ -254,5 +257,28 @@
 		50% {
 			opacity: 0.7;
 		}
+	}
+
+	.mention-container {
+		margin: 4px 0;
+		font-size: small;
+		display: inline-flex;
+		flex-wrap: wrap;
+		max-height: 3.5em;
+		overflow-y: auto;
+		white-space: nowrap;
+
+		/* メンション欄装飾 */
+		padding-left: 8px; /* ライン分の余白 */
+		border-left: 4px solid var(--mention-line-color, #3b82f6);
+		border-radius: 4px;
+		gap: 4px;
+		align-items: center;
+	}
+
+	/* 子要素の横並びと改行防止 */
+	.mention-container > * {
+		flex-shrink: 0;
+		white-space: nowrap;
 	}
 </style>

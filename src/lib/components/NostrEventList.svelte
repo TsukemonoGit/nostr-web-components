@@ -111,9 +111,7 @@
 	{:else}
 		<div class="events-container">
 			{#each events as event (event.id)}
-				<div class="event-item">
-					<nostr-note id={event.id} {relays} {theme}></nostr-note>
-				</div>
+				<nostr-note id={event.id} {relays} {theme}></nostr-note>
 			{/each}
 		</div>
 	{/if}
@@ -129,6 +127,10 @@
 		--error-text: #842029;
 		--loading-color: #666;
 		--empty-color: #888;
+
+		/* メンション用カラー */
+		--mention-line-color: #3b82f6; /* 明るめ青 */
+		--mention-bg-color: #e0f5ff; /* 薄い青系背景 */
 	}
 
 	.theme-dark {
@@ -140,6 +142,10 @@
 		--error-text: #ffb3b3;
 		--loading-color: #aaa;
 		--empty-color: #999;
+
+		/* ダークテーマ用メンションカラー */
+		--mention-line-color: #60a5fa; /* 明るめ青で視認性良 */
+		--mention-bg-color: #1e3a8a22; /* 透過感ある青背景 */
 	}
 
 	.theme-light {
@@ -151,8 +157,11 @@
 		--error-text: #842029;
 		--loading-color: #666;
 		--empty-color: #888;
-	}
 
+		/* ライトテーマ用メンションカラー */
+		--mention-line-color: #3b82f6;
+		--mention-bg-color: #e0f5ff;
+	}
 	.nostr-list-wrapper {
 		width: 100%;
 		background-color: var(--bg-color);
@@ -185,12 +194,7 @@
 	.events-container {
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
-	}
-
-	.event-item {
-		border-bottom: 1px solid var(--border-color);
-		padding-bottom: 10px;
+		gap: 4px;
 	}
 
 	.event-item:last-child {

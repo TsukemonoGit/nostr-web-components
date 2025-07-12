@@ -113,6 +113,11 @@
 			metadataLoading = false;
 		}
 	}
+
+	$: replyUserList = note?.tags
+		?.filter((tag) => tag[0] === 'p' && typeof tag[1] === 'string')
+		?.map((tag) => tag[1]);
+	$: console.log(replyUserList);
 </script>
 
 <!-- Web Components として mount 時に initialize() を実行 -->
@@ -152,8 +157,12 @@
 			{#if note}<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span
 				>{/if}
 		{/snippet}
+		{#snippet replyUser()}
+			{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
+				></nostr-profile>{/each}
+		{/snippet}
 		{#snippet content()}
-			{#if note}<Content text={note.content} {themeClass} tags={note.tags} />{/if}
+			{#if note}<Content text={note.content} {themeClass} {theme} tags={note.tags} />{/if}
 		{/snippet}
 		{#snippet error()}<span>Error: {error}</span>{/snippet}
 	</NoteLayout1>
@@ -164,40 +173,45 @@
 		--bg-color: #fff;
 		--text-color: #222;
 		--border-color: #ddd;
-		--name-color: #333;
-		--time-color: #888;
-		--placeholder-color: #e0e0e0;
 		--error-bg: #f8d7da;
 		--error-border: #f5c2c7;
 		--error-text: #842029;
-		--link-color: #1a0dab;
-		--link-hover-color: #551a8b;
+		--loading-color: #666;
+		--empty-color: #888;
+
+		/* メンション用カラー */
+		--mention-line-color: #3b82f6; /* 明るめ青 */
+		--mention-bg-color: #e0f5ff; /* 薄い青系背景 */
 	}
+
 	.theme-dark {
 		--bg-color: #1e1e1e;
 		--text-color: #ddd;
 		--border-color: #444;
-		--name-color: #eee;
-		--time-color: #aaa;
-		--placeholder-color: #333;
 		--error-bg: #4b1c1f;
 		--error-border: #8a1f2e;
 		--error-text: #ffb3b3;
-		--link-color: #8ab4f8;
-		--link-hover-color: #a3d0ff;
+		--loading-color: #aaa;
+		--empty-color: #999;
+
+		/* ダークテーマ用メンションカラー */
+		--mention-line-color: #60a5fa; /* 明るめ青で視認性良 */
+		--mention-bg-color: #1e3a8a22; /* 透過感ある青背景 */
 	}
+
 	.theme-light {
 		--bg-color: #fff;
 		--text-color: #222;
 		--border-color: #ddd;
-		--name-color: #333;
-		--time-color: #888;
-		--placeholder-color: #e0e0e0;
 		--error-bg: #f8d7da;
 		--error-border: #f5c2c7;
 		--error-text: #842029;
-		--link-color: #1a0dab;
-		--link-hover-color: #551a8b;
+		--loading-color: #666;
+		--empty-color: #888;
+
+		/* ライトテーマ用メンションカラー */
+		--mention-line-color: #3b82f6;
+		--mention-bg-color: #e0f5ff;
 	}
 	.external-link {
 		display: flex;
