@@ -28,8 +28,7 @@
 	"exports": {
 		".": {
 			"import": "./dist/nostr-web-components.js",
-			"require": "./dist/nostr-web-components.js",
-			"types": "./dist/index.d.ts"
+			"require": "./dist/nostr-web-components.js"
 		},
 		"./style.css": "./dist/nostr-web-components.css"
 	},

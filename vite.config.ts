@@ -13,12 +13,18 @@ export default defineConfig(({ mode }) => {
 			return {
 				base: '/nostr-share-component/',
 				plugins: [
+					tailwindcss(),
 					svelte({
 						compilerOptions: {
 							customElement: true
 						}
 					})
-				]
+				],
+				resolve: {
+					alias: {
+						'nostr-web-components': path.resolve(__dirname, 'src/lib')
+					}
+				}
 			};
 		default:
 			return {
