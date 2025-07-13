@@ -23,14 +23,14 @@
 		"**/*.css"
 	],
 	"main": "./dist/nostr-web-components.umd.js",
-	"module": "./dist/nostr-web-components.es.js",
+	"module": "./dist/nostr-web-components.mjs",
 	"unpkg": "./dist/nostr-web-components.iife.js",
 	"jsdelivr": "./dist/nostr-web-components.iife.js",
-	"svelte": "./dist/nostr-web-components.es.js",
+	"svelte": "./dist/nostr-web-components.mjs",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/nostr-web-components.es.js",
+			"import": "./dist/nostr-web-components.mjs",
 			"require": "./dist/nostr-web-components.umd.js"
 		},
 		"./style.css": "./dist/nostr-web-components.css"
@@ -48,6 +48,7 @@
 		"@tailwindcss/postcss": "^4.1.11",
 		"@tailwindcss/vite": "^4.1.11",
 		"@types/node": "^24.0.13",
+		"autoprefixer": "^10.4.21",
 		"eslint": "^9.31.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-svelte": "^3.10.1",
