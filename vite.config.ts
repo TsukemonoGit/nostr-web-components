@@ -19,7 +19,6 @@ export default defineConfig(({ mode }) => {
 					}
 				},
 				build: {
-					// index.html を使わない
 					lib: {
 						entry: 'src/lib/index.ts',
 						name: 'NostrWebComponents',
