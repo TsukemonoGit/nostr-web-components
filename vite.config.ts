@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
 	switch (mode) {
 		case 'pages':
 			return {
-				base: '/nostr-share-component/',
+				base: '/nostr-web-components/',
 				plugins: [svelte({ compilerOptions: { customElement: true } })],
 				resolve: {
 					alias: {
