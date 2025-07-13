@@ -208,9 +208,9 @@
 	}
 
 	.profile-about {
-		line-height: 1.4;
-		color: var(--about-color);
-		margin-top: 4px;
+		white-space: pre-wrap;
+		word-break: normal;
+		word-break: break-word;
 	}
 
 	.placeholder {
