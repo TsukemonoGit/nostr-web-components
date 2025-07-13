@@ -1,6 +1,6 @@
 {
 	"name": "@konemono/nostr-web-components",
-	"version": "0.0.27",
+	"version": "0.0.28",
 	"scripts": {
 		"prepare": "npm run build",
 		"dev": "vite",
@@ -26,7 +26,6 @@
 	"module": "./dist/nostr-web-components.mjs",
 	"unpkg": "./dist/nostr-web-components.iife.js",
 	"jsdelivr": "./dist/nostr-web-components.iife.js",
-	"svelte": "./dist/nostr-web-components.mjs",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
