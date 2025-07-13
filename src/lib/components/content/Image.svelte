@@ -11,7 +11,7 @@
 </script>
 
 {#if !isError}
-	<img {src} alt={src} onerror={() => (isError = true)} />
+	<img loading="lazy" {src} alt={src} onerror={() => (isError = true)} />
 {:else}
 	<Link {themeClass} href={src}>{src}</Link>
 {/if}
