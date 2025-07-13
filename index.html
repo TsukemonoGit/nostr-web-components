@@ -4,110 +4,360 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Nostr Web Components デモ</title>
-		<link rel="stylesheet" href="https://unpkg.com/nostr-web-components/dist/style.css" />
-		<!-- 	<script type="module" src="/nostr-web-components/dist/nostr-web-components.mjs"></script> -->
+		<link rel="stylesheet" href="style.css" />
 		<script type="module" src="dist/nostr-web-components.mjs"></script>
-		<style>
-			body {
-				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-				margin: 0;
-				padding: 20px;
-				background-color: #f5f5f5;
-			}
-			.container {
-				max-width: 800px;
-				margin: 0 auto;
-				background: white;
-				padding: 20px;
-				border-radius: 8px;
-				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-			}
-			.demo-section {
-				margin: 20px 0;
-				padding: 15px;
-				border: 1px solid #ddd;
-				border-radius: 4px;
-			}
-			.demo-section h2 {
-				margin-top: 0;
-				color: #333;
-			}
-			.loading {
-				color: #666;
-				font-style: italic;
-			}
-			.error {
-				color: #d00;
-				background: #ffe6e6;
-				padding: 10px;
-				border-radius: 4px;
-				margin: 10px 0;
-			}
-			.log {
-				background: #f0f8ff;
-				border: 1px solid #cce7ff;
-				padding: 10px;
-				border-radius: 4px;
-				margin: 10px 0;
-				font-family: monospace;
-				font-size: 14px;
-				color: #333;
-				white-space: pre-wrap;
-			}
-			.log.success {
-				background: #f0fff0;
-				border-color: #90ee90;
-				color: #006400;
-			}
-			.log.error {
-				background: #ffe6e6;
-				border-color: #ffcccc;
-				color: #d00;
-			}
-		</style>
 	</head>
 	<body>
 		<div class="container">
 			<h1>Nostr Web Components デモ</h1>
+			<p>このデモでは、Nostr Web Componentsの様々な使用方法を紹介します。</p>
 
 			<div id="log-container"></div>
 
 			<nostr-container relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'>
+				<!-- NostrNote デモ -->
 				<div class="demo-section">
-					<h2>NostrNote</h2>
-					<nostr-note
-						href="https://njump.me/{id}"
-						id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
-					></nostr-note>
-					<nostr-note
-						theme="dark"
-						href="https://lumilumi.app/{id}"
-						id="nevent1qvzqqqqqqypzpp9sc34tdxdvxh4jeg5xgu9ctcypmvsg0n00vwfjydkrjaqh0qh4qyxhwumn8ghj77tpvf6jumt9qqsrmmgg36ra96e2z3gghwh6vf7h87ltggn99xlew0l7h8g8fw65rtsw5cf0d"
-					></nostr-note>
+					<h2>NostrNote コンポーネント</h2>
+
+					<div class="demo-item">
+						<h3>基本的な使用方法</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre
+							class="code-block"
+						><code>&lt;nostr-note id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"&gt;
+&lt;/nostr-note&gt;</code></pre>
+						<nostr-note
+							id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+						></nostr-note>
+					</div>
+
+					<div class="demo-item">
+						<h3>カスタムリンクとテーマ</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-note theme="dark"
+  href="https://lumilumi.app/{id}"
+  target="_blank" id="nevent1qvzqqqqqqypzpp9sc34tdxdvxh4jeg5xgu9ctcypmvsg0n00vwfjydkrjaqh0qh4qyxhwumn8ghj77tpvf6jumt9qqsrmmgg36ra96e2z3gghwh6vf7h87ltggn99xlew0l7h8g8fw65rtsw5cf0d"&gt;
+&lt;/nostr-note&gt;</code></pre>
+						<nostr-note
+							theme="dark"
+							href="https://lumilumi.app/{id}"
+							target="_blank"
+							id="nevent1qvzqqqqqqypzpp9sc34tdxdvxh4jeg5xgu9ctcypmvsg0n00vwfjydkrjaqh0qh4qyxhwumn8ghj77tpvf6jumt9qqsrmmgg36ra96e2z3gghwh6vf7h87ltggn99xlew0l7h8g8fw65rtsw5cf0d"
+						></nostr-note>
+					</div>
+
+					<div class="demo-item">
+						<h3>リンクなしと高さ指定</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-note
+  noLink="true"
+  height="200px"
+  className="custom-note" id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"&gt;
+&lt;/nostr-note&gt;</code></pre>
+						<nostr-note
+							noLink="true"
+							height="200px"
+							className="custom-note"
+							id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+						></nostr-note>
+					</div>
 				</div>
 
+				<!-- NostrProfile デモ -->
 				<div class="demo-section">
-					<h2>NostrProfile</h2>
-					<nostr-profile
-						id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-					></nostr-profile>
-					<nostr-profile
-						display="name"
-						id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-					></nostr-profile>
+					<h2>NostrProfile コンポーネント</h2>
+
+					<div class="demo-item">
+						<h3>カード表示（デフォルト）</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-profile
+  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  display="card"&gt;
+&lt;/nostr-profile&gt;</code></pre>
+						<nostr-profile
+							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							display="card"
+						></nostr-profile>
+					</div>
+
+					<div class="demo-item">
+						<h3>名前のみ表示</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-profile
+  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  display="name"&gt;
+&lt;/nostr-profile&gt;</code></pre>
+						<nostr-profile
+							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							display="name"
+						></nostr-profile>
+					</div>
+
+					<div class="demo-item">
+						<h3>テーマとカスタムリンク</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-profile
+  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  theme="dark"
+  href="https://primal.net/p/{id}"
+  target="_self"&gt;
+&lt;/nostr-profile&gt;</code></pre>
+						<nostr-profile
+							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							theme="dark"
+							href="https://primal.net/p/{id}"
+							target="_self"
+						></nostr-profile>
+					</div>
+
+					<div class="demo-item">
+						<h3>リンクなし</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-profile
+  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  noLink="true"
+  className="static-profile"&gt;
+&lt;/nostr-profile&gt;</code></pre>
+						<nostr-profile
+							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							noLink="true"
+							className="static-profile"
+						></nostr-profile>
+					</div>
 				</div>
 
+				<!-- NostrEventList デモ -->
 				<div class="demo-section">
-					<h2>Filtered List</h2>
-					<nostr-list
-						filters='[{"kinds":[1],"limit":20 ,"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"]}]'
-						limit="20"
-					></nostr-list>
+					<h2>NostrEventList コンポーネント</h2>
+
+					<div class="demo-item">
+						<h3>特定ユーザーの投稿一覧</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-list
+  filters='[{"kinds":[1],"limit":10,"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"]}]'
+  limit="10"
+  height="400px"&gt;
+&lt;/nostr-list&gt;</code></pre>
+						<nostr-list
+							filters='[{"kinds":[1],"limit":10,"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"]}]'
+							limit="10"
+							height="400px"
+						></nostr-list>
+					</div>
+
+					<div class="demo-item">
+						<h3>最新の投稿（全体）</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-list
+  filters='[{"kinds":[1],"limit":5}]'
+  limit="5"
+  theme="dark"
+  href="https://lumilumi.app/{id}"&gt;
+&lt;/nostr-list&gt;</code></pre>
+						<nostr-list
+							filters='[{"kinds":[1],"limit":5}]'
+							limit="5"
+							theme="dark"
+							href="https://lumilumi.app/{id}"
+						></nostr-list>
+					</div>
+
+					<div class="demo-item">
+						<h3>ハッシュタグ検索</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-list
+  filters='[{"kinds":[1],"#t":["nostr"],"limit":8}]'
+  limit="8"
+  height="300px"
+  noLink="true"&gt;
+&lt;/nostr-list&gt;</code></pre>
+						<nostr-list
+							filters='[{"kinds":[1],"#t":["nostr"],"limit":8}]'
+							limit="8"
+							height="300px"
+							noLink="true"
+						></nostr-list>
+					</div>
+				</div>
+
+				<!-- 応用例 -->
+				<div class="demo-section">
+					<h2>応用例</h2>
+
+					<div class="demo-item">
+						<h3>ユーザープロフィール + 投稿一覧</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<div class="code-block">
+							&lt;div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px;"&gt;
+							&lt;nostr-profile id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							display="card" &gt;&lt;/nostr-profile&gt; &lt;h4&gt;最新の投稿&lt;/h4&gt;
+							&lt;nostr-list
+							filters='[{"kinds":[1],"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"],"limit":3}]'
+							limit="3" &gt;&lt;/nostr-list&gt; &lt;/div&gt;
+						</div>
+						<div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px">
+							<nostr-profile
+								id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+								display="card"
+							></nostr-profile>
+							<h4>最新の投稿</h4>
+							<nostr-list
+								filters='[{"kinds":[1],"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"],"limit":3}]'
+								limit="3"
+							></nostr-list>
+						</div>
+					</div>
+
+					<div class="demo-item">
+						<h3>テーマ比較</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<div class="code-block">
+							&lt;div class="theme-demo"&gt; &lt;div&gt; &lt;h5&gt;ライトテーマ&lt;/h5&gt;
+							&lt;nostr-profile id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							theme="light" display="name" &gt;&lt;/nostr-profile&gt; &lt;/div&gt; &lt;div&gt;
+							&lt;h5&gt;ダークテーマ&lt;/h5&gt; &lt;nostr-profile
+							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw" theme="dark"
+							display="name" &gt;&lt;/nostr-profile&gt; &lt;/div&gt; &lt;/div&gt;
+						</div>
+						<div class="theme-demo">
+							<div>
+								<h5>ライトテーマ</h5>
+								<nostr-profile
+									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+									theme="light"
+									display="name"
+								></nostr-profile>
+							</div>
+							<div>
+								<h5>ダークテーマ</h5>
+								<nostr-profile
+									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+									theme="dark"
+									display="name"
+								></nostr-profile>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 設定例 -->
+				<div class="demo-section">
+					<h2>NostrContainer 設定例</h2>
+
+					<div class="demo-item">
+						<h3>基本的な設定</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<div class="code-block">
+							&lt;nostr-container
+							relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'&gt; &lt;!--
+							この中にNostrコンポーネントを配置 --&gt; &lt;nostr-profile
+							id="npub1..."&gt;&lt;/nostr-profile&gt; &lt;nostr-note
+							id="nevent1..."&gt;&lt;/nostr-note&gt; &lt;nostr-list
+							filters='[...]'&gt;&lt;/nostr-list&gt; &lt;/nostr-container&gt;
+						</div>
+						<p>
+							このページ全体がnostr-containerで囲まれており、すべてのコンポーネントが同じリレー設定を共有しています。
+						</p>
+					</div>
+
+					<div class="demo-item">
+						<h3>カスタムリレー設定</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<div class="code-block">
+							&lt;nostr-container
+							relays='["wss://relay.damus.io","wss://nostr.wine","wss://relay.current.fyi"]'&gt;
+							&lt;!-- 独自のリレーセットを使用 --&gt; &lt;nostr-list
+							filters='[{"kinds":[1],"limit":3}]' limit="3" &gt;&lt;/nostr-list&gt;
+							&lt;/nostr-container&gt;
+						</div>
+						<p>
+							個別のコンポーネントでも relays
+							プロパティを指定することで、独自のリレーセットを使用できます。
+						</p>
+					</div>
 				</div>
 			</nostr-container>
 		</div>
 
 		<script>
+			// コードブロック表示/非表示切り替え
+			function toggleCode(button) {
+				const codeBlock = button.parentElement.nextElementSibling;
+				const isVisible = codeBlock.classList.contains('show');
+
+				if (isVisible) {
+					codeBlock.classList.remove('show');
+					button.textContent = 'コードを見る';
+				} else {
+					codeBlock.classList.add('show');
+					button.textContent = 'コードを隠す';
+				}
+			}
+
+			// コピー機能
+			function copyCode(button) {
+				const codeBlock = button.parentElement.nextElementSibling;
+				const code = codeBlock.textContent;
+
+				navigator.clipboard
+					.writeText(code)
+					.then(() => {
+						const originalText = button.textContent;
+						button.textContent = 'コピー済み';
+						button.classList.add('copied');
+
+						setTimeout(() => {
+							button.textContent = originalText;
+							button.classList.remove('copied');
+						}, 2000);
+					})
+					.catch((err) => {
+						console.error('コピーに失敗しました:', err);
+					});
+			}
+
 			// ログ出力関数
 			function addLog(message, type = 'info') {
 				const logContainer = document.getElementById('log-container');

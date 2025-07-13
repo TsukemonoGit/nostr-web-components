@@ -178,7 +178,9 @@
 		--error-text: #842029;
 		--loading-color: #666;
 		--empty-color: #888;
-
+		/* 追加: リンクカラー */
+		--link-color: #1a0dab;
+		--link-hover-color: #551a8b;
 		/* メンション用カラー */
 		--mention-line-color: #3b82f6; /* 明るめ青 */
 		--mention-bg-color: #e0f5ff; /* 薄い青系背景 */
@@ -197,6 +199,9 @@
 		/* ダークテーマ用メンションカラー */
 		--mention-line-color: #60a5fa; /* 明るめ青で視認性良 */
 		--mention-bg-color: #1e3a8a22; /* 透過感ある青背景 */
+		/* 追加: ダークテーマ用リンクカラー */
+		--link-color: #8ab4f8;
+		--link-hover-color: #a3d0ff;
 	}
 
 	.theme-light {
@@ -208,7 +213,9 @@
 		--error-text: #842029;
 		--loading-color: #666;
 		--empty-color: #888;
-
+		/* ライトテーマ用リンクカラー */
+		--link-color: #1a0dab;
+		--link-hover-color: #551a8b;
 		/* ライトテーマ用メンションカラー */
 		--mention-line-color: #3b82f6;
 		--mention-bg-color: #e0f5ff;

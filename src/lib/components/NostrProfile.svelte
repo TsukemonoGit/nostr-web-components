@@ -198,26 +198,15 @@
 		position: relative;
 	}
 	.external-link {
-		width: 100%;
-		height: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 0;
-		border: none;
-		background: transparent;
-		color: #007aff;
 		text-decoration: none;
-		cursor: pointer;
-	}
-	.external-link svg {
-		width: 20px;
-		height: 20px;
-		stroke-width: 2;
+		padding: 0;
+		color: var(--link-color);
 	}
 	.external-link:hover {
-		background-color: rgba(0, 0, 0, 0.05);
-		border-radius: 4px;
+		color: var(--link-hover-color);
 	}
 	.profile {
 		width: fit-content;

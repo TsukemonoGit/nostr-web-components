@@ -150,7 +150,7 @@
 	}
 </script>
 
-<div use:connected={initialize} class="nostr-list-wrapper {themeClass} {className}">
+<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
 	{#if loading}
 		<div class="loading">Loading events...</div>
 	{:else if error}
@@ -158,7 +158,7 @@
 	{:else if events.length === 0}
 		<div class="empty">No events found</div>
 	{:else}
-		<div class="events-container">
+		<div class="nostr-wrapper {themeClass} {className}">
 			{#each events as note (note.id)}
 				{@const replyUserList = note?.tags
 					?.filter((tag) => tag[0] === 'p' && typeof tag[1] === 'string')
@@ -172,13 +172,12 @@
 					{height}
 					showPlaceholders={loading || !note}
 				>
-					{#snippet link()}
-						<!-- svelte-ignore a11y_consider_explicit_label -->
+					{#snippet link()}<!-- svelte-ignore a11y_consider_explicit_label -->
 						<a
 							href={linkUrl}
 							{target}
 							referrerpolicy="no-referrer"
-							class="external-link"
+							class="external-link {theme} {themeClass}"
 							title="Open in new tab"
 						>
 							<svg
@@ -231,7 +230,9 @@
 		--error-text: #842029;
 		--loading-color: #666;
 		--empty-color: #888;
-
+		/* 追加: リンクカラー */
+		--link-color: #1a0dab;
+		--link-hover-color: #551a8b;
 		/* メンション用カラー */
 		--mention-line-color: #3b82f6; /* 明るめ青 */
 		--mention-bg-color: #e0f5ff; /* 薄い青系背景 */
@@ -246,7 +247,9 @@
 		--error-text: #ffb3b3;
 		--loading-color: #aaa;
 		--empty-color: #999;
-
+		/* 追加: ダークテーマ用リンクカラー */
+		--link-color: #8ab4f8;
+		--link-hover-color: #a3d0ff;
 		/* ダークテーマ用メンションカラー */
 		--mention-line-color: #60a5fa; /* 明るめ青で視認性良 */
 		--mention-bg-color: #1e3a8a22; /* 透過感ある青背景 */
@@ -261,7 +264,9 @@
 		--error-text: #842029;
 		--loading-color: #666;
 		--empty-color: #888;
-
+		/* 追加: リンクカラー */
+		--link-color: #1a0dab;
+		--link-hover-color: #551a8b;
 		/* ライトテーマ用メンションカラー */
 		--mention-line-color: #3b82f6;
 		--mention-bg-color: #e0f5ff;
@@ -302,5 +307,16 @@
 
 	.event-item:last-child {
 		border-bottom: none;
+	}
+	.external-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none;
+		padding: 0;
+		color: var(--link-color);
+	}
+	.external-link:hover {
+		color: var(--link-color);
 	}
 </style>
