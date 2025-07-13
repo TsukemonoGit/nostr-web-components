@@ -17,20 +17,6 @@ export default defineConfig(({ mode }) => {
 					alias: {
 						'nostr-web-components': path.resolve(__dirname, 'src/lib')
 					}
-				},
-				build: {
-					lib: {
-						entry: 'src/lib/index.ts',
-						name: 'NostrWebComponents',
-						fileName: 'nostr-web-components',
-						formats: ['es', 'umd']
-					},
-					rollupOptions: {
-						external: ['svelte'],
-						output: {
-							globals: { svelte: 'Svelte' }
-						}
-					}
 				}
 			};
 		default:
