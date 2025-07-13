@@ -40,11 +40,34 @@
 				border-radius: 4px;
 				margin: 10px 0;
 			}
+			.log {
+				background: #f0f8ff;
+				border: 1px solid #cce7ff;
+				padding: 10px;
+				border-radius: 4px;
+				margin: 10px 0;
+				font-family: monospace;
+				font-size: 14px;
+				color: #333;
+				white-space: pre-wrap;
+			}
+			.log.success {
+				background: #f0fff0;
+				border-color: #90ee90;
+				color: #006400;
+			}
+			.log.error {
+				background: #ffe6e6;
+				border-color: #ffcccc;
+				color: #d00;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
 			<h1>Nostr Web Components デモ</h1>
+
+			<div id="log-container"></div>
 
 			<nostr-container relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'>
 				<div class="demo-section">
@@ -82,11 +105,27 @@
 		</div>
 
 		<script>
+			// ログ出力関数
+			function addLog(message, type = 'info') {
+				const logContainer = document.getElementById('log-container');
+				const logDiv = document.createElement('div');
+				logDiv.className = `log ${type}`;
+				logDiv.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+				logContainer.appendChild(logDiv);
+				console.log(message);
+			}
+
 			// 環境判定と適切なパス決定
 			function getModulePaths() {
 				const isDevelopment =
 					location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 				const isGitHubPages = location.hostname.includes('github.io');
+
+				let environment = 'production';
+				if (isDevelopment) environment = 'development';
+				if (isGitHubPages) environment = 'github-pages';
+
+				addLog(`環境: ${environment} (${location.hostname})`);
 
 				if (isDevelopment) {
 					return ['/src/lib/index.ts', './src/lib/index.ts'];
@@ -110,26 +149,31 @@
 			// モジュール読み込み
 			async function loadModule() {
 				const possiblePaths = getModulePaths();
+				addLog(`モジュール読み込み開始。試行パス: ${possiblePaths.length}個`);
 
 				for (const moduleUrl of possiblePaths) {
 					try {
+						addLog(`試行中: ${moduleUrl}`);
 						await import(moduleUrl);
+						addLog(`✓ モジュール読み込み成功: ${moduleUrl}`, 'success');
 						return;
 					} catch (error) {
-						// 次のパスを試行
+						addLog(`✗ 失敗: ${moduleUrl} - ${error.message}`, 'error');
 						continue;
 					}
 				}
 
-				// 全て失敗した場合はscriptタグで試行
+				addLog('ESモジュール読み込み全て失敗。scriptタグで試行します');
 				await tryScriptTagLoading();
 			}
 
 			async function tryScriptTagLoading() {
 				const scriptPaths = getModulePaths().map((path) => path.replace('.ts', '.js'));
+				addLog(`scriptタグ読み込み開始。試行パス: ${scriptPaths.length}個`);
 
 				for (const scriptPath of scriptPaths) {
 					try {
+						addLog(`scriptタグ試行中: ${scriptPath}`);
 						const script = document.createElement('script');
 						script.type = 'module';
 						script.src = scriptPath;
@@ -141,13 +185,15 @@
 						});
 
 						document.head.appendChild(script);
+						addLog(`✓ scriptタグ読み込み成功: ${scriptPath}`, 'success');
 						return;
 					} catch (error) {
+						addLog(`✗ scriptタグ失敗: ${scriptPath} - ${error.message}`, 'error');
 						continue;
 					}
 				}
 
-				// 最後の手段：UMDバージョン
+				addLog('scriptタグ読み込み全て失敗。UMDで試行します');
 				await tryUMDLoading();
 			}
 
@@ -157,8 +203,11 @@
 					'/nostr-web-components/dist/nostr-web-components.umd.js'
 				];
 
+				addLog(`UMD読み込み開始。試行パス: ${umdPaths.length}個`);
+
 				for (const umdPath of umdPaths) {
 					try {
+						addLog(`UMD試行中: ${umdPath}`);
 						const script = document.createElement('script');
 						script.src = umdPath;
 
@@ -168,13 +217,15 @@
 						});
 
 						document.head.appendChild(script);
+						addLog(`✓ UMD読み込み成功: ${umdPath}`, 'success');
 						return;
 					} catch (error) {
+						addLog(`✗ UMD失敗: ${umdPath} - ${error.message}`, 'error');
 						continue;
 					}
 				}
 
-				// 全て失敗した場合のエラー表示
+				addLog('全ての読み込み方法が失敗しました', 'error');
 				showError('モジュールの読み込みに失敗しました');
 			}
 
@@ -185,24 +236,30 @@
 				errorDiv.textContent = message;
 				document
 					.querySelector('.container')
-					.insertBefore(errorDiv, document.querySelector('.container').firstChild);
+					.insertBefore(errorDiv, document.querySelector('#log-container').nextSibling);
 			}
 
 			// 初期化
 			document.addEventListener('DOMContentLoaded', async () => {
+				addLog('DOM読み込み完了。モジュール読み込みを開始します');
 				try {
 					await loadModule();
+					addLog('モジュール読み込み処理完了', 'success');
 				} catch (error) {
+					addLog(`モジュール読み込み処理でエラー: ${error.message}`, 'error');
 					showError('モジュールの読み込みに失敗しました');
 				}
 			});
 
 			// エラーハンドリング
 			window.addEventListener('error', (event) => {
+				const message = event.error?.message || event.message;
+				addLog(`グローバルエラー: ${message}`, 'error');
 				console.error('エラー:', event.error?.message || event.message);
 			});
 
 			window.addEventListener('unhandledrejection', (event) => {
+				addLog(`未処理のPromise拒否: ${event.reason}`, 'error');
 				console.error('未処理のPromise拒否:', event.reason);
 			});
 		</script>
