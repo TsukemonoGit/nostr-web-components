@@ -171,54 +171,186 @@
 				updateStatus('custom-elements-status', 'Custom Elements API: 利用不可', 'error');
 			}
 
+			// 環境判定と適切なパス決定
+			function getEnvironmentPaths() {
+				const isDevelopment =
+					location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+				const isGitHubPages = location.hostname.includes('github.io');
+
+				updateDebugInfo(`環境判定: 開発=${isDevelopment}, GitHub Pages=${isGitHubPages}`);
+				updateDebugInfo(`現在のURL: ${location.href}`);
+
+				if (isDevelopment) {
+					// 開発環境: Viteの開発サーバー用パス
+					return [
+						'/src/lib/index.ts',
+						'./src/lib/index.ts',
+						'/src/lib/index.js',
+						'./src/lib/index.js'
+					];
+				} else if (isGitHubPages) {
+					// GitHub Pages: baseパス考慮
+					const basePath = '/nostr-share-component';
+					return [
+						`${basePath}/dist/nostr-web-components.js`,
+						`${basePath}/dist/nostr-web-components.es.js`,
+						`${basePath}/dist/nostr-web-components.umd.js`,
+						`${basePath}/assets/nostr-web-components.js`,
+						`${basePath}/assets/nostr-web-components.es.js`,
+						`${basePath}/nostr-web-components.js`,
+						`${basePath}/nostr-web-components.es.js`,
+						// 相対パスも試行
+						'./dist/nostr-web-components.js',
+						'./dist/nostr-web-components.es.js',
+						'./dist/nostr-web-components.umd.js',
+						'./assets/nostr-web-components.js',
+						'./assets/nostr-web-components.es.js',
+						'./nostr-web-components.js',
+						'./nostr-web-components.es.js'
+					];
+				} else {
+					// その他の本番環境
+					return [
+						'./dist/nostr-web-components.js',
+						'./dist/nostr-web-components.es.js',
+						'./dist/nostr-web-components.umd.js',
+						'./assets/nostr-web-components.js',
+						'./nostr-web-components.js'
+					];
+				}
+			}
+
 			// モジュール読み込み試行
 			async function loadModule() {
 				try {
 					updateDebugInfo('モジュール読み込み開始');
 					updateStatus('module-status', 'モジュール読み込み中...', 'loading');
 
-					// 実際のモジュールパスを確認
-					const moduleUrl = '/src/lib/index.ts';
-					updateDebugInfo(`モジュールURL: ${moduleUrl}`);
+					const possiblePaths = getEnvironmentPaths();
 
-					const module = await import(moduleUrl);
-					updateDebugInfo('モジュール読み込み成功', 'success');
-					updateStatus('module-status', 'モジュール読み込み成功', 'success');
+					for (const moduleUrl of possiblePaths) {
+						try {
+							updateDebugInfo(`モジュールURL試行: ${moduleUrl}`);
+							const module = await import(moduleUrl);
+							updateDebugInfo(`モジュール読み込み成功: ${moduleUrl}`, 'success');
+							updateStatus('module-status', `モジュール読み込み成功: ${moduleUrl}`, 'success');
 
-					// モジュールの内容を確認
-					updateDebugInfo(`モジュール内容: ${Object.keys(module).join(', ')}`);
+							// モジュールの内容を確認
+							const moduleKeys = Object.keys(module);
+							updateDebugInfo(`モジュール内容: ${moduleKeys.join(', ')}`);
+
+							// デフォルトエクスポートの確認
+							if (module.default) {
+								updateDebugInfo('デフォルトエクスポート確認: あり');
+							}
+
+							return;
+						} catch (error) {
+							updateDebugInfo(`URL失敗: ${moduleUrl} - ${error.message}`, 'error');
+						}
+					}
+
+					updateDebugInfo('全てのモジュールパスで失敗', 'error');
+					updateStatus('module-status', '全てのモジュールパスで失敗', 'error');
+
+					// 代替手段：script タグでの読み込み
+					await tryScriptTagLoading();
 				} catch (error) {
 					updateDebugInfo(`モジュール読み込みエラー: ${error.message}`, 'error');
 					updateStatus('module-status', `読み込みエラー: ${error.message}`, 'error');
-
-					// 代替手段の提案
-					updateDebugInfo('代替手段を試行中...');
-					await tryAlternativeLoading();
 				}
 			}
 
-			async function tryAlternativeLoading() {
-				const alternatives = [
-					'./src/lib/index.ts',
-					'./src/lib/index.js',
-					'/src/lib/index.js',
-					'./lib/index.js',
-					'./index.js'
-				];
+			async function tryScriptTagLoading() {
+				updateDebugInfo('script タグでの読み込みを試行中...');
 
-				for (const url of alternatives) {
+				const scriptPaths = getEnvironmentPaths().map((path) => path.replace('.ts', '.js'));
+
+				for (const scriptPath of scriptPaths) {
 					try {
-						updateDebugInfo(`代替URL試行: ${url}`);
-						const module = await import(url);
-						updateDebugInfo(`代替URL成功: ${url}`, 'success');
-						updateStatus('module-status', `代替URL成功: ${url}`, 'success');
+						updateDebugInfo(`script タグ試行: ${scriptPath}`);
+
+						const script = document.createElement('script');
+						script.type = 'module';
+						script.src = scriptPath;
+
+						const loadPromise = new Promise((resolve, reject) => {
+							script.onload = () => {
+								updateDebugInfo(`script タグ読み込み完了: ${scriptPath}`);
+								resolve();
+							};
+							script.onerror = (error) => {
+								updateDebugInfo(`script タグエラー: ${scriptPath} - ${error}`);
+								reject(error);
+							};
+
+							// タイムアウト設定
+							setTimeout(() => {
+								reject(new Error('タイムアウト'));
+							}, 5000);
+						});
+
+						document.head.appendChild(script);
+						await loadPromise;
+
+						updateDebugInfo(`script タグ成功: ${scriptPath}`, 'success');
+						updateStatus('module-status', `script タグ成功: ${scriptPath}`, 'success');
+
+						// 少し待ってからCustom Elements確認
+						setTimeout(checkCustomElements, 500);
 						return;
 					} catch (error) {
-						updateDebugInfo(`代替URL失敗: ${url} - ${error.message}`, 'error');
+						updateDebugInfo(`script タグ失敗: ${scriptPath} - ${error.message}`, 'error');
 					}
 				}
 
-				updateDebugInfo('全ての代替URLで失敗', 'error');
+				updateDebugInfo('script タグでの読み込みも失敗', 'error');
+
+				// 最後の手段：UMDバージョンの確認
+				await tryUMDLoading();
+			}
+
+			async function tryUMDLoading() {
+				updateDebugInfo('UMDバージョンの読み込みを試行中...');
+
+				const umdPaths = [
+					'./dist/nostr-web-components.umd.js',
+					'/nostr-share-component/dist/nostr-web-components.umd.js',
+					'./nostr-web-components.umd.js',
+					'/nostr-share-component/nostr-web-components.umd.js'
+				];
+
+				for (const umdPath of umdPaths) {
+					try {
+						updateDebugInfo(`UMD試行: ${umdPath}`);
+
+						const script = document.createElement('script');
+						script.src = umdPath;
+
+						const loadPromise = new Promise((resolve, reject) => {
+							script.onload = resolve;
+							script.onerror = reject;
+						});
+
+						document.head.appendChild(script);
+						await loadPromise;
+
+						updateDebugInfo(`UMD成功: ${umdPath}`, 'success');
+						updateStatus('module-status', `UMD成功: ${umdPath}`, 'success');
+
+						// グローバル変数の確認
+						if (window.NostrWebComponents) {
+							updateDebugInfo('グローバル変数 NostrWebComponents 確認: あり');
+						}
+
+						setTimeout(checkCustomElements, 500);
+						return;
+					} catch (error) {
+						updateDebugInfo(`UMD失敗: ${umdPath} - ${error.message}`, 'error');
+					}
+				}
+
+				updateDebugInfo('UMDでの読み込みも失敗', 'error');
 			}
 
 			// Custom Elements の定義確認
@@ -243,9 +375,55 @@
 				});
 			}
 
+			// ファイル存在確認機能
+			async function checkFileExists(url) {
+				try {
+					const response = await fetch(url, { method: 'HEAD' });
+					return response.ok;
+				} catch (error) {
+					return false;
+				}
+			}
+
+			// ディレクトリ構造を確認
+			async function checkDirectoryStructure() {
+				updateDebugInfo('=== ディレクトリ構造確認 ===');
+
+				const checkPaths = [
+					'./',
+					'./src/',
+					'./src/lib/',
+					'./dist/',
+					'./dist/assets/',
+					'./build/',
+					'./build/assets/',
+					'./assets/',
+					'/nostr-web-components/',
+					'/nostr-web-components/src/',
+					'/nostr-web-components/src/lib/',
+					'/nostr-web-components/dist/',
+					'/nostr-web-components/dist/assets/',
+					'/nostr-web-components/build/',
+					'/nostr-web-components/build/assets/',
+					'/nostr-web-components/assets/'
+				];
+
+				for (const path of checkPaths) {
+					const indexJsExists = await checkFileExists(path + 'index.js');
+					const indexTsExists = await checkFileExists(path + 'index.ts');
+
+					if (indexJsExists || indexTsExists) {
+						updateDebugInfo(`発見: ${path} - JS:${indexJsExists}, TS:${indexTsExists}`);
+					}
+				}
+			}
+
 			// DOMContentLoaded時の処理
 			document.addEventListener('DOMContentLoaded', async () => {
 				updateDebugInfo('DOM読み込み完了');
+
+				// ディレクトリ構造確認
+				await checkDirectoryStructure();
 
 				// モジュール読み込み
 				await loadModule();
