@@ -5,6 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Nostr Web Components デモ</title>
 		<link rel="stylesheet" href="https://unpkg.com/nostr-web-components/dist/style.css" />
+		<!-- 	<script type="module" src="/nostr-web-components/dist/nostr-web-components.mjs"></script> -->
+		<script type="module" src="dist/nostr-web-components.mjs"></script>
 		<style>
 			body {
 				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -133,15 +135,18 @@
 				} else if (isGitHubPages) {
 					const basePath = '/nostr-web-components';
 					return [
-						`${basePath}/dist/nostr-web-components.es.js`,
+						`${basePath}/dist/nostr-web-components.mjs`,
 						`${basePath}/dist/nostr-web-components.iife.js`,
-						`./dist/nostr-web-components.es.js`,
-						`./dist/nostr-web-components.iife.js`
+						`${basePath}/dist/nostr-web-components.umd.js`,
+						`./dist/nostr-web-components.mjs`,
+						`./dist/nostr-web-components.iife.js`,
+						`./dist/nostr-web-components.umd.js`
 					];
 				} else {
 					return [
-						'./dist/nostr-web-components.es.js',
+						'./dist/nostr-web-components.mjs',
 						'./dist/nostr-web-components.iife.js',
+						'./dist/nostr-web-components.umd.js',
 						'./nostr-web-components.iife.js'
 					];
 				}
@@ -242,7 +247,14 @@
 
 			// 初期化
 			document.addEventListener('DOMContentLoaded', async () => {
-				addLog('DOM読み込み完了。モジュール読み込みを開始します');
+				addLog('DOM読み込み完了。カスタム要素定義をチェックします');
+
+				if (customElements.get('nostr-note')) {
+					addLog('nostr-noteは既に定義済みです。動的読み込みは不要です。', 'success');
+					return;
+				}
+
+				addLog('nostr-noteは未定義です。モジュールの動的読み込みを開始します。');
 				try {
 					await loadModule();
 					addLog('モジュール読み込み処理完了', 'success');
