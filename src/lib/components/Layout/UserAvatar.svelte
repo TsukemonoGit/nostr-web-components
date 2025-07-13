@@ -19,6 +19,7 @@
 
 <style>
 	.placeholder {
+		display: inline-block;
 		vertical-align: bottom;
 		background-color: var(--placeholder-color, #ccc);
 		border-radius: 20%;
