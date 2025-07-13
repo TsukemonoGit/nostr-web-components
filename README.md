@@ -177,13 +177,7 @@ Posts from specific author
 Multiple filters
 
 ```html
-<nostr-list
-	filters='[
-{"kinds":[1],"limit":10},
-{"kinds":[6],"limit":5}
-]'
->
-</nostr-list>
+<nostr-list filters='[{"kinds":[1],"limit":10},{"kinds":[6],"limit":5}]'> </nostr-list>
 ```
 
 Custom relays and theme
@@ -204,22 +198,22 @@ Common filter patterns for `<nostr-list>`:
 
 ```js
 // Text notes (kind 1)
-[{ kinds: [1], limit: 10 }][
-	// Posts from specific authors
-	{ kinds: [1], authors: ['npub1...', 'npub2...'], limit: 5 }
-][
-	// Posts with specific hashtags
-	{ kinds: [1], '#t': ['nostr', 'bitcoin'], limit: 10 }
-][
-	// Posts from the last hour
-	{ kinds: [1], since: Math.floor(Date.now() / 1000) - 3600, limit: 20 }
-][
-	// Replies to a specific note
-	{ kinds: [1], '#e': ['note1abc...'], limit: 10 }
-][
-	// Multiple kinds
-	{ kinds: [1, 6, 7], limit: 15 }
-];
+'[{"kinds":[1],"limit":10}]';
+
+// Posts from specific authors
+'[{"kinds":[1],"authors":["npub1...","npub2..."],"limit":5}]';
+
+// Posts with specific hashtags
+'[{"kinds":[1],"#t":["nostr","bitcoin"],"limit":10}]';
+
+// Posts from the last hour
+'[{"kinds":[1],"since":' + (Math.floor(Date.now() / 1000) - 3600) + ',"limit":20}]';
+
+// Replies to a specific note
+('[{"kinds":[1],"#e":["note1abc..."],"limit":10}]');
+
+// Multiple kinds
+('[{"kinds":[1,6,7],"limit":15}]');
 ```
 
 ## Development

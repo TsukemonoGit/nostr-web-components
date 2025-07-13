@@ -9,6 +9,9 @@
 	import Link from './Link.svelte';
 	import DecodedContent from './DecodedContent.svelte';
 	import Image from './Image.svelte';
+	import Video from './Video.svelte';
+	import Audio from './Video.svelte';
+
 	interface Props {
 		text: string;
 		tags: string[][];
@@ -79,9 +82,15 @@
 		{#if decoded}<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
 		{:else}{part.content}{/if}
 	{:else if part.type === 'url'}
-		{#if part.metadata.type === 'image'}<Image src={part.content} {themeClass} />{:else}<Link
+		{#if part.metadata.type === 'image'}<Image
+				src={part.content}
 				{themeClass}
-				href={part.content}>{part.content}</Link
+			/>{:else if part.metadata.type === 'video'}<Video
+				src={part.content}
+				{themeClass}
+			/>{:else if part.metadata.type === 'audio'}
+			<Audio src={part.content} {themeClass} />{:else}<Link {themeClass} href={part.content}
+				>{part.content}</Link
 			>{/if}
 	{:else if part.type === TokenType.CUSTOM_EMOJI}<CustomEmoji
 			{part}

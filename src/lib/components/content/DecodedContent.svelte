@@ -16,11 +16,10 @@
 
 {#if decoded.type === 'npub' || decoded.type === 'nprofile'}<nostr-profile
 		display="name"
-		id={decoded.type === 'npub' ? decoded.data : decoded.data.pubkey}
+		id={part.metadata.plainNip19}
 		{theme}
 	></nostr-profile>{:else if decoded.type === 'nevent' || decoded.type === 'note'}
-	<nostr-note id={decoded.type === 'note' ? decoded.data : decoded.data.author} {theme}
-	></nostr-note>
+	<nostr-note id={part.metadata.plainNip19} {theme}></nostr-note>
 {:else if decoded.type === 'naddr'}
 	<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
 {:else if decoded.type === 'nsec'}
