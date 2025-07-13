@@ -1,10 +1,28 @@
+[EN/[JA](./README-ja.md)]
+
 # Nostr Web Components
 
 A lightweight, easy-to-use Web Components library for integrating Nostr protocol functionality into web applications.
 
 ## Installation
 
-npm install nostr-web-components
+### Option 1: CDN (Recommended for quick start)
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.min.js"></script>
+```
+
+### Option 2: NPM Package
+
+```bash
+npm install @konemono/nostr-web-components
+```
+
+Then import in your JavaScript:
+
+```javascript
+import '@konemono/nostr-web-components';
+```
 
 ## Usage
 
@@ -12,9 +30,34 @@ npm install nostr-web-components
 
 The `<nostr-container>` component provides a way to share relay configuration to all child components.
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@{version}/dist/nostr-web-components.iife.min.js"></script>
+#### Using CDN
 
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.min.js"></script>
+	</head>
+	<body>
+		<nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
+			<nostr-note id="note1abc..."></nostr-note>
+			<nostr-profile id="npub1xyz..."></nostr-profile>
+			<nostr-list filters='[{"kinds":[1],"limit":10}]'></nostr-list>
+		</nostr-container>
+	</body>
+</html>
+```
+
+#### Using NPM
+
+```javascript
+// main.js
+import '@konemono/nostr-web-components';
+
+// Now you can use the components in your HTML
+```
+
+```html
 <nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
 	<nostr-note id="note1abc..."></nostr-note>
 	<nostr-profile id="npub1xyz..."></nostr-profile>
@@ -218,10 +261,12 @@ Common filter patterns for `<nostr-list>`:
 
 ## Development
 
+```bash
 npm install
 npm run build
 npm run dev # Watch mode
 npm run serve # Development server
+```
 
 ## License
 
