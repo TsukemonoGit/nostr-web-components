@@ -220,14 +220,16 @@
 							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
-						<div class="code-block">
-							&lt;div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px;"&gt;
-							&lt;nostr-profile id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-							display="card" &gt;&lt;/nostr-profile&gt; &lt;h4&gt;最新の投稿&lt;/h4&gt;
-							&lt;nostr-list
-							filters='[{"kinds":[1],"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"],"limit":3}]'
-							limit="3" &gt;&lt;/nostr-list&gt; &lt;/div&gt;
-						</div>
+						<pre class="code-block"><code>&lt;nostr-profile
+  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  display="card"&gt;
+&lt;/nostr-profile&gt;
+&lt;h4&gt;最新の投稿&lt;/h4&gt;
+&lt;nostr-list
+  filters='[{"kinds":[1],"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"],"limit":3}]'
+  limit="3"&gt;
+&lt;/nostr-list&gt;
+</code></pre>
 						<div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px">
 							<nostr-profile
 								id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
@@ -247,14 +249,23 @@
 							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
-						<div class="code-block">
-							&lt;div class="theme-demo"&gt; &lt;div&gt; &lt;h5&gt;ライトテーマ&lt;/h5&gt;
-							&lt;nostr-profile id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-							theme="light" display="name" &gt;&lt;/nostr-profile&gt; &lt;/div&gt; &lt;div&gt;
-							&lt;h5&gt;ダークテーマ&lt;/h5&gt; &lt;nostr-profile
-							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw" theme="dark"
-							display="name" &gt;&lt;/nostr-profile&gt; &lt;/div&gt; &lt;/div&gt;
-						</div>
+						<pre class="code-block"><code>&lt;div&gt;
+  &lt;h5&gt;ライトテーマ&lt;/h5&gt;
+  &lt;nostr-profile
+    id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+    theme="light"
+    display="name"&gt;
+  &lt;/nostr-profile&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h5&gt;ダークテーマ&lt;/h5&gt;
+  &lt;nostr-profile
+    id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+    theme="dark"
+    display="name"&gt;
+  &lt;/nostr-profile&gt;
+&lt;/div&gt;
+</code></pre>
 						<div class="theme-demo">
 							<div>
 								<h5>ライトテーマ</h5>
@@ -286,14 +297,13 @@
 							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
-						<div class="code-block">
-							&lt;nostr-container
-							relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'&gt; &lt;!--
-							この中にNostrコンポーネントを配置 --&gt; &lt;nostr-profile
-							id="npub1..."&gt;&lt;/nostr-profile&gt; &lt;nostr-note
-							id="nevent1..."&gt;&lt;/nostr-note&gt; &lt;nostr-list
-							filters='[...]'&gt;&lt;/nostr-list&gt; &lt;/nostr-container&gt;
-						</div>
+						<pre class="code-block"><code>&lt;nostr-container
+  relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'&gt; &lt;!--
+  この中にNostrコンポーネントを配置 --&gt; &lt;nostr-profile
+  id="npub1..."&gt;&lt;/nostr-profile&gt; &lt;nostr-note
+  id="nevent1..."&gt;&lt;/nostr-note&gt; &lt;nostr-list
+  filters='[...]'&gt;&lt;/nostr-list&gt; &lt;/nostr-container&gt;
+</code></pre>
 						<p>
 							このページ全体がnostr-containerで囲まれており、すべてのコンポーネントが同じリレー設定を共有しています。
 						</p>
@@ -305,13 +315,12 @@
 							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
-						<div class="code-block">
-							&lt;nostr-container
-							relays='["wss://relay.damus.io","wss://nostr.wine","wss://relay.current.fyi"]'&gt;
-							&lt;!-- 独自のリレーセットを使用 --&gt; &lt;nostr-list
-							filters='[{"kinds":[1],"limit":3}]' limit="3" &gt;&lt;/nostr-list&gt;
-							&lt;/nostr-container&gt;
-						</div>
+						<pre class="code-block"><code>&lt;nostr-container
+  relays='["wss://relay.damus.io","wss://nostr.wine","wss://relay.current.fyi"]'&gt;
+  &lt;!-- 独自のリレーセットを使用 --&gt; &lt;nostr-list
+  filters='[{"kinds":[1],"limit":3}]' limit="3" &gt;&lt;/nostr-list&gt;
+&lt;/nostr-container&gt;
+</code></pre>
 						<p>
 							個別のコンポーネントでも relays
 							プロパティを指定することで、独自のリレーセットを使用できます。
