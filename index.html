@@ -190,7 +190,7 @@
 					];
 				} else if (isGitHubPages) {
 					// GitHub Pages: baseパス考慮
-					const basePath = '/nostr-share-component';
+					const basePath = '/nostr-web-components';
 					return [
 						`${basePath}/dist/nostr-web-components.js`,
 						`${basePath}/dist/nostr-web-components.es.js`,
@@ -315,9 +315,9 @@
 
 				const umdPaths = [
 					'./dist/nostr-web-components.umd.js',
-					'/nostr-share-component/dist/nostr-web-components.umd.js',
+					'/nostr-web-components/dist/nostr-web-components.umd.js',
 					'./nostr-web-components.umd.js',
-					'/nostr-share-component/nostr-web-components.umd.js'
+					'/nostr-web-components/nostr-web-components.umd.js'
 				];
 
 				for (const umdPath of umdPaths) {
