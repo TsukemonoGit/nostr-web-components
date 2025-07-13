@@ -31,8 +31,7 @@
 	"exports": {
 		".": {
 			"import": "./dist/nostr-web-components.es.js",
-			"require": "./dist/nostr-web-components.umd.js",
-			"default": "./dist/nostr-web-components.iife.js"
+			"require": "./dist/nostr-web-components.umd.js"
 		},
 		"./style.css": "./dist/nostr-web-components.css"
 	},
@@ -46,6 +45,7 @@
 		"@sveltejs/kit": "^2.22.5",
 		"@sveltejs/package": "^2.3.12",
 		"@sveltejs/vite-plugin-svelte": "^6.0.0",
+		"@tailwindcss/postcss": "^4.1.11",
 		"@tailwindcss/vite": "^4.1.11",
 		"@types/node": "^24.0.13",
 		"eslint": "^9.31.0",

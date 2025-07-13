@@ -8,36 +8,55 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig(({ mode }) => {
-	const isPages = mode === 'pages';
-
-	return {
-		base: isPages ? '/nostr-web-components/' : undefined,
-		plugins: [
-			tailwindcss(),
-			svelte({
-				compilerOptions: {
-					customElement: true
+	switch (mode) {
+		case 'pages':
+			return {
+				base: '/nostr-web-components/',
+				plugins: [svelte({ compilerOptions: { customElement: true } })],
+				resolve: {
+					alias: {
+						'nostr-web-components': path.resolve(__dirname, 'src/lib')
+					}
+				},
+				build: {
+					lib: {
+						entry: 'src/lib/index.ts',
+						name: 'NostrWebComponents',
+						fileName: 'nostr-web-components',
+						formats: ['es', 'umd', 'iife']
+					}
 				}
-			})
-		],
-		resolve: {
-			alias: {
-				'nostr-web-components': path.resolve(__dirname, 'src/lib')
-			}
-		},
-		build: {
-			lib: {
-				entry: 'src/lib/index.ts',
-				name: 'NostrWebComponents',
-				fileName: 'nostr-web-components',
-				formats: ['es', 'umd', 'iife']
-			},
-			rollupOptions: {
-				external: [], // ← 全バンドルに含める
-				output: {
-					globals: {} // ← 使わないので空でもよい
+			};
+		default:
+			return {
+				plugins: [
+					svelte({
+						compilerOptions: {
+							customElement: true
+						}
+					})
+				],
+				resolve: {
+					alias: {
+						'nostr-web-components': path.resolve(__dirname, 'src/lib')
+					}
+				},
+				build: {
+					lib: {
+						entry: 'src/lib/index.ts',
+						name: 'NostrWebComponents',
+						fileName: 'nostr-web-components',
+						formats: ['es', 'umd', 'iife']
+					},
+					rollupOptions: {
+						external: ['svelte'],
+						output: {
+							globals: {
+								svelte: 'Svelte'
+							}
+						}
+					}
 				}
-			}
-		}
-	};
+			};
+	}
 });

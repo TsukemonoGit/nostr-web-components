@@ -1,34 +1,27 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
-    "types": ["svelte"],
-    "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": "./dist/types",
-    "baseUrl": ".",
-    "paths": {
-      "nostr-web-components/*": ["./src/lib/*"]
-    }
-  },
-  "include": [
-    "src/lib/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "eslint.config.js",
-    "svelte.config.js",
-    "vite.config.js"
-  ]
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2022",
+		"lib": ["ES2022", "DOM"],
+		"types": ["svelte"],
+		"declaration": true,
+		"emitDeclarationOnly": true,
+		"outDir": "./dist/types",
+		"baseUrl": ".",
+		"paths": {
+			"nostr-web-components/*": ["./src/lib/*"]
+		}
+	},
+	"typeRoots": ["./dist/types", "./node_modules/@types"],
+	"include": ["src/lib/**/*"],
+	"exclude": ["node_modules", "dist", "eslint.config.js", "svelte.config.js", "vite.config.js"]
 }
