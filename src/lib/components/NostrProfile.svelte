@@ -125,11 +125,16 @@
 		<!--{:else if display === 'compact'}
 		-->
 	{:else if noLink}
-		<span>@{profile?.name || profile?.display_name || 'Unknown User'}</span>
+		{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
+			src={profile?.picture}
+			size={20}
+		/>
 	{:else}<Link {themeClass} href={linkUrl}
-			>@{profile?.name || profile?.display_name || 'Unknown User'}</Link
-		>
-	{/if}
+			>{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
+				src={profile?.picture}
+				size={20}
+			/></Link
+		>{/if}
 </div>
 
 <style>

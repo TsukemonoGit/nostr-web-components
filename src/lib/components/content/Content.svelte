@@ -68,22 +68,21 @@
 
 {#each parts as part}{#if part.type === 'nip19'}{@const decoded = nip19Decode(
 			part.metadata!.plainNip19 as string
-		)}{#if decoded}
-			<DecodedContent {decoded} {part} {theme} {themeClass} />
-		{:else}{part.content}{/if}
+		)}{#if decoded}<DecodedContent
+				{decoded}
+				{part}
+				{theme}
+				{themeClass}
+			/>{:else}{part.content}{/if}
 	{:else if part.type === TokenType.LEGACY_REFERENCE && part.metadata && part.metadata.tagType && part.metadata.referenceId}
 		{@const decoded = arekore(part.metadata.tagType as string, part.metadata.referenceId as string)}
-		{#if decoded}
-			<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
+		{#if decoded}<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
 		{:else}{part.content}{/if}
 	{:else if part.type === 'url'}
-		{#if part.metadata.type === 'image'}
-			<Image src={part.content} {themeClass} />
-		{:else}
-			<Link {themeClass} href={part.content}>{part.content}</Link>
-		{/if}
-	{:else if part.type === TokenType.CUSTOM_EMOJI}
-		<CustomEmoji {part} />
-	{:else}<span class="break-words whitespace-pre-wrap" style="word-break: break-word;"
-			>{part.content}</span
-		>{/if}{/each}
+		{#if part.metadata.type === 'image'}<Image src={part.content} {themeClass} />{:else}<Link
+				{themeClass}
+				href={part.content}>{part.content}</Link
+			>{/if}
+	{:else if part.type === TokenType.CUSTOM_EMOJI}<CustomEmoji
+			{part}
+		/>{:else}{part.content}{/if}{/each}
