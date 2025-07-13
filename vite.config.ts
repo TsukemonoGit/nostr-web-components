@@ -12,17 +12,25 @@ export default defineConfig(({ mode }) => {
 		case 'pages': //github actions でpagesをデプロイするときのやつ
 			return {
 				base: '/nostr-share-component/',
-				plugins: [
-					tailwindcss(),
-					svelte({
-						compilerOptions: {
-							customElement: true
-						}
-					})
-				],
+				plugins: [svelte({ compilerOptions: { customElement: true } })],
 				resolve: {
 					alias: {
 						'nostr-web-components': path.resolve(__dirname, 'src/lib')
+					}
+				},
+				build: {
+					// index.html を使わない
+					lib: {
+						entry: 'src/lib/index.ts',
+						name: 'NostrWebComponents',
+						fileName: 'nostr-web-components',
+						formats: ['es', 'umd']
+					},
+					rollupOptions: {
+						external: ['svelte'],
+						output: {
+							globals: { svelte: 'Svelte' }
+						}
 					}
 				}
 			};
