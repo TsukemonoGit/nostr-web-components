@@ -1,5 +1,5 @@
 import { type Event as NostrEvent } from 'nostr-typedef';
-import type { UserProfile } from 'nostr-web-components/types/index.js';
+import { UserProfile } from '.';
 // src/types/utils.ts
 
 export interface ParsedContent {
