@@ -173,7 +173,7 @@
 	.note-avatar {
 		width: 40px;
 		height: 40px;
-		border-radius: 50%;
+		border-radius: 20%;
 		overflow: hidden;
 		display: flex;
 		align-items: center;
@@ -185,7 +185,7 @@
 		max-width: 100%;
 		max-height: 100%;
 		object-fit: contain;
-		border-radius: 50%;
+		border-radius: 20%;
 	}
 
 	.note-details {
@@ -226,7 +226,7 @@
 	.placeholder.avatar {
 		width: 40px;
 		height: 40px;
-		border-radius: 50%;
+		border-radius: 20%;
 	}
 
 	.placeholder.name {

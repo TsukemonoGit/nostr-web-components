@@ -168,7 +168,7 @@
 	.profile-avatar {
 		width: 60px;
 		height: 60px;
-		border-radius: 50%;
+		border-radius: 20%;
 		overflow: hidden;
 		display: flex;
 		align-items: center;
@@ -180,7 +180,7 @@
 		max-width: 100%;
 		max-height: 100%;
 		object-fit: contain;
-		border-radius: 50%;
+		border-radius: 20%;
 	}
 
 	.profile-details {
@@ -222,7 +222,7 @@
 	.placeholder.avatar {
 		width: 60px;
 		height: 60px;
-		border-radius: 50%;
+		border-radius: 20%;
 	}
 
 	.placeholder.name {
