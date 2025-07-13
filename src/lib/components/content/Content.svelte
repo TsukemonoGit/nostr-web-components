@@ -8,7 +8,7 @@
 	import { parseNaddr } from 'nostr-web-components/utils/utils.js';
 	import Link from './Link.svelte';
 	import DecodedContent from './DecodedContent.svelte';
-
+	import Image from './Image.svelte';
 	interface Props {
 		text: string;
 		tags: string[][];
@@ -77,7 +77,11 @@
 			<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
 		{:else}{part.content}{/if}
 	{:else if part.type === 'url'}
-		<Link {themeClass} href={part.content}>{part.content}</Link>
+		{#if part.metadata.type === 'image'}
+			<Image src={part.content} {themeClass} />
+		{:else}
+			<Link {themeClass} href={part.content}>{part.content}</Link>
+		{/if}
 	{:else if part.type === TokenType.CUSTOM_EMOJI}
 		<CustomEmoji {part} />
 	{:else}<span class="break-words whitespace-pre-wrap" style="word-break: break-word;"
