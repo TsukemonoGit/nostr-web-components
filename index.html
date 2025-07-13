@@ -19,22 +19,6 @@
 				border-radius: 8px;
 				box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 			}
-			.debug-info {
-				background: #f0f0f0;
-				padding: 15px;
-				border-radius: 4px;
-				margin-bottom: 20px;
-				font-family: monospace;
-				font-size: 12px;
-			}
-			.debug-info.error {
-				background: #ffe6e6;
-				border: 1px solid #ffcccc;
-			}
-			.debug-info.success {
-				background: #e6ffe6;
-				border: 1px solid #ccffcc;
-			}
 			.demo-section {
 				margin: 20px 0;
 				padding: 15px;
@@ -56,49 +40,15 @@
 				border-radius: 4px;
 				margin: 10px 0;
 			}
-			.status {
-				padding: 5px 10px;
-				border-radius: 4px;
-				margin: 5px 0;
-				font-size: 12px;
-			}
-			.status.loading {
-				background: #fff3cd;
-				color: #856404;
-			}
-			.status.success {
-				background: #d4edda;
-				color: #155724;
-			}
-			.status.error {
-				background: #f8d7da;
-				color: #721c24;
-			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
 			<h1>Nostr Web Components デモ</h1>
 
-			<div class="debug-info" id="debug-output">
-				<div>デバッグ情報:</div>
-				<div id="debug-content">初期化中...</div>
-			</div>
-
-			<div class="demo-section">
-				<h2>モジュール読み込み確認</h2>
-				<div id="module-status" class="status loading">モジュール読み込み中...</div>
-			</div>
-
-			<div class="demo-section">
-				<h2>Custom Elements 確認</h2>
-				<div id="custom-elements-status" class="status loading">Custom Elements確認中...</div>
-			</div>
-
 			<nostr-container relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'>
 				<div class="demo-section">
 					<h2>NostrNote</h2>
-					<div id="note-status" class="status loading">NostrNote読み込み中...</div>
 					<nostr-note
 						href="https://njump.me/{id}"
 						id="nevent1qvzqqqqqqypzpjqu0xvlwfmrsuchs789n47ryyyn5seewlhxsyw2wmwr49ecuxrfqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpz4mhxue69uhhyetvv9ujucnpwf5kuefwvdhsqgqd5xfdgjgyr4zs828n6puphdaz2k8fgyvf27uzjfevzr2788kevcqzrqkj"
@@ -107,7 +57,6 @@
 
 				<div class="demo-section">
 					<h2>NostrProfile</h2>
-					<div id="profile-status" class="status loading">NostrProfile読み込み中...</div>
 					<nostr-profile
 						id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 					></nostr-profile>
@@ -119,7 +68,6 @@
 
 				<div class="demo-section">
 					<h2>Filtered List</h2>
-					<div id="list-status" class="status loading">NostrList読み込み中...</div>
 					<nostr-list
 						filters='[{"kinds":[1],"limit":20 ,"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"]}]'
 						limit="50"
@@ -129,322 +77,128 @@
 		</div>
 
 		<script>
-			// デバッグ情報の出力
-			function updateDebugInfo(message, type = 'info') {
-				const debugContent = document.getElementById('debug-content');
-				const timestamp = new Date().toLocaleTimeString();
-				debugContent.innerHTML += `<div class="${type}">[${timestamp}] ${message}</div>`;
-			}
-
-			function updateStatus(elementId, message, type = 'loading') {
-				const element = document.getElementById(elementId);
-				if (element) {
-					element.textContent = message;
-					element.className = `status ${type}`;
-				}
-			}
-
-			// モジュール読み込み前の確認
-			updateDebugInfo('ページ読み込み開始');
-			updateDebugInfo(`User Agent: ${navigator.userAgent}`);
-
-			// ES Modules サポート確認
-			let esModulesSupport = false;
-			try {
-				// ES Modules の機能確認
-				esModulesSupport = 'noModule' in HTMLScriptElement.prototype;
-				updateDebugInfo(`ES Modules サポート: ${esModulesSupport}`);
-				updateDebugInfo(
-					`動的import サポート: ${typeof window.import !== 'undefined' || 'import' in window}`
-				);
-			} catch (e) {
-				esModulesSupport = false;
-				updateDebugInfo(`ES Modules サポート: false (エラー: ${e.message})`);
-			}
-
-			// Custom Elements API の確認
-			if (typeof customElements !== 'undefined') {
-				updateDebugInfo('Custom Elements API: 利用可能');
-				updateStatus('custom-elements-status', 'Custom Elements API: 利用可能', 'success');
-			} else {
-				updateDebugInfo('Custom Elements API: 利用不可', 'error');
-				updateStatus('custom-elements-status', 'Custom Elements API: 利用不可', 'error');
-			}
-
 			// 環境判定と適切なパス決定
-			function getEnvironmentPaths() {
+			function getModulePaths() {
 				const isDevelopment =
 					location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 				const isGitHubPages = location.hostname.includes('github.io');
 
-				updateDebugInfo(`環境判定: 開発=${isDevelopment}, GitHub Pages=${isGitHubPages}`);
-				updateDebugInfo(`現在のURL: ${location.href}`);
-
 				if (isDevelopment) {
-					// 開発環境: Viteの開発サーバー用パス
-					return [
-						'/src/lib/index.ts',
-						'./src/lib/index.ts',
-						'/src/lib/index.js',
-						'./src/lib/index.js'
-					];
+					return ['/src/lib/index.ts', './src/lib/index.ts'];
 				} else if (isGitHubPages) {
-					// GitHub Pages: baseパス考慮
 					const basePath = '/nostr-web-components';
 					return [
 						`${basePath}/dist/nostr-web-components.js`,
 						`${basePath}/dist/nostr-web-components.es.js`,
-						`${basePath}/dist/nostr-web-components.umd.js`,
-						`${basePath}/assets/nostr-web-components.js`,
-						`${basePath}/assets/nostr-web-components.es.js`,
-						`${basePath}/nostr-web-components.js`,
-						`${basePath}/nostr-web-components.es.js`,
-						// 相対パスも試行
 						'./dist/nostr-web-components.js',
-						'./dist/nostr-web-components.es.js',
-						'./dist/nostr-web-components.umd.js',
-						'./assets/nostr-web-components.js',
-						'./assets/nostr-web-components.es.js',
-						'./nostr-web-components.js',
-						'./nostr-web-components.es.js'
+						'./dist/nostr-web-components.es.js'
 					];
 				} else {
-					// その他の本番環境
 					return [
 						'./dist/nostr-web-components.js',
 						'./dist/nostr-web-components.es.js',
-						'./dist/nostr-web-components.umd.js',
-						'./assets/nostr-web-components.js',
 						'./nostr-web-components.js'
 					];
 				}
 			}
 
-			// モジュール読み込み試行
+			// モジュール読み込み
 			async function loadModule() {
-				try {
-					updateDebugInfo('モジュール読み込み開始');
-					updateStatus('module-status', 'モジュール読み込み中...', 'loading');
+				const possiblePaths = getModulePaths();
 
-					const possiblePaths = getEnvironmentPaths();
-
-					for (const moduleUrl of possiblePaths) {
-						try {
-							updateDebugInfo(`モジュールURL試行: ${moduleUrl}`);
-							const module = await import(moduleUrl);
-							updateDebugInfo(`モジュール読み込み成功: ${moduleUrl}`, 'success');
-							updateStatus('module-status', `モジュール読み込み成功: ${moduleUrl}`, 'success');
-
-							// モジュールの内容を確認
-							const moduleKeys = Object.keys(module);
-							updateDebugInfo(`モジュール内容: ${moduleKeys.join(', ')}`);
-
-							// デフォルトエクスポートの確認
-							if (module.default) {
-								updateDebugInfo('デフォルトエクスポート確認: あり');
-							}
-
-							return;
-						} catch (error) {
-							updateDebugInfo(`URL失敗: ${moduleUrl} - ${error.message}`, 'error');
-						}
+				for (const moduleUrl of possiblePaths) {
+					try {
+						await import(moduleUrl);
+						return;
+					} catch (error) {
+						// 次のパスを試行
+						continue;
 					}
-
-					updateDebugInfo('全てのモジュールパスで失敗', 'error');
-					updateStatus('module-status', '全てのモジュールパスで失敗', 'error');
-
-					// 代替手段：script タグでの読み込み
-					await tryScriptTagLoading();
-				} catch (error) {
-					updateDebugInfo(`モジュール読み込みエラー: ${error.message}`, 'error');
-					updateStatus('module-status', `読み込みエラー: ${error.message}`, 'error');
 				}
+
+				// 全て失敗した場合はscriptタグで試行
+				await tryScriptTagLoading();
 			}
 
 			async function tryScriptTagLoading() {
-				updateDebugInfo('script タグでの読み込みを試行中...');
-
-				const scriptPaths = getEnvironmentPaths().map((path) => path.replace('.ts', '.js'));
+				const scriptPaths = getModulePaths().map((path) => path.replace('.ts', '.js'));
 
 				for (const scriptPath of scriptPaths) {
 					try {
-						updateDebugInfo(`script タグ試行: ${scriptPath}`);
-
 						const script = document.createElement('script');
 						script.type = 'module';
 						script.src = scriptPath;
 
-						const loadPromise = new Promise((resolve, reject) => {
-							script.onload = () => {
-								updateDebugInfo(`script タグ読み込み完了: ${scriptPath}`);
-								resolve();
-							};
-							script.onerror = (error) => {
-								updateDebugInfo(`script タグエラー: ${scriptPath} - ${error}`);
-								reject(error);
-							};
-
-							// タイムアウト設定
-							setTimeout(() => {
-								reject(new Error('タイムアウト'));
-							}, 5000);
+						await new Promise((resolve, reject) => {
+							script.onload = resolve;
+							script.onerror = reject;
+							setTimeout(() => reject(new Error('timeout')), 5000);
 						});
 
 						document.head.appendChild(script);
-						await loadPromise;
-
-						updateDebugInfo(`script タグ成功: ${scriptPath}`, 'success');
-						updateStatus('module-status', `script タグ成功: ${scriptPath}`, 'success');
-
-						// 少し待ってからCustom Elements確認
-						setTimeout(checkCustomElements, 500);
 						return;
 					} catch (error) {
-						updateDebugInfo(`script タグ失敗: ${scriptPath} - ${error.message}`, 'error');
+						continue;
 					}
 				}
 
-				updateDebugInfo('script タグでの読み込みも失敗', 'error');
-
-				// 最後の手段：UMDバージョンの確認
+				// 最後の手段：UMDバージョン
 				await tryUMDLoading();
 			}
 
 			async function tryUMDLoading() {
-				updateDebugInfo('UMDバージョンの読み込みを試行中...');
-
 				const umdPaths = [
 					'./dist/nostr-web-components.umd.js',
-					'/nostr-web-components/dist/nostr-web-components.umd.js',
-					'./nostr-web-components.umd.js',
-					'/nostr-web-components/nostr-web-components.umd.js'
+					'/nostr-web-components/dist/nostr-web-components.umd.js'
 				];
 
 				for (const umdPath of umdPaths) {
 					try {
-						updateDebugInfo(`UMD試行: ${umdPath}`);
-
 						const script = document.createElement('script');
 						script.src = umdPath;
 
-						const loadPromise = new Promise((resolve, reject) => {
+						await new Promise((resolve, reject) => {
 							script.onload = resolve;
 							script.onerror = reject;
 						});
 
 						document.head.appendChild(script);
-						await loadPromise;
-
-						updateDebugInfo(`UMD成功: ${umdPath}`, 'success');
-						updateStatus('module-status', `UMD成功: ${umdPath}`, 'success');
-
-						// グローバル変数の確認
-						if (window.NostrWebComponents) {
-							updateDebugInfo('グローバル変数 NostrWebComponents 確認: あり');
-						}
-
-						setTimeout(checkCustomElements, 500);
 						return;
 					} catch (error) {
-						updateDebugInfo(`UMD失敗: ${umdPath} - ${error.message}`, 'error');
+						continue;
 					}
 				}
 
-				updateDebugInfo('UMDでの読み込みも失敗', 'error');
+				// 全て失敗した場合のエラー表示
+				showError('モジュールの読み込みに失敗しました');
 			}
 
-			// Custom Elements の定義確認
-			function checkCustomElements() {
-				const elements = ['nostr-container', 'nostr-note', 'nostr-profile', 'nostr-list'];
-
-				elements.forEach((tagName) => {
-					const isDefined = customElements.get(tagName) !== undefined;
-					const status = isDefined ? 'success' : 'error';
-					const message = isDefined ? '定義済み' : '未定義';
-
-					updateDebugInfo(`${tagName}: ${message}`);
-
-					// 対応するステータスを更新
-					if (tagName === 'nostr-note') {
-						updateStatus('note-status', `${tagName}: ${message}`, status);
-					} else if (tagName === 'nostr-profile') {
-						updateStatus('profile-status', `${tagName}: ${message}`, status);
-					} else if (tagName === 'nostr-list') {
-						updateStatus('list-status', `${tagName}: ${message}`, status);
-					}
-				});
+			// エラー表示
+			function showError(message) {
+				const errorDiv = document.createElement('div');
+				errorDiv.className = 'error';
+				errorDiv.textContent = message;
+				document
+					.querySelector('.container')
+					.insertBefore(errorDiv, document.querySelector('.container').firstChild);
 			}
 
-			// ファイル存在確認機能
-			async function checkFileExists(url) {
-				try {
-					const response = await fetch(url, { method: 'HEAD' });
-					return response.ok;
-				} catch (error) {
-					return false;
-				}
-			}
-
-			// ディレクトリ構造を確認
-			async function checkDirectoryStructure() {
-				updateDebugInfo('=== ディレクトリ構造確認 ===');
-
-				const checkPaths = [
-					'./',
-					'./src/',
-					'./src/lib/',
-					'./dist/',
-					'./dist/assets/',
-					'./build/',
-					'./build/assets/',
-					'./assets/',
-					'/nostr-web-components/',
-					'/nostr-web-components/src/',
-					'/nostr-web-components/src/lib/',
-					'/nostr-web-components/dist/',
-					'/nostr-web-components/dist/assets/',
-					'/nostr-web-components/build/',
-					'/nostr-web-components/build/assets/',
-					'/nostr-web-components/assets/'
-				];
-
-				for (const path of checkPaths) {
-					const indexJsExists = await checkFileExists(path + 'index.js');
-					const indexTsExists = await checkFileExists(path + 'index.ts');
-
-					if (indexJsExists || indexTsExists) {
-						updateDebugInfo(`発見: ${path} - JS:${indexJsExists}, TS:${indexTsExists}`);
-					}
-				}
-			}
-
-			// DOMContentLoaded時の処理
+			// 初期化
 			document.addEventListener('DOMContentLoaded', async () => {
-				updateDebugInfo('DOM読み込み完了');
-
-				// ディレクトリ構造確認
-				await checkDirectoryStructure();
-
-				// モジュール読み込み
-				await loadModule();
-
-				// 少し待ってからCustom Elements確認
-				setTimeout(checkCustomElements, 1000);
-
-				// 5秒後に再確認
-				setTimeout(() => {
-					updateDebugInfo('=== 5秒後の再確認 ===');
-					checkCustomElements();
-				}, 5000);
+				try {
+					await loadModule();
+				} catch (error) {
+					showError('モジュールの読み込みに失敗しました');
+				}
 			});
 
 			// エラーハンドリング
 			window.addEventListener('error', (event) => {
-				updateDebugInfo(`グローバルエラー: ${event.error?.message || event.message}`, 'error');
+				console.error('エラー:', event.error?.message || event.message);
 			});
 
 			window.addEventListener('unhandledrejection', (event) => {
-				updateDebugInfo(`未処理のPromise拒否: ${event.reason}`, 'error');
+				console.error('未処理のPromise拒否:', event.reason);
 			});
 		</script>
 	</body>
