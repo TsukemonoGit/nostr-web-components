@@ -4,7 +4,7 @@
 	import 'nostr-web-components/style.css';
 	import type { NostrEvent } from 'nostr-tools';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
-	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
+	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
 	import NoteLayout1 from './Layout/NoteLayout1.svelte';
 	import NameDisplay from './Layout/NameDisplay.svelte';
@@ -12,6 +12,7 @@
 	import Content from './content/Content.svelte';
 
 	import { connected } from 'nostr-web-components/core/connected.js'; // initialize呼び出し用アクション
+	import type { UserProfile } from 'nostr-web-components/types/index.ts';
 
 	export let id: string = '';
 	export let relays: string[] = [];
@@ -28,7 +29,7 @@
 	let loading = false;
 	let error: string | null = null;
 	let note: NostrEvent | null = null;
-	let metadata: { name?: string; picture?: string } | null = null;
+	let metadata: UserProfile | null = null;
 	let metadataLoading = false;
 	let mounted = false;
 
@@ -152,7 +153,16 @@
 		{/snippet}
 
 		{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
-		{#snippet name()}<NameDisplay name={metadata?.name} />{/snippet}
+		{#snippet name()}
+			{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
+			{@const userUrl = encodedNpub
+				? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
+				: undefined}
+			<NameDisplay
+				{themeClass}
+				href={userUrl}
+				name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
+			/>{/snippet}
 		{#snippet createdAt()}
 			{#if note}<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span
 				>{/if}

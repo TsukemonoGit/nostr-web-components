@@ -6,10 +6,11 @@
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { connected } from 'nostr-web-components/core/connected.js';
 	import NoteLayout1 from './Layout/NoteLayout1.svelte';
-	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
+	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 	import UserAvatar from './Layout/UserAvatar.svelte';
 	import NameDisplay from './Layout/NameDisplay.svelte';
 	import Content from './content/Content.svelte';
+	import { UserProfile } from 'nostr-web-components/types';
 
 	export let filters: string = '[]';
 	export let relays: string[] = [];
@@ -35,7 +36,7 @@
 	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
 	let events: NostrEvent[] = [];
-	let metadataMap: Map<string, { name?: string; picture?: string }> = new Map();
+	let metadataMap: Map<string, UserProfile> = new Map();
 	let loading = false;
 	let error: string | null = null;
 	let mounted = false;
@@ -200,7 +201,16 @@
 					{/snippet}
 
 					{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
-					{#snippet name()}<NameDisplay name={metadata?.name} />{/snippet}
+					{#snippet name()}
+						{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
+						{@const userUrl = encodedNpub
+							? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
+							: undefined}
+						<NameDisplay
+							{themeClass}
+							href={userUrl}
+							name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
+						/>{/snippet}
 					{#snippet createdAt()}
 						{#if note}<span class="timestamp"
 								>{new Date(note.created_at * 1000).toLocaleString()}</span

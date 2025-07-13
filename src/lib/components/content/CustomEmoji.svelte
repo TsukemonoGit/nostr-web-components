@@ -33,7 +33,7 @@
 		margin: 0;
 		display: inline;
 		overflow: hidden;
-		object-fit: contain;
+		object-fit: cover;
 		vertical-align: bottom;
 	}
 </style>

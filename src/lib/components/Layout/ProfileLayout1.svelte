@@ -44,20 +44,11 @@
 
 		<div class="profile-details">
 			<div class="profile-header">
-				<div class="profile-name">
-					{#if name}
-						{@render name()}
-					{:else if showPlaceholders}
-						<div class="placeholder name"></div>
-					{/if}
-				</div>
-				<div class="profile-username">
-					{#if username}
-						{@render username()}
-					{:else if showPlaceholders}
-						<div class="placeholder username"></div>
-					{/if}
-				</div>
+				{#if name}
+					{@render name()}
+				{:else if showPlaceholders}
+					<div class="placeholder name"></div>
+				{/if}
 			</div>
 
 			{#if about || showPlaceholders}
@@ -179,7 +170,7 @@
 	.profile-avatar > :global(*) {
 		max-width: 100%;
 		max-height: 100%;
-		object-fit: contain;
+		object-fit: cover;
 		border-radius: 20%;
 	}
 
@@ -194,17 +185,9 @@
 		display: flex;
 		align-items: center;
 		gap: 12px;
-	}
-
-	.profile-name {
 		font-weight: bold;
 		font-size: 18px;
 		color: var(--name-color);
-	}
-
-	.profile-username {
-		font-size: 14px;
-		color: var(--username-color);
 	}
 
 	.profile-about {

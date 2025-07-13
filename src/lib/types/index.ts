@@ -1,5 +1,5 @@
 // src/types/index.ts
-import { type Filter, type Event as NostrEvent } from 'nostr-typedef';
+import { type Event as NostrEvent } from 'nostr-typedef';
 export * from 'nostr-web-components/types/components.js';
 export * from 'nostr-web-components/types/utils.js';
 

@@ -131,3 +131,10 @@ body {
 	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 	gap: 20px;
 }
+
+.github-link {
+	text-decoration: none;
+}
+.github-link:hover {
+	text-decoration: underline;
+}

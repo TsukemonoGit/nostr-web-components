@@ -2,6 +2,8 @@
  * URL生成ユーティリティ関数
  */
 
+import { nip19 } from 'nostr-tools';
+
 /**
  * URLテンプレート内のプレースホルダーを実際の値に置換する
  * @param template URLテンプレート（例: "https://example.com/user/{id}"）
@@ -86,3 +88,10 @@ export function validateUrlTemplate(
 
 	return requiredPlaceholders.every((required) => placeholders.includes(required));
 }
+
+export const encodeNpub = (hex: string): string | undefined => {
+	try {
+		return nip19.npubEncode(hex);
+	} catch (error) {}
+	return undefined;
+};

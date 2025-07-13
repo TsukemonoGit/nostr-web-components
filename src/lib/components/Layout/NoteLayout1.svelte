@@ -184,7 +184,7 @@
 	.note-avatar > :global(*) {
 		max-width: 100%;
 		max-height: 100%;
-		object-fit: contain;
+		object-fit: cover;
 		border-radius: 20%;
 	}
 

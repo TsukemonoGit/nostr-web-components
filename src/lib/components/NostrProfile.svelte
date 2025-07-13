@@ -106,9 +106,7 @@
 				{/snippet}
 
 				{#snippet name()}
-					{#if profile?.name}
-						<span class="username">{profile.name}</span>
-					{/if}
+					<span class="username">{profile?.display_name || ''}@{profile?.name || 'no name'}</span>
 				{/snippet}
 
 				{#snippet about()}

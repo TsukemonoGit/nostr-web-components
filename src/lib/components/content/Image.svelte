@@ -20,7 +20,7 @@
 	img {
 		display: inline-flex;
 		max-width: 100%;
-		object-fit: contain;
+		object-fit: cover;
 		max-height: 10rem;
 	}
 </style>

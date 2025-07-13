@@ -1,12 +1,28 @@
 <script lang="ts">
 	import 'nostr-web-components/style.css';
+
 	interface Props {
 		name: undefined | string;
+		href?: string | undefined;
+		themeClass?: string | undefined;
 	}
-	let { name }: Props = $props();
+	let { name, href, themeClass }: Props = $props();
 </script>
 
-{#if name}
+{#if href}<a
+		{href}
+		class={themeClass}
+		target="_blank"
+		rel="noopener noreferrer"
+		referrerpolicy="no-referrer"
+	>
+		{#if name}
+			{name}
+		{:else}
+			<div class="placeholder name"></div>
+		{/if}
+	</a>
+{:else if name}
 	{name}
 {:else}
 	<div class="placeholder name"></div>
@@ -28,5 +44,17 @@
 	.name {
 		width: 80px;
 		height: 14px;
+	}
+	a {
+		display: inline;
+		white-space: pre-wrap;
+		word-break: normal;
+		word-break: break-word;
+		text-decoration: none;
+		color: var(--text-base);
+	}
+
+	a:hover {
+		text-decoration: underline;
 	}
 </style>
