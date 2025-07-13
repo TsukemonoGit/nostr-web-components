@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
+	base: '/nostr-web-components/',
 	plugins: [
 		tailwindcss(),
 		svelte({
