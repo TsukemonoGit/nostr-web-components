@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Nostr Web Components デモ</title>
+		<link rel="stylesheet" href="https://unpkg.com/nostr-web-components/dist/style.css" />
 		<style>
 			body {
 				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -132,16 +133,16 @@
 				} else if (isGitHubPages) {
 					const basePath = '/nostr-web-components';
 					return [
-						`${basePath}/dist/nostr-web-components.js`,
 						`${basePath}/dist/nostr-web-components.es.js`,
-						'./dist/nostr-web-components.js',
-						'./dist/nostr-web-components.es.js'
+						`${basePath}/dist/nostr-web-components.iife.js`,
+						`./dist/nostr-web-components.es.js`,
+						`./dist/nostr-web-components.iife.js`
 					];
 				} else {
 					return [
-						'./dist/nostr-web-components.js',
 						'./dist/nostr-web-components.es.js',
-						'./nostr-web-components.js'
+						'./dist/nostr-web-components.iife.js',
+						'./nostr-web-components.iife.js'
 					];
 				}
 			}
