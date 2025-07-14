@@ -26,7 +26,9 @@ export class NostrClient {
 		// 	console.log(`${packet.from} の接続状況が ${packet.state} に変化しました。`);
 		// });
 	}
-
+	setDefaultRelays(list: string[]) {
+		this.rxNostr.setDefaultRelays(list);
+	}
 	async fetchByFilters(
 		filters: Filter[],
 		relays?: string[],

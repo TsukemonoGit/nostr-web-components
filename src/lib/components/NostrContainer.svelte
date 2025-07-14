@@ -60,6 +60,9 @@
 				console.error('Invalid relays configuration:', error);
 				nostrClient.set(null);
 			}
+		} else if (relaysArray.length > 0) {
+			//すでにセットしてあってもコンテナのリレーをデフォリレーに設定するよ
+			currentClient.setDefaultRelays(relaysArray);
 		}
 	}
 </script>
