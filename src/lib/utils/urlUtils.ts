@@ -46,15 +46,13 @@ export function resolveUrl(
 	id: string,
 	defaultUrlTemplate: string = 'https://njump.me/{id}'
 ): string {
-	if (!href) {
-		return generateDynamicUrl(defaultUrlTemplate, id);
-	}
+	const replacements: Record<string, string> = {
+		id,
+		user: id // user も同じ値で置き換える（npubなど）
+	};
 
-	if (href.includes('{id}')) {
-		return generateDynamicUrl(href, id);
-	}
-
-	return href;
+	const template = href ?? defaultUrlTemplate;
+	return replaceUrlPlaceholders(template, replacements);
 }
 
 /**

@@ -64,7 +64,7 @@
 	}
 
 	let linkUrl: string | null = null;
-	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{user}');
+	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{id}');
 </script>
 
 <div use:connected={initialize} class="profile {themeClass} {className}">
