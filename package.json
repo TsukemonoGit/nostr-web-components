@@ -1,6 +1,6 @@
 {
 	"name": "@konemono/nostr-web-components",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"scripts": {
 		"prepare": "npm run build",
 		"dev": "vite",
@@ -8,7 +8,8 @@
 		"build:types": "tsc --project tsconfig.json",
 		"build:pages": "tsc && vite build --mode pages",
 		"preview": "vite preview",
-		"check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
+		"check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json",
+		"test": "vitest"
 	},
 	"repository": {
 		"type": "git",
@@ -61,7 +62,8 @@
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.8.3",
 		"typescript-eslint": "^8.36.0",
-		"vite": "^7.0.4"
+		"vite": "^7.0.4",
+		"vitest": "^3.2.4"
 	},
 	"keywords": [
 		"svelte"

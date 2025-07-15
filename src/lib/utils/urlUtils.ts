@@ -17,8 +17,13 @@ export function replaceUrlPlaceholders(
 	let result = template;
 
 	for (const [key, value] of Object.entries(replacements)) {
-		const placeholder = `{${key}}`;
-		result = result.replace(new RegExp(placeholder, 'g'), value);
+		const rawPlaceholder = `{${key}}`;
+		const encodedPlaceholder = encodeURIComponent(rawPlaceholder); // 例: {user} → %7Buser%7D
+
+		// 両方置換：未エンコードとエンコード済みのプレースホルダー
+		result = result
+			.replace(new RegExp(rawPlaceholder, 'g'), value)
+			.replace(new RegExp(encodedPlaceholder, 'g'), value);
 	}
 
 	return result;
