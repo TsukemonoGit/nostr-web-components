@@ -11,6 +11,7 @@
 	import NameDisplay from './Layout/NameDisplay.svelte';
 	import Content from './content/Content.svelte';
 	import { UserProfile } from 'nostr-web-components/types';
+	import NoteLayoutCompact from './Layout/NoteLayoutCompact.svelte';
 
 	export let filters: string = '[]';
 	export let relays: string[] = [];
@@ -21,6 +22,7 @@
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
+	export let display: 'card' | 'compact' | 'name' = 'card';
 
 	// 変換された数値を格納する変数
 	let parsedLimit = 50;
@@ -166,65 +168,141 @@
 					?.map((tag) => tag[1])}
 				{@const metadata = getMetadata(note.pubkey)}
 				{@const linkUrl = resolveUrl(href, note.id, 'https://njump.me/{id}')}
-				<NoteLayout1
-					class={className}
-					{themeClass}
-					{noLink}
-					{height}
-					showPlaceholders={loading || !note}
-				>
-					{#snippet link()}<!-- svelte-ignore a11y_consider_explicit_label -->
-						<a
-							href={linkUrl}
-							{target}
-							referrerpolicy="no-referrer"
-							class="external-link {theme} {themeClass}"
-							title="Open in new tab"
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
-								viewBox="0 0 24 24"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								class="lucide lucide-external-link-icon lucide-external-link"
+				{#if display === 'card'}
+					<NoteLayout1
+						class={className}
+						{themeClass}
+						{noLink}
+						{height}
+						showPlaceholders={loading || !note}
+					>
+						{#snippet link()}
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<a
+								href={linkUrl}
+								{target}
+								referrerpolicy="no-referrer"
+								class="external-link"
+								title="Open in new tab"
 							>
-								<path d="M15 3h6v6" />
-								<path d="M10 14 21 3" />
-								<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-							</svg>
-						</a>
-					{/snippet}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-external-link-icon lucide-external-link"
+								>
+									<path d="M15 3h6v6" />
+									<path d="M10 14 21 3" />
+									<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+								</svg>
+							</a>
+						{/snippet}
 
-					{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
-					{#snippet name()}
-						{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
-						{@const userUrl = encodedNpub
-							? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
-							: undefined}
-						<NameDisplay
-							{themeClass}
-							href={userUrl}
-							name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
-						/>{/snippet}
-					{#snippet createdAt()}
-						{#if note}<span class="timestamp"
-								>{new Date(note.created_at * 1000).toLocaleString()}</span
-							>{/if}
-					{/snippet}
-					{#snippet replyUser()}
-						{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
-							></nostr-profile>{/each}
-					{/snippet}
-					{#snippet content()}
-						{#if note}<Content text={note.content} {themeClass} {theme} tags={note.tags} />{/if}
-					{/snippet}
-					{#snippet error()}<span>Error: {error}</span>{/snippet}
-				</NoteLayout1>
+						{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
+						{#snippet name()}
+							{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
+							{@const userUrl = encodedNpub
+								? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
+								: undefined}
+							<NameDisplay
+								{themeClass}
+								href={userUrl}
+								name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
+							/>{/snippet}
+						{#snippet createdAt()}
+							{#if note}<span class="timestamp"
+									>{new Date(note.created_at * 1000).toLocaleString()}</span
+								>{/if}
+						{/snippet}
+						{#snippet replyUser()}
+							{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
+								></nostr-profile>{/each}
+						{/snippet}
+						{#snippet content()}
+							{#if note}<Content
+									{display}
+									text={note.content}
+									{themeClass}
+									{theme}
+									tags={note.tags}
+								/>{/if}
+						{/snippet}
+						{#snippet error()}<span>Error: {error}</span>{/snippet}
+					</NoteLayout1>
+				{:else if display === 'compact'}
+					<NoteLayoutCompact
+						class={className}
+						{themeClass}
+						{noLink}
+						{height}
+						showPlaceholders={loading || !note}
+					>
+						{#snippet link()}
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<a
+								href={linkUrl}
+								{target}
+								referrerpolicy="no-referrer"
+								class="external-link"
+								title="Open in new tab"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-external-link-icon lucide-external-link"
+								>
+									<path d="M15 3h6v6" />
+									<path d="M10 14 21 3" />
+									<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+								</svg>
+							</a>
+						{/snippet}
+
+						{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
+						{#snippet name()}
+							{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
+							{@const userUrl = encodedNpub
+								? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
+								: undefined}
+							<NameDisplay
+								{themeClass}
+								href={userUrl}
+								name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
+							/>{/snippet}
+						{#snippet createdAt()}
+							{#if note}<span class="timestamp"
+									>{new Date(note.created_at * 1000).toLocaleString()}</span
+								>{/if}
+						{/snippet}
+						{#snippet replyUser()}
+							{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
+								></nostr-profile>{/each}
+						{/snippet}
+						{#snippet content()}
+							{#if note}<Content
+									{display}
+									text={note.content}
+									{themeClass}
+									{theme}
+									tags={note.tags}
+								/>{/if}
+						{/snippet}
+						{#snippet error()}<span>Error: {error}</span>{/snippet}
+					</NoteLayoutCompact>
+				{/if}
 			{/each}
 		</div>
 	{/if}
@@ -246,6 +324,9 @@
 		/* メンション用カラー */
 		--mention-line-color: #3b82f6; /* 明るめ青 */
 		--mention-bg-color: #e0f5ff; /* 薄い青系背景 */
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
 	}
 
 	.theme-dark {
@@ -263,6 +344,9 @@
 		/* ダークテーマ用メンションカラー */
 		--mention-line-color: #60a5fa; /* 明るめ青で視認性良 */
 		--mention-bg-color: #1e3a8a22; /* 透過感ある青背景 */
+
+		--external-link-color: #8ab4f8c4;
+		--external-link-hover-color: #a3cfffd2;
 	}
 
 	.theme-light {
@@ -278,8 +362,11 @@
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
 		/* ライトテーマ用メンションカラー */
-		--mention-line-color: #3b82f6;
-		--mention-bg-color: #e0f5ff;
+		--link-color: #1a0dab;
+		--link-hover-color: #551a8b;
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
 	}
 	.nostr-list-wrapper {
 		width: 100%;
@@ -324,9 +411,9 @@
 		justify-content: center;
 		text-decoration: none;
 		padding: 0;
-		color: var(--link-color);
+		color: var(--external-link-color);
 	}
 	.external-link:hover {
-		color: var(--link-color);
+		color: var(--external-link-color);
 	}
 </style>

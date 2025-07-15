@@ -10,13 +10,14 @@
 	import Link from './content/Link.svelte';
 	import UserAvatar from './Layout/UserAvatar.svelte';
 	import { connected } from 'nostr-web-components/core/connected.js';
+	import ProfileLayoutCompact from './Layout/ProfileLayoutCompact.svelte';
 
 	export let id: string = '';
 	export let relays: string[] = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
-	export let display: 'card' /*  | 'compact' */ | 'name' = 'card';
+	export let display: 'card' | 'compact' | 'name' = 'card';
 	export let className: string = '';
 	export let theme: 'light' | 'dark' | 'auto' = 'auto';
 
@@ -111,7 +112,7 @@
 
 				{#snippet about()}
 					{#if profile}
-						<Content text={profile.about || ''} tags={profile.tags} />
+						<Content {display} text={profile.about || ''} tags={profile.tags} />
 					{/if}
 				{/snippet}
 
@@ -120,8 +121,55 @@
 				{/snippet}
 			</ProfileLayout1>
 		</div>
-		<!--{:else if display === 'compact'}
-		-->
+	{:else if display === 'compact'}
+		<ProfileLayoutCompact
+			class={className}
+			{themeClass}
+			{noLink}
+			showPlaceholders={loading || !profile}
+		>
+			{#snippet avatar()}
+				<UserAvatar src={profile?.picture} />
+			{/snippet}
+
+			{#snippet name()}
+				<span class="username">{profile?.display_name || ''}@{profile?.name || 'no name'}</span>
+			{/snippet}
+
+			{#snippet about()}
+				{#if profile}
+					<Content {display} text={profile.about || ''} tags={profile.tags} />
+				{/if}
+			{/snippet}
+
+			{#snippet link()}
+				<!-- svelte-ignore a11y_consider_explicit_label -->
+				<a
+					href={linkUrl}
+					{target}
+					referrerpolicy="no-referrer"
+					class="external-link"
+					title="Open in new tab"
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-external-link-icon lucide-external-link"
+					>
+						<path d="M15 3h6v6" />
+						<path d="M10 14 21 3" />
+						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+					</svg>
+				</a>
+			{/snippet}
+		</ProfileLayoutCompact>
 	{:else if noLink}
 		{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
 			src={profile?.picture}
@@ -150,6 +198,9 @@
 		/* 追加: リンクカラー */
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
 	}
 
 	.theme-dark,
@@ -167,6 +218,9 @@
 		/* 追加: ダークテーマ用リンクカラー */
 		--link-color: #8ab4f8;
 		--link-hover-color: #a3d0ff;
+
+		--external-link-color: #8ab4f8c4;
+		--external-link-hover-color: #a3cfffd2;
 	}
 
 	:host(.theme-light),
@@ -184,6 +238,9 @@
 		/* ライトテーマ用リンクカラー */
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
 	}
 
 	.nostr-wrapper {
@@ -201,10 +258,10 @@
 		justify-content: center;
 		text-decoration: none;
 		padding: 0;
-		color: var(--link-color);
+		color: var(--external-link-color);
 	}
 	.external-link:hover {
-		color: var(--link-hover-color);
+		color: var(--external-hover-color);
 	}
 	.profile {
 		width: fit-content;

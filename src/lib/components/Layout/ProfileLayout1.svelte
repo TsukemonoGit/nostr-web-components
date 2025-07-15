@@ -84,6 +84,9 @@
 		/* 追加: リンクカラー */
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
 	}
 
 	.theme-dark,
@@ -101,6 +104,9 @@
 		/* 追加: ダークテーマ用リンクカラー */
 		--link-color: #8ab4f8;
 		--link-hover-color: #a3d0ff;
+
+		--external-link-color: #8ab4f8c4;
+		--external-link-hover-color: #a3cfffd2;
 	}
 
 	:host(.theme-light),
@@ -118,6 +124,9 @@
 		/* ライトテーマ用リンクカラー */
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
 	}
 
 	.placeholder {

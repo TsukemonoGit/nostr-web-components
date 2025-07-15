@@ -9,9 +9,10 @@
 		theme: string | undefined;
 		part: Token;
 		themeClass: string | undefined;
+		display: 'card' | 'compact' | 'name';
 	}
 
-	let { decoded, themeClass, theme, part }: Props = $props();
+	let { decoded, themeClass, theme, part, display }: Props = $props();
 </script>
 
 {#if decoded.type === 'npub' || decoded.type === 'nprofile'}<nostr-profile
@@ -19,7 +20,7 @@
 		id={part.metadata.plainNip19}
 		{theme}
 	></nostr-profile>{:else if decoded.type === 'nevent' || decoded.type === 'note'}
-	<nostr-note id={part.metadata.plainNip19} {theme}></nostr-note>
+	<nostr-note {display} id={part.metadata.plainNip19} {theme}></nostr-note>
 {:else if decoded.type === 'naddr'}
 	<Link {themeClass} href={`https://njump.me/${part.content}`}>{part.content}</Link>
 {:else if decoded.type === 'nsec'}

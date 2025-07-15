@@ -30,16 +30,33 @@
 					<h2>NostrNote コンポーネント</h2>
 
 					<div class="demo-item">
-						<h3>基本的な使用方法</h3>
+						<h3>カード表示（デフォルト）</h3>
 						<div class="demo-controls">
 							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
-						<pre
-							class="code-block"
-						><code>&lt;nostr-note id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"&gt;
+						<pre class="code-block"><code>&lt;nostr-note 
+  id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+  display="card"&gt;
 &lt;/nostr-note&gt;</code></pre>
 						<nostr-note
+							id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+							display="card"
+						></nostr-note>
+					</div>
+
+					<div class="demo-item">
+						<h3>コンパクト表示</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-note 
+  id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+  display="compact"&gt;
+&lt;/nostr-note&gt;</code></pre>
+						<nostr-note
+							display="compact"
 							id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
 						></nostr-note>
 					</div>
@@ -50,14 +67,18 @@
 							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
-						<pre class="code-block"><code>&lt;nostr-note theme="dark"
+						<pre class="code-block"><code>&lt;nostr-note 
+  id="nevent1qvzqqqqqqypzpp9sc34tdxdvxh4jeg5xgu9ctcypmvsg0n00vwfjydkrjaqh0qh4qyxhwumn8ghj77tpvf6jumt9qqsrmmgg36ra96e2z3gghwh6vf7h87ltggn99xlew0l7h8g8fw65rtsw5cf0d"
+  theme="dark"
   href="https://lumilumi.app/{id}"
-  target="_blank" id="nevent1qvzqqqqqqypzpp9sc34tdxdvxh4jeg5xgu9ctcypmvsg0n00vwfjydkrjaqh0qh4qyxhwumn8ghj77tpvf6jumt9qqsrmmgg36ra96e2z3gghwh6vf7h87ltggn99xlew0l7h8g8fw65rtsw5cf0d"&gt;
+  target="_blank"
+  display="card"&gt;
 &lt;/nostr-note&gt;</code></pre>
 						<nostr-note
 							theme="dark"
 							href="https://lumilumi.app/{id}"
 							target="_blank"
+							display="card"
 							id="nevent1qvzqqqqqqypzpp9sc34tdxdvxh4jeg5xgu9ctcypmvsg0n00vwfjydkrjaqh0qh4qyxhwumn8ghj77tpvf6jumt9qqsrmmgg36ra96e2z3gghwh6vf7h87ltggn99xlew0l7h8g8fw65rtsw5cf0d"
 						></nostr-note>
 					</div>
@@ -69,14 +90,15 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-note
+  id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
   noLink="true"
   height="200px"
-  className="custom-note" id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"&gt;
+  display="card"&gt;
 &lt;/nostr-note&gt;</code></pre>
 						<nostr-note
 							noLink="true"
 							height="200px"
-							className="custom-note"
+							display="card"
 							id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
 						></nostr-note>
 					</div>
@@ -99,6 +121,22 @@
 						<nostr-profile
 							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 							display="card"
+						></nostr-profile>
+					</div>
+
+					<div class="demo-item">
+						<h3>コンパクト表示</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-profile
+  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  display="compact"&gt;
+&lt;/nostr-profile&gt;</code></pre>
+						<nostr-profile
+							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							display="compact"
 						></nostr-profile>
 					</div>
 
@@ -128,13 +166,15 @@
   id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
   theme="dark"
   href="https://primal.net/p/{id}"
-  target="_self"&gt;
+  target="_self"
+  display="card"&gt;
 &lt;/nostr-profile&gt;</code></pre>
 						<nostr-profile
 							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 							theme="dark"
 							href="https://primal.net/p/{id}"
 							target="_self"
+							display="card"
 						></nostr-profile>
 					</div>
 
@@ -147,19 +187,19 @@
 						<pre class="code-block"><code>&lt;nostr-profile
   id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
   noLink="true"
-  className="static-profile"&gt;
+  display="card"&gt;
 &lt;/nostr-profile&gt;</code></pre>
 						<nostr-profile
 							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 							noLink="true"
-							className="static-profile"
+							display="card"
 						></nostr-profile>
 					</div>
 				</div>
 
 				<!-- NostrEventList デモ -->
 				<div class="demo-section">
-					<h2>NostrEventList コンポーネント</h2>
+					<h2>NostrList コンポーネント</h2>
 
 					<div class="demo-item">
 						<h3>特定ユーザーの投稿一覧</h3>
@@ -238,8 +278,7 @@
 &lt;nostr-list
   filters='[{"kinds":[1],"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"],"limit":3}]'
   limit="3"&gt;
-&lt;/nostr-list&gt;
-</code></pre>
+&lt;/nostr-list&gt;</code></pre>
 						<div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px">
 							<nostr-profile
 								id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
@@ -254,44 +293,91 @@
 					</div>
 
 					<div class="demo-item">
-						<h3>テーマ比較</h3>
+						<h3>表示モード比較</h3>
 						<div class="demo-controls">
 							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;div&gt;
-  &lt;h5&gt;ライトテーマ&lt;/h5&gt;
+  &lt;h5&gt;カード表示&lt;/h5&gt;
   &lt;nostr-profile
     id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-    theme="light"
-    display="name"&gt;
+    display="card"&gt;
   &lt;/nostr-profile&gt;
 &lt;/div&gt;
 &lt;div&gt;
-  &lt;h5&gt;ダークテーマ&lt;/h5&gt;
+  &lt;h5&gt;コンパクト表示&lt;/h5&gt;
   &lt;nostr-profile
     id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-    theme="dark"
-    display="name"&gt;
+    display="compact"&gt;
   &lt;/nostr-profile&gt;
 &lt;/div&gt;
-</code></pre>
+&lt;div&gt;
+  &lt;h5&gt;名前のみ表示&lt;/h5&gt;
+  &lt;nostr-profile
+    id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+    display="name"&gt;
+  &lt;/nostr-profile&gt;
+&lt;/div&gt;</code></pre>
 						<div class="theme-demo">
 							<div>
-								<h5>ライトテーマ</h5>
+								<h5>カード表示</h5>
 								<nostr-profile
 									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-									theme="light"
-									display="name"
+									display="card"
 								></nostr-profile>
 							</div>
 							<div>
-								<h5>ダークテーマ</h5>
+								<h5>コンパクト表示</h5>
 								<nostr-profile
 									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
-									theme="dark"
+									display="compact"
+								></nostr-profile>
+							</div>
+							<div>
+								<h5>名前のみ表示</h5>
+								<nostr-profile
+									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 									display="name"
 								></nostr-profile>
+							</div>
+						</div>
+					</div>
+
+					<div class="demo-item">
+						<h3>ノート表示モード比較</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;div&gt;
+  &lt;h5&gt;カード表示&lt;/h5&gt;
+  &lt;nostr-note
+    id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+    display="card"&gt;
+  &lt;/nostr-note&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;h5&gt;コンパクト表示&lt;/h5&gt;
+  &lt;nostr-note
+    id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+    display="compact"&gt;
+  &lt;/nostr-note&gt;
+&lt;/div&gt;</code></pre>
+						<div class="theme-demo">
+							<div>
+								<h5>カード表示</h5>
+								<nostr-note
+									id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+									display="card"
+								></nostr-note>
+							</div>
+							<div>
+								<h5>コンパクト表示</h5>
+								<nostr-note
+									id="nevent1qvzqqqqq9gpzq2aj4wlutzft00dg77x4x6pdjy7vnfzxk30pry5lpy6a3l0uks9aqyxhwumn8ghj77tpvf6jumt9qys8wumn8ghj7un9d3shjtt2wqhxummnw3ezuamfwfjkgmn9wshx5uqpr4mhxue69uhhyetvv9ujumn0wd68ytnhd9ex2erwv46zu6nsqyxhwumn8ghj7mn0wvhxcmmvqyghwumn8ghj7mnxwfjkccte9eshquqqyqv8dx4g48jf0gwdyldmsde4z0wpqj65wkpzq3a0d7zjqeacc43huavy3te"
+									display="compact"
+								></nostr-note>
 							</div>
 						</div>
 					</div>

@@ -26,9 +26,9 @@ import '@konemono/nostr-web-components';
 
 ## Usage
 
-### Basic Setup with `<nostr-container>`
+### Basic Setup with <nostr-container>
 
-The `<nostr-container>` component provides a way to share relay configuration to all child components.
+The <nostr-container> component provides a way to share relay configuration to all child components.
 
 #### Using CDN
 
@@ -65,9 +65,9 @@ import '@konemono/nostr-web-components';
 </nostr-container>
 ```
 
-### Using Individual Components Without `<nostr-container>`
+### Using Individual Components Without <nostr-container>
 
-Each component works independently by accessing a **shared global client instance** internally. Therefore, `<nostr-container>` is **optional**. For example, to display a single note:
+Each component works independently by accessing a **shared global client instance** internally. Therefore, <nostr-container> is **optional**. For example, to display a single note:
 
 ```html
 <nostr-note id="note1abc..."></nostr-note>
@@ -85,9 +85,9 @@ You can also specify the relays attribute on individual components to override t
 <nostr-list filters='[{"kinds":[1],"limit":10}]' relays='["wss://relay.damus.io"]'></nostr-list>
 ```
 
-### Important Notes About `<nostr-container>`
+### Important Notes About <nostr-container>
 
-- Multiple `<nostr-container>` instances can exist, but **all components share a single global client internally**.
+- Multiple <nostr-container> instances can exist, but **all components share a single global client internally**.
 - The container mainly serves to propagate relay configuration via context to child components.
 - Relay configuration in a container does **not** create separate or isolated Nostr clients.
 - For advanced use cases requiring isolated clients or multiple relay sets, consider managing clients programmatically with the JavaScript API.
@@ -96,7 +96,7 @@ You can also specify the relays attribute on individual components to override t
 
 ## Components
 
-### `<nostr-container>`
+### <nostr-container>
 
 Container component that provides relay configuration to child components via context. This is **optional** and mainly used to avoid repeating relay configuration on multiple child components.
 
@@ -104,7 +104,7 @@ Attributes:
 
 - relays: JSON array of relay URLs
 
-### `<nostr-note>`
+### <nostr-note>
 
 Displays a Nostr note.
 
@@ -118,6 +118,7 @@ Attributes:
 - noLink: Boolean to disable link functionality
 - theme: Theme mode - light, dark, or auto (default)
 - height: Custom height for the note container
+- display: Display mode - card (default) or compact
 
 Examples:
 
@@ -145,7 +146,14 @@ No link functionality
 <nostr-note id="note1abc..." noLink="true"></nostr-note>
 ```
 
-### `<nostr-profile>`
+Different display modes
+
+```html
+<nostr-note id="note1abc..." display="card"></nostr-note>
+<nostr-note id="note1abc..." display="compact"></nostr-note>
+```
+
+### <nostr-profile>
 
 Displays a Nostr profile.
 
@@ -176,6 +184,7 @@ Custom URL template
 Different display modes
 
 ```html
+<nostr-profile id="npub1xyz..." display="card"></nostr-profile>
 <nostr-profile id="npub1xyz..." display="compact"></nostr-profile>
 <nostr-profile id="npub1xyz..." display="name"></nostr-profile>
 ```
@@ -192,7 +201,7 @@ Custom click handler
 <nostr-profile id="npub1xyz..." onclick="console.log('Profile clicked')"></nostr-profile>
 ```
 
-### `<nostr-list>`
+### <nostr-list>
 
 Displays a list of Nostr events based on filters.
 
@@ -237,7 +246,7 @@ Custom relays and theme
 
 ## Filter Examples
 
-Common filter patterns for `<nostr-list>`:
+Common filter patterns for <nostr-list>:
 
 ```js
 // Text notes (kind 1)

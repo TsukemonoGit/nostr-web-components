@@ -17,9 +17,10 @@
 		tags: string[][];
 		themeClass?: string;
 		theme?: string;
+		display: 'card' | 'compact' | 'name';
 	}
 
-	let { text, tags, themeClass, theme }: Props = $props();
+	let { text, tags, themeClass, theme, display }: Props = $props();
 
 	let parts: Token[] = $derived(parseContent(text, tags));
 
@@ -72,6 +73,7 @@
 {#each parts as part}{#if part.type === 'nip19'}{@const decoded = nip19Decode(
 			part.metadata!.plainNip19 as string
 		)}{#if decoded}<DecodedContent
+				{display}
 				{decoded}
 				{part}
 				{theme}
