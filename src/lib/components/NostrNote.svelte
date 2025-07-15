@@ -177,7 +177,7 @@
 					>{/if}
 			{/snippet}
 			{#snippet replyUser()}
-				{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
+				{#each replyUserList || [] as user}<nostr-profile display="name" {theme} {user}
 					></nostr-profile>{/each}
 			{/snippet}
 			{#snippet content()}
@@ -243,7 +243,7 @@
 					>{/if}
 			{/snippet}
 			{#snippet replyUser()}
-				{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
+				{#each replyUserList || [] as user}<nostr-profile display="name" {theme} {user}
 					></nostr-profile>{/each}
 			{/snippet}
 			{#snippet content()}

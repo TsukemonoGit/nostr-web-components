@@ -5,7 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Nostr Web Components デモ</title>
 		<link rel="stylesheet" href="style.css" />
-		<script type="module" src="dist/nostr-web-components.mjs"></script>
+		<!-- 	<script type="module" src="dist/nostr-web-components.mjs"></script> -->
+		<script type="module" src="src/lib/index.ts"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -115,13 +116,10 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-profile
-  id="npub1fuffhzfv7xdrm5htde4mp9e5n6ywn763cq6mzxtetyqvsg66kkasp9zzyz"
+  user="mono@tsukemonogit.github.io"
   display="card"&gt;
 &lt;/nostr-profile&gt;</code></pre>
-						<nostr-profile
-							id="npub1fuffhzfv7xdrm5htde4mp9e5n6ywn763cq6mzxtetyqvsg66kkasp9zzyz"
-							display="card"
-						></nostr-profile>
+						<nostr-profile user="mono@tsukemonogit.github.io" display="card"></nostr-profile>
 					</div>
 
 					<div class="demo-item">
@@ -131,11 +129,11 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-profile
-  id="npub1fuffhzfv7xdrm5htde4mp9e5n6ywn763cq6mzxtetyqvsg66kkasp9zzyz"
+  user="npub1fuffhzfv7xdrm5htde4mp9e5n6ywn763cq6mzxtetyqvsg66kkasp9zzyz"
   display="compact"&gt;
 &lt;/nostr-profile&gt;</code></pre>
 						<nostr-profile
-							id="npub1fuffhzfv7xdrm5htde4mp9e5n6ywn763cq6mzxtetyqvsg66kkasp9zzyz"
+							user="npub1fuffhzfv7xdrm5htde4mp9e5n6ywn763cq6mzxtetyqvsg66kkasp9zzyz"
 							display="compact"
 						></nostr-profile>
 					</div>
@@ -147,11 +145,11 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-profile
-  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
   display="name"&gt;
 &lt;/nostr-profile&gt;</code></pre>
 						<nostr-profile
-							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 							display="name"
 						></nostr-profile>
 					</div>
@@ -163,14 +161,14 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-profile
-  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
   theme="dark"
   href="https://primal.net/p/{id}"
   target="_self"
   display="card"&gt;
 &lt;/nostr-profile&gt;</code></pre>
 						<nostr-profile
-							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 							theme="dark"
 							href="https://primal.net/p/{id}"
 							target="_self"
@@ -185,12 +183,12 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-profile
-  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
   noLink="true"
   display="card"&gt;
 &lt;/nostr-profile&gt;</code></pre>
 						<nostr-profile
-							id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+							user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 							noLink="true"
 							display="card"
 						></nostr-profile>
@@ -271,7 +269,7 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-profile
-  id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+  user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
   display="card"&gt;
 &lt;/nostr-profile&gt;
 &lt;h4&gt;最新の投稿&lt;/h4&gt;
@@ -281,7 +279,7 @@
 &lt;/nostr-list&gt;</code></pre>
 						<div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px">
 							<nostr-profile
-								id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+								user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 								display="card"
 							></nostr-profile>
 							<h4>最新の投稿</h4>
@@ -301,21 +299,21 @@
 						<pre class="code-block"><code>&lt;div&gt;
   &lt;h5&gt;カード表示&lt;/h5&gt;
   &lt;nostr-profile
-    id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+    user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
     display="card"&gt;
   &lt;/nostr-profile&gt;
 &lt;/div&gt;
 &lt;div&gt;
   &lt;h5&gt;コンパクト表示&lt;/h5&gt;
   &lt;nostr-profile
-    id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+    user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
     display="compact"&gt;
   &lt;/nostr-profile&gt;
 &lt;/div&gt;
 &lt;div&gt;
   &lt;h5&gt;名前のみ表示&lt;/h5&gt;
   &lt;nostr-profile
-    id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+    user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
     display="name"&gt;
   &lt;/nostr-profile&gt;
 &lt;/div&gt;</code></pre>
@@ -323,21 +321,21 @@
 							<div>
 								<h5>カード表示</h5>
 								<nostr-profile
-									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+									user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 									display="card"
 								></nostr-profile>
 							</div>
 							<div>
 								<h5>コンパクト表示</h5>
 								<nostr-profile
-									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+									user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 									display="compact"
 								></nostr-profile>
 							</div>
 							<div>
 								<h5>名前のみ表示</h5>
 								<nostr-profile
-									id="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
+									user="npub1sjcvg64knxkrt6ev52rywzu9uzqakgy8ehhk8yezxmpewsthst6sw3jqcw"
 									display="name"
 								></nostr-profile>
 							</div>

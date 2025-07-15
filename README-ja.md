@@ -41,7 +41,7 @@ import '@konemono/nostr-web-components';
 	<body>
 		<nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
 			<nostr-note id="note1abc..."></nostr-note>
-			<nostr-profile id="npub1xyz..."></nostr-profile>
+			<nostr-profile user="npub1xyz..."></nostr-profile>
 			<nostr-list filters='[{"kinds":[1],"limit":10}]'></nostr-list>
 		</nostr-container>
 	</body>
@@ -60,7 +60,7 @@ import '@konemono/nostr-web-components';
 ```html
 <nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
 	<nostr-note id="note1abc..."></nostr-note>
-	<nostr-profile id="npub1xyz..."></nostr-profile>
+	<nostr-profile user="npub1xyz..."></nostr-profile>
 	<nostr-list filters='[{"kinds":[1],"limit":10}]'></nostr-list>
 </nostr-container>
 ```
@@ -81,7 +81,7 @@ import '@konemono/nostr-web-components';
 
 ```html
 <nostr-note id="note1abc..." relays='["wss://relay.damus.io"]'></nostr-note>
-<nostr-profile id="npub1xyz..." relays='["wss://nos.lol"]'></nostr-profile>
+<nostr-profile user="npub1xyz..." relays='["wss://nos.lol"]'></nostr-profile>
 <nostr-list filters='[{"kinds":[1],"limit":10}]' relays='["wss://relay.damus.io"]'></nostr-list>
 ```
 
@@ -164,32 +164,32 @@ Nostrプロフィールを表示します。
 基本的なプロフィールカード
 
 ```html
-<nostr-profile id="npub1xyz..."></nostr-profile>
+<nostr-profile user="npub1xyz..."></nostr-profile>
 ```
 
 カスタムURLテンプレート
 
 ```html
-<nostr-profile id="npub1xyz..." href="https://primal.net/p/{id}"></nostr-profile>
+<nostr-profile user="npub1xyz..." href="https://primal.net/p/{id}"></nostr-profile>
 ```
 
 異なる表示モード
 
 ```html
-<nostr-profile id="npub1xyz..." display="compact"></nostr-profile>
-<nostr-profile id="npub1xyz..." display="name"></nostr-profile>
+<nostr-profile user="npub1xyz..." display="compact"></nostr-profile>
+<nostr-profile user="npub1xyz..." display="name"></nostr-profile>
 ```
 
 リンク機能なし
 
 ```html
-<nostr-profile id="npub1xyz..." noLink="true"></nostr-profile>
+<nostr-profile user="npub1xyz..." noLink="true"></nostr-profile>
 ```
 
 カスタムクリックハンドラー
 
 ```html
-<nostr-profile id="npub1xyz..." onclick="console.log('Profile clicked')"></nostr-profile>
+<nostr-profile user="npub1xyz..." onclick="console.log('Profile clicked')"></nostr-profile>
 ```
 
 ### `<nostr-list>`

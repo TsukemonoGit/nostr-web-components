@@ -18,7 +18,7 @@
 <div class="decoded">
 	{#if decoded.type === 'npub' || decoded.type === 'nprofile'}<nostr-profile
 			display="name"
-			id={part.metadata.plainNip19}
+			user={part.metadata.plainNip19}
 			{theme}
 		></nostr-profile>{:else if decoded.type === 'nevent' || decoded.type === 'note'}
 		<nostr-note {display} id={part.metadata.plainNip19} {theme}></nostr-note>

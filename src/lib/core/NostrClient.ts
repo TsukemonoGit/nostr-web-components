@@ -1,6 +1,6 @@
 // src/core/NostrClient.ts
 import { createRxBackwardReq, createRxNostr, type EventPacket, type RxNostr, uniq } from 'rx-nostr';
-import { nip19, type NostrEvent } from 'nostr-tools';
+import { nip05, nip19, type NostrEvent } from 'nostr-tools';
 import { verifier } from '@rx-nostr/crypto';
 import type { UserProfile, NostrClientConfig } from 'nostr-web-components/types/index.js';
 import type { Filter } from 'nostr-typedef';
@@ -114,17 +114,42 @@ export class NostrClient {
 		return event;
 	}
 
-	async fetchProfile(npub: string, relays?: string[]): Promise<UserProfile | null> {
-		let pubkey = npub;
-		try {
-			if (npub.startsWith('npub')) {
-				const decoded = nip19.decode(npub);
-				if (decoded.type === 'npub') {
-					pubkey = decoded.data;
+	async fetchProfile(user: string, relays?: string[]): Promise<UserProfile | null> {
+		// userはnpub かneventかnip05Adressが入っている可能性があるものとする
+		let pubkey = user;
+		if (nip05.isNip05(user)) {
+			console.log(user);
+			try {
+				const profile = await nip05.queryProfile(user);
+				if (profile?.pubkey) {
+					pubkey = profile.pubkey;
+				} else {
+					console.warn('No pubkey found for NIP-05:', user);
 				}
+			} catch (err) {
+				console.warn('Failed to resolve NIP-05 address:', user, err);
 			}
-		} catch (e) {
-			console.warn('Failed to decode npub:', npub);
+		} else if (nip19.NostrTypeGuard.isNProfile(user) || nip19.NostrTypeGuard.isNPub(user)) {
+			try {
+				const decoded = nip19.decode(user);
+				switch (decoded.type) {
+					case 'npub':
+						pubkey = decoded.data;
+						break;
+					case 'nprofile':
+						pubkey = decoded.data.pubkey;
+
+						break;
+					default:
+						console.warn('Unsupported NIP-19 type:', decoded.type);
+				}
+			} catch (e) {
+				console.warn('Failed to decode NIP-19 identifier:', user, e);
+			}
+		}
+		if (!/^[0-9a-f]{64}$/i.test(pubkey)) {
+			//でコードやらなんやららした結果hexになってなかったらreturn
+			return null;
 		}
 
 		if (this.profileCache.has(pubkey)) {

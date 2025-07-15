@@ -10,7 +10,7 @@
 	import UserAvatar from './Layout/UserAvatar.svelte';
 	import NameDisplay from './Layout/NameDisplay.svelte';
 	import Content from './content/Content.svelte';
-	import { UserProfile } from 'nostr-web-components/types';
+	import type { UserProfile } from 'nostr-web-components/types';
 	import NoteLayoutCompact from './Layout/NoteLayoutCompact.svelte';
 
 	export let filters: string = '[]';
@@ -221,7 +221,7 @@
 								>{/if}
 						{/snippet}
 						{#snippet replyUser()}
-							{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
+							{#each replyUserList || [] as user}<nostr-profile display="name" {theme} {user}
 								></nostr-profile>{/each}
 						{/snippet}
 						{#snippet content()}
@@ -288,7 +288,7 @@
 								>{/if}
 						{/snippet}
 						{#snippet replyUser()}
-							{#each replyUserList || [] as user}<nostr-profile display="name" {theme} id={user}
+							{#each replyUserList || [] as user}<nostr-profile display="name" {theme} {user}
 								></nostr-profile>{/each}
 						{/snippet}
 						{#snippet content()}

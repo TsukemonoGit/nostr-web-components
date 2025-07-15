@@ -41,7 +41,7 @@ The <nostr-container> component provides a way to share relay configuration to a
 	<body>
 		<nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
 			<nostr-note id="note1abc..."></nostr-note>
-			<nostr-profile id="npub1xyz..."></nostr-profile>
+			<nostr-profile user="npub1xyz..."></nostr-profile>
 			<nostr-list filters='[{"kinds":[1],"limit":10}]'></nostr-list>
 		</nostr-container>
 	</body>
@@ -60,7 +60,7 @@ import '@konemono/nostr-web-components';
 ```html
 <nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
 	<nostr-note id="note1abc..."></nostr-note>
-	<nostr-profile id="npub1xyz..."></nostr-profile>
+	<nostr-profile user="npub1xyz..."></nostr-profile>
 	<nostr-list filters='[{"kinds":[1],"limit":10}]'></nostr-list>
 </nostr-container>
 ```
@@ -81,7 +81,7 @@ You can also specify the relays attribute on individual components to override t
 
 ```html
 <nostr-note id="note1abc..." relays='["wss://relay.damus.io"]'></nostr-note>
-<nostr-profile id="npub1xyz..." relays='["wss://nos.lol"]'></nostr-profile>
+<nostr-profile user="npub1xyz..." relays='["wss://nos.lol"]'></nostr-profile>
 <nostr-list filters='[{"kinds":[1],"limit":10}]' relays='["wss://relay.damus.io"]'></nostr-list>
 ```
 
@@ -159,7 +159,7 @@ Displays a Nostr profile.
 
 Attributes:
 
-- id: Profile ID (npub1... format)
+- user: Profile identifier (supports hex, npub1..., nprofile1..., and NIP-05 address formats)
 - relays: Optional relay configuration (overrides container)
 - href: Custom URL template (use {id} placeholder for dynamic URLs)
 - target: Link target attribute (default: \_blank)
@@ -169,36 +169,54 @@ Attributes:
 
 Examples:
 
-Basic profile card
+Basic profile card with npub format
 
 ```html
-<nostr-profile id="npub1xyz..."></nostr-profile>
+<nostr-profile user="npub1xyz..."></nostr-profile>
+```
+
+Using hex format
+
+```html
+<nostr-profile user="abcdef1234567890..."></nostr-profile>
+```
+
+Using nprofile format
+
+```html
+<nostr-profile user="nprofile1abc..."></nostr-profile>
+```
+
+Using NIP-05 address
+
+```html
+<nostr-profile user="mono@tsukemonogit.github.io"></nostr-profile>
 ```
 
 Custom URL template
 
 ```html
-<nostr-profile id="npub1xyz..." href="https://primal.net/p/{id}"></nostr-profile>
+<nostr-profile user="npub1xyz..." href="https://primal.net/p/{id}"></nostr-profile>
 ```
 
 Different display modes
 
 ```html
-<nostr-profile id="npub1xyz..." display="card"></nostr-profile>
-<nostr-profile id="npub1xyz..." display="compact"></nostr-profile>
-<nostr-profile id="npub1xyz..." display="name"></nostr-profile>
+<nostr-profile user="npub1xyz..." display="card"></nostr-profile>
+<nostr-profile user="npub1xyz..." display="compact"></nostr-profile>
+<nostr-profile user="npub1xyz..." display="name"></nostr-profile>
 ```
 
 No link functionality
 
 ```html
-<nostr-profile id="npub1xyz..." noLink="true"></nostr-profile>
+<nostr-profile user="npub1xyz..." noLink="true"></nostr-profile>
 ```
 
 Custom click handler
 
 ```html
-<nostr-profile id="npub1xyz..." onclick="console.log('Profile clicked')"></nostr-profile>
+<nostr-profile user="npub1xyz..." onclick="console.log('Profile clicked')"></nostr-profile>
 ```
 
 ### <nostr-list>

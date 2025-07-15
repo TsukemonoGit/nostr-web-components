@@ -12,7 +12,9 @@
 	import { connected } from 'nostr-web-components/core/connected.js';
 	import ProfileLayoutCompact from './Layout/ProfileLayoutCompact.svelte';
 
-	export let id: string = '';
+	//export let id: string = '';
+	// Nostrの識別子（npub1~、nevent1~、またはNIP-05アドレス）
+	export let user: string = '';
 	export let relays: string[] = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
@@ -32,25 +34,25 @@
 
 	// 接続時の初期化処理（onMountの代替）
 	function initialize() {
-		if (mounted || !id) return;
+		if (mounted || !user) return;
 		mounted = true;
 		loadProfile();
 	}
 
 	// IDが変化したときにも再読込
-	$: if (mounted && id) {
+	$: if (mounted && user) {
 		loadProfile();
 	}
 
 	async function loadProfile() {
-		if (loading || !id) return;
+		if (loading || !user) return;
 
 		loading = true;
 		error = null;
 
 		try {
 			const client = await ensureClient(relays);
-			profile = await client.fetchProfile(id, relays);
+			profile = await client.fetchProfile(user, relays);
 			if (!profile) {
 				error = 'Profile not found';
 			}
@@ -62,7 +64,7 @@
 	}
 
 	let linkUrl: string | null = null;
-	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
+	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{user}');
 </script>
 
 <div use:connected={initialize} class="profile {themeClass} {className}">
