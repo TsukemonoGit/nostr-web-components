@@ -328,8 +328,15 @@
 		text-decoration: none;
 		padding: 0;
 		color: var(--external-link-color);
+		opacity: 0.8;
+		border-radius: 20%;
+		transition: all 0.3s ease;
+		transform: scale(1);
 	}
+
 	.external-link:hover {
-		color: var(--external-link-hover-color);
+		opacity: 1;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		transform: scale(1.1);
 	}
 </style>

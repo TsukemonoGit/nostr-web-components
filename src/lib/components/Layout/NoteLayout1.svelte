@@ -71,8 +71,7 @@
 					</div>
 				</div>
 
-				<div class="mention-container">{@render replyUser?.()}</div>
-
+				{#if replyUser}<div class="mention-container">{@render replyUser?.()}</div>{/if}
 				<div
 					class="note-body"
 					style={`${height ? `max-height: ${height}; overflow-y: auto;` : 'overflow-y:hidden'}`}
@@ -206,7 +205,8 @@
 	.note-header {
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		flex-wrap: wrap;
+		justify-content: space-between;
 	}
 
 	.note-name {

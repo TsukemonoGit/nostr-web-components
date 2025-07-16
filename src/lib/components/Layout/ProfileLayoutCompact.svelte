@@ -113,9 +113,9 @@
 		font-weight: bold;
 		font-size: 1em;
 		color: var(--name-color);
-		text-overflow: ellipsis;
+		word-break: break-word;
 		overflow: hidden;
-		white-space: nowrap;
+		max-width: 100%;
 	}
 
 	.compact-about {

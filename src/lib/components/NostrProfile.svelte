@@ -108,8 +108,7 @@
 					<UserAvatar src={profile?.picture} />
 				{/snippet}
 
-				{#snippet name()}
-					<span class="username">{profile?.display_name || ''}@{profile?.name || 'no name'}</span>
+				{#snippet name()}{profile?.display_name || ''}@{profile?.name || 'no name'}
 				{/snippet}
 
 				{#snippet about()}
@@ -135,7 +134,7 @@
 			{/snippet}
 
 			{#snippet name()}
-				<span class="username">{profile?.display_name || ''}@{profile?.name || 'no name'}</span>
+				{profile?.display_name || ''}@{profile?.name || 'no name'}
 			{/snippet}
 
 			{#snippet about()}
@@ -248,7 +247,7 @@
 	.nostr-wrapper {
 		border: 1px solid var(--border-color);
 		border-radius: 6px;
-		padding: 12px;
+		padding: 6px;
 		background-color: var(--bg-color);
 		color: var(--text-color);
 		font-family: sans-serif;
@@ -261,9 +260,16 @@
 		text-decoration: none;
 		padding: 0;
 		color: var(--external-link-color);
+		opacity: 0.8;
+		border-radius: 20%;
+		transition: all 0.3s ease;
+		transform: scale(1);
 	}
+
 	.external-link:hover {
-		color: var(--external-hover-color);
+		opacity: 1;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		transform: scale(1.1);
 	}
 	.profile {
 		width: fit-content;

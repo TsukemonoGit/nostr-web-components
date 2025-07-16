@@ -15,7 +15,6 @@
 			aria-label="video contents"
 			width="288"
 			height="200"
-			class="max-h-[18rem] max-w-[min(18rem,100%)] overflow-hidden object-contain"
 			{src}
 			controls
 			preload="metadata"
@@ -26,3 +25,12 @@
 	</div>
 {:else}
 	<Link {themeClass} href={src}>{src}</Link>{/if}
+
+<style>
+	video {
+		max-height: 18rem;
+		max-width: min(18rem /* 288px */, 100%);
+		overflow: hidden;
+		object-fit: contain;
+	}
+</style>

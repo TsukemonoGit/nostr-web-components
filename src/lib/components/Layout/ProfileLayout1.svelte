@@ -188,15 +188,16 @@
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
+		overflow: hidden;
 	}
 
 	.profile-header {
-		display: flex;
-		align-items: center;
-		gap: 12px;
 		font-weight: bold;
 		font-size: 18px;
 		color: var(--name-color);
+		word-break: break-word;
+		overflow: hidden;
+		max-width: 100%;
 	}
 
 	.profile-about {

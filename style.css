@@ -121,10 +121,11 @@ body {
 	display: flex;
 	gap: 20px;
 	flex-wrap: wrap;
+	max-width: 100%;
 }
 .theme-demo > div {
 	flex: 1;
-	min-width: 300px;
+	min-width: min(300px, 100%);
 }
 .grid-demo {
 	display: grid;

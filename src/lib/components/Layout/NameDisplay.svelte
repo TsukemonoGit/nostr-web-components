@@ -48,10 +48,10 @@
 	a {
 		display: inline;
 		white-space: pre-wrap;
-		word-break: normal;
 		word-break: break-word;
 		text-decoration: none;
 		color: var(--text-base);
+		overflow: hidden;
 	}
 
 	a:hover {

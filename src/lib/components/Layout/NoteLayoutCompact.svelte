@@ -57,12 +57,6 @@
 
 			<!-- 右: 本文 -->
 			<div class="note-main">
-				{#if replyUser}
-					<div class="note-reply">
-						{@render replyUser()}
-					</div>
-				{/if}
-
 				<div class="note-header">
 					<span class="note-name">
 						{#if name}
@@ -79,7 +73,11 @@
 						{/if}
 					</span>
 				</div>
-
+				{#if replyUser}
+					<div class="note-reply">
+						{@render replyUser()}
+					</div>
+				{/if}
 				{#if content}
 					<div class="note-content" style={`max-height: ${height ?? 'none'}; overflow-y: auto;`}>
 						{@render content()}
@@ -99,6 +97,65 @@
 {/if}
 
 <style>
+	:host {
+		--bg-color: #fff;
+		--text-color: #222;
+		--border-color: #ddd;
+		--name-color: #333;
+		--time-color: #888;
+		--placeholder-color: #e0e0e0;
+		--error-bg: #f8d7da;
+		--error-border: #f5c2c7;
+		--error-text: #842029;
+
+		/* 追加: リンクカラー */
+		--link-color: #1a0dab;
+		--link-hover-color: #551a8b;
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
+	}
+
+	.theme-dark,
+	:host(.dark) {
+		--bg-color: #1e1e1e;
+		--text-color: #ddd;
+		--border-color: #444;
+		--name-color: #eee;
+		--time-color: #aaa;
+		--placeholder-color: #333;
+		--error-bg: #4b1c1f;
+		--error-border: #8a1f2e;
+		--error-text: #ffb3b3;
+
+		/* 追加: ダークテーマ用リンクカラー */
+		--link-color: #8ab4f8;
+		--link-hover-color: #a3d0ff;
+
+		--external-link-color: #8ab4f8c4;
+		--external-link-hover-color: #a3cfffd2;
+	}
+
+	:host(.theme-light),
+	:host(.light) {
+		--bg-color: #fff;
+		--text-color: #222;
+		--border-color: #ddd;
+		--name-color: #333;
+		--time-color: #888;
+		--placeholder-color: #e0e0e0;
+		--error-bg: #f8d7da;
+		--error-border: #f5c2c7;
+		--error-text: #842029;
+
+		/* ライトテーマ用リンクカラー */
+		--link-color: #1a0dab;
+		--link-hover-color: #551a8b;
+
+		--external-link-color: #1a0dabb7;
+		--external-link-hover-color: #541a8bb4;
+	}
+
 	.compact-note {
 		border: 1px solid var(--border-color);
 		border-radius: 6px;
@@ -140,34 +197,45 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
 		min-width: 0;
 		overflow: hidden;
 	}
 
 	.note-reply {
-		font-size: 0.75em;
-		color: var(--time-color);
+		margin: 4px 0;
+		font-size: small;
+		display: inline-flex;
+		flex-wrap: wrap;
+		max-height: 3.5em;
+		overflow-y: auto;
 		white-space: nowrap;
-		text-overflow: ellipsis;
-		overflow: hidden;
-	}
 
+		/* メンション欄装飾 */
+		padding-left: 8px; /* ライン分の余白 */
+		border-left: 4px solid var(--mention-line-color, #3b82f6);
+		border-radius: 4px;
+		gap: 4px;
+		align-items: center;
+	}
+	/* 子要素の横並びと改行防止 */
+	.note-reply > * {
+		flex-shrink: 0;
+		white-space: nowrap;
+	}
 	.note-header {
 		display: flex;
-		gap: 6px;
+		flex-wrap: wrap;
+		justify-content: space-between;
 		align-items: baseline;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		font-size: 0.85em;
 	}
 
 	.note-name {
 		font-weight: bold;
 		color: var(--name-color);
+		word-break: break-all;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		white-space: pre-wrap;
 	}
 
 	.note-time {
@@ -187,8 +255,8 @@
 
 	.note-link {
 		position: absolute;
-		top: 6px;
-		right: 8px;
+		top: 0px;
+		right: 0px;
 	}
 
 	/* プレースホルダー */
