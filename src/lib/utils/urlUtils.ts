@@ -3,7 +3,7 @@
  */
 
 import { nip19 } from 'nostr-tools';
-
+import * as Nostr from 'nostr-typedef';
 /**
  * URLテンプレート内のプレースホルダーを実際の値に置換する
  * @param template URLテンプレート（例: "https://example.com/user/{id}"）
@@ -48,9 +48,12 @@ export function generateDynamicUrl(template: string, id: string): string {
  */
 export function resolveUrl(
 	href: string | null,
-	id: string,
+	id: string | undefined,
 	defaultUrlTemplate: string = 'https://njump.me/{id}'
-): string {
+): string | undefined {
+	if (!id) {
+		return undefined;
+	}
 	const replacements: Record<string, string> = {
 		id,
 		user: id // user も同じ値で置き換える（npubなど）
@@ -98,3 +101,10 @@ export const encodeNpub = (hex: string): string | undefined => {
 	} catch (error) {}
 	return undefined;
 };
+export function encodeNevent(note: Nostr.Event): string | undefined {
+	try {
+		return nip19.neventEncode({ id: note.id, author: note.pubkey });
+	} catch (error) {
+		return undefined;
+	}
+}

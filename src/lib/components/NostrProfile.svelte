@@ -63,7 +63,7 @@
 		}
 	}
 
-	let linkUrl: string | null = null;
+	let linkUrl: string | undefined = undefined;
 	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{id}');
 </script>
 

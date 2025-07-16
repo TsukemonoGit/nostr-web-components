@@ -177,7 +177,8 @@
 					>{/if}
 			{/snippet}
 			{#snippet replyUser()}
-				{#each replyUserList || [] as user}<nostr-profile display="name" {theme} {user}
+				{#each replyUserList || [] as user}
+					{@const npub = encodeNpub(user)}<nostr-profile display="name" {theme} user={npub}
 					></nostr-profile>{/each}
 			{/snippet}
 			{#snippet content()}
@@ -243,7 +244,8 @@
 					>{/if}
 			{/snippet}
 			{#snippet replyUser()}
-				{#each replyUserList || [] as user}<nostr-profile display="name" {theme} {user}
+				{#each replyUserList || [] as user}
+					{@const npub = encodeNpub(user)}<nostr-profile display="name" {theme} user={npub}
 					></nostr-profile>{/each}
 			{/snippet}
 			{#snippet content()}
