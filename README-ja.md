@@ -6,22 +6,8 @@ Webアプリケーションに簡単にNostrプロトコル機能を統合でき
 
 ## インストール
 
-### 方法1: CDN（クイックスタートに推奨）
-
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.min.js"></script>
-```
-
-### 方法2: NPMパッケージ
-
-```bash
-npm install @konemono/nostr-web-components
-```
-
-その後、JavaScriptでインポートします：
-
-```javascript
-import '@konemono/nostr-web-components';
+<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.js"></script>
 ```
 
 ## 使用方法
@@ -36,7 +22,7 @@ import '@konemono/nostr-web-components';
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.js"></script>
 	</head>
 	<body>
 		<nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>

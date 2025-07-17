@@ -2,8 +2,7 @@
 
 <script lang="ts">
 	import 'nostr-web-components/style.css';
-	import type { NostrEvent } from 'nostr-tools';
-	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
+
 	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
 	import NoteLayout1 from './Layout/NoteLayout1.svelte';
@@ -12,7 +11,6 @@
 	import Content from './content/Content.svelte';
 
 	import { connected } from 'nostr-web-components/core/connected.js'; // initialize呼び出し用アクション
-	import type { UserProfile } from 'nostr-web-components/types/index.ts';
 	import NoteLayoutCompact from './Layout/NoteLayoutCompact.svelte';
 	import Note from './Data/Note.svelte';
 	import Profile from './Data/Profile.svelte';

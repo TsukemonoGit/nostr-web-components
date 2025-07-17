@@ -7,7 +7,7 @@ A lightweight, easy-to-use Web Components library for integrating Nostr protocol
 ## Installation
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.js"></script>
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ The <nostr-container> component provides a way to share relay configuration to a
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.js"></script>
 	</head>
 	<body>
 		<nostr-container relays='["wss://relay.damus.io", "wss://nos.lol"]'>
