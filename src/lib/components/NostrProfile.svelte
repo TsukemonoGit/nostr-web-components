@@ -2,7 +2,6 @@
 
 <script lang="ts">
 	import type { UserProfile } from 'nostr-web-components/types/index.ts';
-	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
 	import ProfileLayout1 from './Layout/ProfileLayout1.svelte';
@@ -11,176 +10,168 @@
 	import UserAvatar from './Layout/UserAvatar.svelte';
 	import { connected } from 'nostr-web-components/core/connected.js';
 	import ProfileLayoutCompact from './Layout/ProfileLayoutCompact.svelte';
+	import Metadata from './Nostr/Metadata.svelte';
 
-	//export let id: string = '';
 	// Nostrの識別子（npub1~、nevent1~、またはNIP-05アドレス）
-	export let user: string = '';
-	export let relays: string[] = [];
-	export let href: string | null = null;
-	export let target: string = '_blank';
-	export let noLink: boolean = false;
-	export let display: 'card' | 'compact' | 'name' = 'card';
-	export let className: string = '';
-	export let theme: 'light' | 'dark' | 'auto' = 'auto';
 
-	let loading = false;
+	interface Props {
+		user: string;
+		relays: string[];
+		href: string | null;
+		target: string;
+		noLink: boolean;
+		className: string;
+		theme: 'light' | 'dark' | 'auto';
+		height: string | undefined;
+		display: 'card' | 'compact' | 'name';
+	}
+	let {
+		user = '',
+		relays = [],
+		href = null,
+		target = '_blank',
+		noLink = false,
+		className = '',
+		theme = 'auto',
+		height = undefined,
+		display = 'card'
+	}: Props = $props();
+
 	let profile: UserProfile | null = null;
-	let error: string | null = null;
 
-	let mounted = false;
+	let mounted = $state(false);
 
-	let themeClass = '';
-	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
+	let themeClass = $derived(
+		theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : ''
+	);
 
 	// 接続時の初期化処理（onMountの代替）
 	function initialize() {
 		if (mounted || !user) return;
 		mounted = true;
-		loadProfile();
 	}
 
-	// IDが変化したときにも再読込
-	$: if (mounted && user) {
-		loadProfile();
-	}
-
-	async function loadProfile() {
-		if (loading || !user) return;
-
-		loading = true;
-		error = null;
-
-		try {
-			const client = await ensureClient(relays);
-			profile = await client.fetchProfile(user, relays);
-			if (!profile) {
-				error = 'Profile not found';
-			}
-		} catch (e: any) {
-			error = e?.message || 'Error loading profile';
-		} finally {
-			loading = false;
-		}
-	}
-
-	let linkUrl: string | undefined = undefined;
-	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{id}');
+	let linkUrl = $derived(resolveUrl(href, user, 'https://njump.me/{id}'));
 </script>
 
 <div use:connected={initialize} class="profile {themeClass} {className}">
-	{#if display === 'card'}
-		<div class="nostr-wrapper">
-			<ProfileLayout1
-				class={`${className}`}
-				{themeClass}
-				{noLink}
-				showPlaceholders={loading || !profile}
-			>
-				{#snippet link()}
-					<!-- svelte-ignore a11y_consider_explicit_label -->
-					<a
-						href={linkUrl}
-						{target}
-						referrerpolicy="no-referrer"
-						class="external-link"
-						title="Open in new tab"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="24"
-							height="24"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="lucide lucide-external-link-icon lucide-external-link"
+	{#if mounted}
+		<Metadata {relays} pubkey={user}>
+			{#snippet children({ profile, status })}
+				{#if display === 'card'}
+					<div class="nostr-wrapper">
+						<ProfileLayout1
+							class={`${className}`}
+							{themeClass}
+							{noLink}
+							showPlaceholders={status === 'loading' || !profile}
 						>
-							<path d="M15 3h6v6" />
-							<path d="M10 14 21 3" />
-							<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-						</svg>
-					</a>
-				{/snippet}
+							{#snippet link()}
+								<!-- svelte-ignore a11y_consider_explicit_label -->
+								<a
+									href={linkUrl}
+									{target}
+									referrerpolicy="no-referrer"
+									class="external-link"
+									title="Open in new tab"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="lucide lucide-external-link-icon lucide-external-link"
+									>
+										<path d="M15 3h6v6" />
+										<path d="M10 14 21 3" />
+										<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+									</svg>
+								</a>
+							{/snippet}
 
-				{#snippet avatar()}
-					<UserAvatar src={profile?.picture} />
-				{/snippet}
+							{#snippet avatar()}
+								<UserAvatar src={profile?.picture} />
+							{/snippet}
 
-				{#snippet name()}{profile?.display_name || ''}@{profile?.name || 'no name'}
-				{/snippet}
+							{#snippet name()}{profile?.display_name || ''}@{profile?.name || 'no name'}
+							{/snippet}
 
-				{#snippet about()}
-					{#if profile}
-						<Content {display} text={profile.about || ''} tags={profile.tags} />
-					{/if}
-				{/snippet}
+							{#snippet about()}
+								{#if profile}
+									<Content {display} text={profile.about || ''} tags={profile.tags} />
+								{/if}
+							{/snippet}
 
-				{#snippet error()}
-					<span>Error: {error}</span>
-				{/snippet}
-			</ProfileLayout1>
-		</div>
-	{:else if display === 'compact'}
-		<ProfileLayoutCompact
-			class={className}
-			{themeClass}
-			{noLink}
-			showPlaceholders={loading || !profile}
-		>
-			{#snippet avatar()}
-				<UserAvatar src={profile?.picture} />
-			{/snippet}
-
-			{#snippet name()}
-				{profile?.display_name || ''}@{profile?.name || 'no name'}
-			{/snippet}
-
-			{#snippet about()}
-				{#if profile}
-					<Content {display} text={profile.about || ''} tags={profile.tags} />
-				{/if}
-			{/snippet}
-
-			{#snippet link()}
-				<!-- svelte-ignore a11y_consider_explicit_label -->
-				<a
-					href={linkUrl}
-					{target}
-					referrerpolicy="no-referrer"
-					class="external-link"
-					title="Open in new tab"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide lucide-external-link-icon lucide-external-link"
+							{#snippet error()}
+								<span>Error: {error}</span>
+							{/snippet}
+						</ProfileLayout1>
+					</div>
+				{:else if display === 'compact'}
+					<ProfileLayoutCompact
+						class={className}
+						{themeClass}
+						{noLink}
+						showPlaceholders={status === 'loading' || !profile}
 					>
-						<path d="M15 3h6v6" />
-						<path d="M10 14 21 3" />
-						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-					</svg>
-				</a>
-			{/snippet}
-		</ProfileLayoutCompact>
-	{:else if noLink}
-		{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
-			src={profile?.picture}
-			size={20}
-		/>
-	{:else}<Link {themeClass} href={linkUrl}
-			>{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
-				src={profile?.picture}
-				size={20}
-			/></Link
+						{#snippet avatar()}
+							<UserAvatar src={profile?.picture} />
+						{/snippet}
+
+						{#snippet name()}
+							{profile?.display_name || ''}@{profile?.name || 'no name'}
+						{/snippet}
+
+						{#snippet about()}
+							{#if profile}
+								<Content {display} text={profile.about || ''} tags={profile.tags} />
+							{/if}
+						{/snippet}
+
+						{#snippet link()}
+							<!-- svelte-ignore a11y_consider_explicit_label -->
+							<a
+								href={linkUrl}
+								{target}
+								referrerpolicy="no-referrer"
+								class="external-link"
+								title="Open in new tab"
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="24"
+									height="24"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									class="lucide lucide-external-link-icon lucide-external-link"
+								>
+									<path d="M15 3h6v6" />
+									<path d="M10 14 21 3" />
+									<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+								</svg>
+							</a>
+						{/snippet}
+					</ProfileLayoutCompact>
+				{:else if noLink}
+					{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
+						src={profile?.picture}
+						size={20}
+					/>
+				{:else}<Link {themeClass} href={linkUrl}
+						>{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
+							src={profile?.picture}
+							size={20}
+						/></Link
+					>{/if}{/snippet}</Metadata
 		>{/if}
 </div>
 

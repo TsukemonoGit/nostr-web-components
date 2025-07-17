@@ -31,3 +31,6 @@ export interface NostrSearchResult {
 	total: number;
 	hasMore: boolean;
 }
+
+export type Theme = 'light' | 'dark' | 'auto';
+export type Display = 'card' | 'compact' | 'name';
