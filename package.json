@@ -1,7 +1,6 @@
 {
 	"name": "@konemono/nostr-web-components",
-	"version": "0.1.7",
-	"type": "module",
+	"version": "0.1.8",
 	"scripts": {
 		"prepare": "npm run build",
 		"dev": "vite",
@@ -25,13 +24,13 @@
 		"**/*.css"
 	],
 	"main": "./dist/nostr-web-components.umd.js",
-	"module": "./dist/nostr-web-components.mjs",
+	"module": "./dist/nostr-web-components.js",
 	"unpkg": "./dist/nostr-web-components.iife.js",
 	"jsdelivr": "./dist/nostr-web-components.iife.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/nostr-web-components.mjs",
+			"import": "./dist/nostr-web-components.js",
 			"require": "./dist/nostr-web-components.umd.js"
 		},
 		"./style.css": "./dist/nostr-web-components.css"
