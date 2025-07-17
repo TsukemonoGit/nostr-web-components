@@ -133,9 +133,32 @@ body {
 	gap: 20px;
 }
 
-.github-link {
+.source-button {
+	display: inline-flex;
+	vertical-align: center;
 	text-decoration: none;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	border-radius: 0.5rem;
+	margin: 0.25rem;
 }
-.github-link:hover {
-	text-decoration: underline;
+
+.source-button:focus {
+	outline: 2px solid #3b82f6;
+	outline-offset: 2px;
+}
+
+.source-button:hover,
+.source-button:focus {
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.source-button img {
+	height: 28px;
+	border-radius: 6px;
+	transition: opacity 0.3s ease;
+}
+
+.source-button:hover img {
+	opacity: 0.8;
 }
