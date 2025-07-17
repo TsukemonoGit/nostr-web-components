@@ -5,8 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Nostr Web Components デモ</title>
 		<link rel="stylesheet" href="style.css" />
-		<!--<script type="module" src="dist/nostr-web-components.mjs"></script>-->
-		<script type="module" src="src/lib/index.ts"></script>
+		<script type="module" src="dist/nostr-web-components.js"></script>
+		<!--<script type="module" src="/src/lib/index.ts"></script>-->
 	</head>
 	<body>
 		<div class="container">
@@ -212,12 +212,12 @@
 							<button class="copy-button" onclick="copyCode(this)">コピー</button>
 						</div>
 						<pre class="code-block"><code>&lt;nostr-list
-  filters='[{"kinds":[1],"limit":10,"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"]}]'
+  filters='[{"kinds":[1,6],"limit":10,"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"]}]'
   limit="10"
   height="400px"&gt;
 &lt;/nostr-list&gt;</code></pre>
 						<nostr-list
-							filters='[{"kinds":[1],"limit":10,"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"]}]'
+							filters='[{"kinds":[1,6],"limit":10,"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"]}]'
 							limit="10"
 							height="400px"
 						></nostr-list>

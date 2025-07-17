@@ -40,3 +40,10 @@ export interface NostrPacket {
 	accepted?: boolean;
 	message?: string;
 }
+export interface NostrSearchResult {
+	events: NostrEvent[];
+	profiles: UserProfile[];
+	total: number;
+	hasMore: boolean;
+}
+export type Status = 'init' | 'loading' | 'error' | 'success' | 'nodata';

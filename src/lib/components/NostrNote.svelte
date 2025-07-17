@@ -14,6 +14,7 @@
 	import { connected } from 'nostr-web-components/core/connected.js'; // initialize呼び出し用アクション
 	import type { UserProfile } from 'nostr-web-components/types/index.ts';
 	import NoteLayoutCompact from './Layout/NoteLayoutCompact.svelte';
+	import Note from './Data/Note.svelte';
 
 	export let id: string = '';
 	export let relays: string[] = [];
@@ -125,141 +126,145 @@
 
 <!-- Web Components として mount 時に initialize() を実行 -->
 <div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
-	{#if display === 'card'}
-		<NoteLayout1
-			class={className}
-			{themeClass}
-			{noLink}
-			{height}
-			showPlaceholders={loading || !note}
-		>
-			{#snippet link()}
-				<!-- svelte-ignore a11y_consider_explicit_label -->
-				<a
-					href={linkUrl}
-					{target}
-					referrerpolicy="no-referrer"
-					class="external-link"
-					title="Open in new tab"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide lucide-external-link-icon lucide-external-link"
+	<Note {id} {relays} let:note>
+		{#if display === 'card'}
+			<NoteLayout1
+				class={className}
+				{themeClass}
+				{noLink}
+				{height}
+				showPlaceholders={loading || !note}
+			>
+				{#snippet link()}
+					<!-- svelte-ignore a11y_consider_explicit_label -->
+					<a
+						href={linkUrl}
+						{target}
+						referrerpolicy="no-referrer"
+						class="external-link"
+						title="Open in new tab"
 					>
-						<path d="M15 3h6v6" />
-						<path d="M10 14 21 3" />
-						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-					</svg>
-				</a>
-			{/snippet}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="lucide lucide-external-link-icon lucide-external-link"
+						>
+							<path d="M15 3h6v6" />
+							<path d="M10 14 21 3" />
+							<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+						</svg>
+					</a>
+				{/snippet}
 
-			{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
-			{#snippet name()}
-				{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
-				{@const userUrl = encodedNpub
-					? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
-					: undefined}
-				<NameDisplay
-					{themeClass}
-					href={userUrl}
-					name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
-				/>{/snippet}
-			{#snippet createdAt()}
-				{#if note}<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span
-					>{/if}
-			{/snippet}
-			{#snippet replyUser()}
-				{#each replyUserList || [] as user}
-					{@const npub = encodeNpub(user)}<nostr-profile display="name" {theme} user={npub}
-					></nostr-profile>{/each}
-			{/snippet}
-			{#snippet content()}
-				{#if note}<Content
-						text={note.content}
-						{display}
+				{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
+				{#snippet name()}
+					{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
+					{@const userUrl = encodedNpub
+						? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
+						: undefined}
+					<NameDisplay
 						{themeClass}
-						{theme}
-						tags={note.tags}
-					/>{/if}
-			{/snippet}
-			{#snippet error()}<span>Error: {error}</span>{/snippet}
-		</NoteLayout1>
-	{:else if display === 'compact'}
-		<NoteLayoutCompact
-			class={className}
-			{themeClass}
-			{noLink}
-			{height}
-			showPlaceholders={loading || !note}
-		>
-			{#snippet link()}
-				<!-- svelte-ignore a11y_consider_explicit_label -->
-				<a
-					href={linkUrl}
-					{target}
-					referrerpolicy="no-referrer"
-					class="external-link"
-					title="Open in new tab"
-				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="24"
-						height="24"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="lucide lucide-external-link-icon lucide-external-link"
+						href={userUrl}
+						name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
+					/>{/snippet}
+				{#snippet createdAt()}
+					{#if note}<span class="timestamp"
+							>{new Date(note.created_at * 1000).toLocaleString()}</span
+						>{/if}
+				{/snippet}
+				{#snippet replyUser()}
+					{#each replyUserList || [] as user}
+						{@const npub = encodeNpub(user)}<nostr-profile display="name" {theme} user={npub}
+						></nostr-profile>{/each}
+				{/snippet}
+				{#snippet content()}
+					{#if note}<Content
+							text={note.content}
+							{display}
+							{themeClass}
+							{theme}
+							tags={note.tags}
+						/>{/if}
+				{/snippet}
+				{#snippet error()}<span>Error: {error}</span>{/snippet}
+			</NoteLayout1>
+		{:else if display === 'compact'}
+			<NoteLayoutCompact
+				class={className}
+				{themeClass}
+				{noLink}
+				{height}
+				showPlaceholders={loading || !note}
+			>
+				{#snippet link()}
+					<!-- svelte-ignore a11y_consider_explicit_label -->
+					<a
+						href={linkUrl}
+						{target}
+						referrerpolicy="no-referrer"
+						class="external-link"
+						title="Open in new tab"
 					>
-						<path d="M15 3h6v6" />
-						<path d="M10 14 21 3" />
-						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-					</svg>
-				</a>
-			{/snippet}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="lucide lucide-external-link-icon lucide-external-link"
+						>
+							<path d="M15 3h6v6" />
+							<path d="M10 14 21 3" />
+							<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+						</svg>
+					</a>
+				{/snippet}
 
-			{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
-			{#snippet name()}
-				{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
-				{@const userUrl = encodedNpub
-					? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
-					: undefined}
-				<NameDisplay
-					{themeClass}
-					href={userUrl}
-					name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
-				/>{/snippet}
-			{#snippet createdAt()}
-				{#if note}<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span
-					>{/if}
-			{/snippet}
-			{#snippet replyUser()}
-				{#each replyUserList || [] as user}
-					{@const npub = encodeNpub(user)}<nostr-profile display="name" {theme} user={npub}
-					></nostr-profile>{/each}
-			{/snippet}
-			{#snippet content()}
-				{#if note}<Content
-						text={note.content}
-						{display}
+				{#snippet avatar()}<UserAvatar src={metadata?.picture} />{/snippet}
+				{#snippet name()}
+					{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
+					{@const userUrl = encodedNpub
+						? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
+						: undefined}
+					<NameDisplay
 						{themeClass}
-						{theme}
-						tags={note.tags}
-					/>{/if}
-			{/snippet}
-			{#snippet error()}<span>Error: {error}</span>{/snippet}
-		</NoteLayoutCompact>
-	{/if}
+						href={userUrl}
+						name={`${metadata?.display_name || ''}@${metadata?.name || 'no name'}`}
+					/>{/snippet}
+				{#snippet createdAt()}
+					{#if note}<span class="timestamp"
+							>{new Date(note.created_at * 1000).toLocaleString()}</span
+						>{/if}
+				{/snippet}
+				{#snippet replyUser()}
+					{#each replyUserList || [] as user}
+						{@const npub = encodeNpub(user)}<nostr-profile display="name" {theme} user={npub}
+						></nostr-profile>{/each}
+				{/snippet}
+				{#snippet content()}
+					{#if note}<Content
+							text={note.content}
+							{display}
+							{themeClass}
+							{theme}
+							tags={note.tags}
+						/>{/if}
+				{/snippet}
+				{#snippet error()}<span>Error: {error}</span>{/snippet}
+			</NoteLayoutCompact>
+		{/if}</Note
+	>
 </div>
 
 <style>

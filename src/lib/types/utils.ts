@@ -1,5 +1,5 @@
 import { type Event as NostrEvent } from 'nostr-typedef';
-import { UserProfile } from '.';
+
 // src/types/utils.ts
 
 export interface ParsedContent {
@@ -23,11 +23,4 @@ export interface NostrThreadEvent {
 	replies: NostrThreadEvent[];
 	metrics: NostrMetrics;
 	level: number;
-}
-
-export interface NostrSearchResult {
-	events: NostrEvent[];
-	profiles: UserProfile[];
-	total: number;
-	hasMore: boolean;
 }
