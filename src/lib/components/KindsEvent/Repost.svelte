@@ -64,14 +64,6 @@
 				{@const encodedRepostNpub = repostedNote ? encodeNpub(repostedNote.pubkey) : ''}
 				{@const userRepostUrl = resolveUrl(href, encodedRepostNpub, 'https://njump.me/{id}')}
 				<div class="repost-header">
-					<UserAvatar src={profile?.picture} size={20} />
-					<div class="reposter-info">
-						<NameDisplay
-							{themeClass}
-							href={userRepostUrl}
-							name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
-						/>
-					</div>
 					<span class="repost-indicator">
 						<svg
 							width="16"
@@ -86,11 +78,14 @@
 							<path d="M7 23l-4-4 4-4" />
 							<path d="M21 13v2a4 4 0 0 1-4 4H3" />
 						</svg>
-						reposted
-					</span>
-					<span class="timestamp">
-						{note && new Date(note.created_at * 1000).toLocaleString()}
-					</span>
+					</span><UserAvatar src={profile?.picture} size={20} />
+
+					<NameDisplay
+						{themeClass}
+						href={userRepostUrl}
+						name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
+					/>
+
 					{#if !noLink}
 						<!-- svelte-ignore a11y_consider_explicit_label -->
 						<a
@@ -141,17 +136,16 @@
 		padding: 6px;
 		background-color: var(--bg-color);
 		color: var(--text-color);
+		position: relative;
 	}
 
 	.repost-header {
-		display: flex;
+		display: inline-flex;
+		flex-wrap: wrap;
 		align-items: center;
-		gap: 8px;
+		gap: 2px;
 		padding-bottom: 8px;
-	}
-
-	.reposter-info {
-		flex: 1;
+		font-size: smaller;
 	}
 
 	.repost-indicator {
@@ -202,9 +196,10 @@
 	}
 
 	.external-link {
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		position: absolute;
+		top: 0;
+		right: 0;
+		overflow: visible;
 		text-decoration: none;
 		color: var(--external-link-color);
 		opacity: 0.8;
