@@ -47,3 +47,5 @@ export interface NostrSearchResult {
 	hasMore: boolean;
 }
 export type Status = 'init' | 'loading' | 'error' | 'success' | 'nodata';
+export type Theme = 'light' | 'dark' | 'auto';
+export type Display = 'card' | 'compact' | 'name';

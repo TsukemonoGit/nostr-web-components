@@ -76,3 +76,22 @@ export async function resolveToPubkey(user: string): Promise<string | null> {
 
 	return pubkey;
 }
+
+export const nip33Regex = /^([0-9]{1,9}):([0-9a-fA-F]{64}):(.*)$/;
+export const repostedId = (
+	tags: string[][]
+): { tag: string[] | undefined; kind: number | undefined } => {
+	const kindtag = tags.find((tag) => tag[0] === 'k');
+	const kind = kindtag ? Number(kindtag[1]) : undefined;
+	return {
+		tag: tags
+			.slice()
+			.reverse()
+			.find(
+				(tag) =>
+					(tag[0] === 'e' && nip19.BECH32_REGEX.test(tag[1])) ||
+					(tag[0] === 'a' && nip33Regex.test(tag[1]))
+			),
+		kind: kind
+	};
+};

@@ -1,7 +1,7 @@
 <svelte:options customElement="nostr-profile" accessors={true} />
 
 <script lang="ts">
-	import type { UserProfile } from 'nostr-web-components/types/index.ts';
+	import type { Display, Theme, UserProfile } from 'nostr-web-components/types/index.ts';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
@@ -21,9 +21,9 @@
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
-	export let display: 'card' | 'compact' | 'name' = 'card';
+	export let display: Display = 'card';
 	export let className: string = '';
-	export let theme: 'light' | 'dark' | 'auto' = 'auto';
+	export let theme: Theme = 'auto';
 
 	let mounted = false;
 
@@ -62,8 +62,8 @@
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									width="24"
-									height="24"
+									width="16"
+									height="16"
 									viewBox="0 0 24 24"
 									fill="none"
 									stroke="currentColor"
@@ -129,8 +129,8 @@
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
-								width="24"
-								height="24"
+								width="16"
+								height="16"
 								viewBox="0 0 24 24"
 								fill="none"
 								stroke="currentColor"
