@@ -138,19 +138,16 @@
 	.repost-container {
 		border: 1px solid var(--border-color);
 		border-radius: 8px;
-		padding: 16px;
+		padding: 6px;
 		background-color: var(--bg-color);
 		color: var(--text-color);
-		margin-bottom: 8px;
 	}
 
 	.repost-header {
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		margin-bottom: 12px;
 		padding-bottom: 8px;
-		border-bottom: 1px solid var(--border-color);
 	}
 
 	.reposter-info {
