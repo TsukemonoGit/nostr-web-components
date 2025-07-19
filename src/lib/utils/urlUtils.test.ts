@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveUrl } from './urlUtils';
+import { resolveUrl } from './urlUtils.js';
 
 describe('resolveUrl', () => {
 	const id = 'npub17sysrj0cgny7jtplj50dtzmjng49sxw0st6eqsparpjc0gft07squxl7m4';

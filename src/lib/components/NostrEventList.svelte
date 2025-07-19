@@ -5,13 +5,9 @@
 	import type { NostrEvent, Filter as NostrFilter } from 'nostr-tools';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { connected } from 'nostr-web-components/core/connected.js';
-	import NoteLayout1 from './Layout/NoteLayout1.svelte';
-	import { encodeNpub, resolveUrl, encodeNevent } from 'nostr-web-components/utils/urlUtils.js';
-	import UserAvatar from './Layout/UserAvatar.svelte';
-	import NameDisplay from './Layout/NameDisplay.svelte';
-	import Content from './content/Content.svelte';
+	import { resolveUrl, encodeNevent } from 'nostr-web-components/utils/urlUtils.js';
+
 	import type { Display, Theme, UserProfile } from 'nostr-web-components/types';
-	import NoteLayoutCompact from './Layout/NoteLayoutCompact.svelte';
 	import NoteEventRenderer from './KindsEvent/NoteEventRenderer.svelte';
 
 	export let filters: string = '[]';
@@ -182,6 +178,7 @@
 					{target}
 					{href}
 					{theme}
+					status={'success'}
 				/>
 			{/each}
 		</div>

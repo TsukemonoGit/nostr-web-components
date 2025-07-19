@@ -2,7 +2,6 @@
 	import * as Nostr from 'nostr-typedef';
 
 	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
-	import type { Display, Theme, UserProfile } from 'nostr-web-components/types/index.ts';
 
 	import NameDisplay from 'nostr-web-components/components/Layout/NameDisplay.svelte';
 	import UserAvatar from 'nostr-web-components/components/Layout/UserAvatar.svelte';
@@ -10,6 +9,7 @@
 	import Note from 'nostr-web-components/components/Data/Note.svelte';
 	import Profile from '../Data/Profile.svelte';
 	import NoteEventRenderer from './NoteEventRenderer.svelte';
+	import type { Display, Theme, UserProfile } from 'nostr-web-components/index.js';
 
 	interface Props {
 		note: Nostr.Event | null;
@@ -123,6 +123,7 @@
 					{target}
 					{href}
 					{theme}
+					status={repostStatus}
 				/>
 			</Profile>
 		</Note>

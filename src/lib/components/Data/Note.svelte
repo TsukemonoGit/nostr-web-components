@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Nostr from 'nostr-typedef';
-	import { Status } from 'nostr-web-components/index.js';
+	import type { Status } from 'nostr-web-components/index.js';
+
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 
 	export let id: string;

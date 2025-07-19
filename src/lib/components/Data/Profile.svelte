@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Nostr from 'nostr-typedef';
-	import { Status, UserProfile } from 'nostr-web-components/index.js';
+	import type { Status, UserProfile } from 'nostr-web-components/index.js';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 
 	export let pubkey: string | undefined;

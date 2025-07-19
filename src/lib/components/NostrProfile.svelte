@@ -1,8 +1,7 @@
 <svelte:options customElement="nostr-profile" accessors={true} />
 
 <script lang="ts">
-	import type { Display, Theme, UserProfile } from 'nostr-web-components/types/index.ts';
-	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
+	import type { Display, Theme } from 'nostr-web-components/index.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
 	import ProfileLayout1 from './Layout/ProfileLayout1.svelte';

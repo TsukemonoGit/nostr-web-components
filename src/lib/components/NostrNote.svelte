@@ -10,7 +10,7 @@
 	import Note from './Data/Note.svelte';
 	import Profile from './Data/Profile.svelte';
 	import NoteEventRenderer from './KindsEvent/NoteEventRenderer.svelte';
-	import { Display, Theme } from 'nostr-web-components/types';
+	import type { Display, Theme } from 'nostr-web-components/index.js';
 
 	export let id: string = '';
 	export let relays: string[] = [];
@@ -57,6 +57,7 @@
 				{target}
 				{href}
 				{theme}
+				{status}
 			/>
 		</Profile></Note
 	>

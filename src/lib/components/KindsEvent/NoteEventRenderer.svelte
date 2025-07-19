@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Display, Theme, UserProfile } from 'nostr-web-components/types';
+	import type { Display, Status, Theme, UserProfile } from 'nostr-web-components/types';
 	import * as Nostr from 'nostr-typedef';
 	import Kind1 from './Kind1.svelte';
 	import Repost from './Repost.svelte';
@@ -16,6 +16,7 @@
 		target: string;
 		href: string | null;
 		theme: Theme;
+		status: Status;
 	}
 
 	let {
@@ -29,7 +30,8 @@
 		linkUrl,
 		target,
 		href,
-		theme
+		theme,
+		status
 	}: Props = $props();
 </script>
 
@@ -59,5 +61,6 @@
 		{target}
 		{href}
 		{theme}
+		{status}
 	/>
 {/if}

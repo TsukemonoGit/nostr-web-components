@@ -3,13 +3,14 @@
 	import { type Token } from '@konemono/nostr-content-parser';
 	import { nip19 } from 'nostr-tools';
 	import Link from './Link.svelte';
+	import type { Display } from 'nostr-web-components/types/index.js';
 
 	interface Props {
 		decoded: nip19.DecodedResult;
 		theme: string | undefined;
 		part: Token;
 		themeClass: string | undefined;
-		display: 'card' | 'compact' | 'name';
+		display: Display;
 	}
 
 	let { decoded, themeClass, theme, part, display }: Props = $props();

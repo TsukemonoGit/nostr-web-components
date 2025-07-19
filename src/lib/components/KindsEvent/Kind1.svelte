@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Display, Theme, UserProfile } from 'nostr-web-components/types';
+	import type { Display, Status, Theme, UserProfile } from 'nostr-web-components/index.js';
 	import * as Nostr from 'nostr-typedef';
 	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils';
 	import Content from '../content/Content.svelte';
@@ -20,6 +20,7 @@
 		target: string;
 		href: string | null;
 		theme: Theme;
+		status: Status;
 	}
 
 	let {
@@ -33,7 +34,8 @@
 		linkUrl,
 		target,
 		href,
-		theme
+		theme,
+		status
 	}: Props = $props();
 </script>
 

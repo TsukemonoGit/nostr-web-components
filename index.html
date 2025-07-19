@@ -5,8 +5,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Nostr Web Components デモ</title>
 		<link rel="stylesheet" href="style.css" />
-		<script type="module" src="dist/nostr-web-components.mjs"></script>
-		<!--<script type="module" src="/src/lib/index.ts"></script>-->
+		<!--<script type="module" src="dist/nostr-web-components.mjs"></script>-->
+		<script type="module" src="/src/lib/index.ts"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -291,6 +291,16 @@
 							<h4>最新の投稿</h4>
 							<nostr-list
 								filters='[{"kinds":[1],"authors":["f987fb90696fcb09358629aeebf5156ea05a405101c4f2d9020bf02f47ea4a49"],"limit":3}]'
+								limit="3"
+							></nostr-list>
+							<h4>最新のRP</h4>
+							<nostr-list
+								filters='[{"kinds":[6],"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"],"limit":3}]'
+								limit="3"
+							></nostr-list>
+							<h4>最新のふぁぼ</h4>
+							<nostr-list
+								filters='[{"kinds":[7],"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"],"limit":3}]'
 								limit="3"
 							></nostr-list>
 						</div>
