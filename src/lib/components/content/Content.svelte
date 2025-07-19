@@ -11,13 +11,14 @@
 	import Image from './Image.svelte';
 	import Video from './Video.svelte';
 	import Audio from './Video.svelte';
+	import type { Display } from 'nostr-web-components/types/index.js';
 
 	interface Props {
 		text: string;
 		tags: string[][];
 		themeClass?: string;
 		theme?: string;
-		display: 'card' | 'compact' | 'name';
+		display: Display;
 	}
 
 	let { text, tags, themeClass, theme, display }: Props = $props();
