@@ -23,9 +23,34 @@
 				/></a>
 			</h1>
 
-			<p>このデモでは、Nostr Web Componentsの様々な使用方法を紹介します。</p>
-
 			<div id="log-container"></div>
+
+			<!-- 使い方ガイドセクションを追加 -->
+			<div class="demo-section">
+				<h2>使い方ガイド</h2>
+
+				<div class="demo-item">
+					<h3>基本的なセットアップ</h3>
+					<p>
+						Nostr Web
+						Componentsは軽量で使いやすいWebコンポーネントライブラリです。Nostrプロトコル機能をWebアプリケーションに簡単に統合できます。
+					</p>
+
+					<h4>CDNを使用したインストール</h4>
+
+					<pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/@konemono/nostr-web-components@latest/dist/nostr-web-components.iife.js"&gt;&lt;/script&gt;</code></pre>
+				</div>
+
+				<div class="demo-item">
+					<h3>主要なコンポーネント</h3>
+					<ul>
+						<li><strong>nostr-container</strong>: 子コンポーネントにリレー設定を提供</li>
+						<li><strong>nostr-note</strong>: 個別のNostr投稿を表示</li>
+						<li><strong>nostr-profile</strong>: ユーザープロフィールを表示</li>
+						<li><strong>nostr-list</strong>: 複数の投稿をリスト表示</li>
+					</ul>
+				</div>
+			</div>
 
 			<nostr-container relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'>
 				<!-- NostrNote デモ -->
@@ -364,7 +389,6 @@
 							></nostr-profile>
 						</div>
 					</div>
-
 					<div class="demo-item">
 						<h3>ノート表示モード比較</h3>
 						<div class="demo-controls">
