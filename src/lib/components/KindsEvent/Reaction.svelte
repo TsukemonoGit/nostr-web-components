@@ -11,6 +11,7 @@
 	import NoteEventRenderer from './NoteEventRenderer.svelte';
 	import type { Display, Theme, UserProfile } from 'nostr-web-components/index.js';
 	import ReactionDisplay from '../Layout/ReactionDisplay.svelte';
+	import ReactionIcon from './ReactionIcon.svelte';
 
 	interface Props {
 		note: Nostr.Event | null;
@@ -88,22 +89,10 @@
 			>
 				{@const encodedRepostNpub = repostedNote ? encodeNpub(repostedNote.pubkey) : ''}
 				{@const userRepostUrl = resolveUrl(href, encodedRepostNpub, 'https://njump.me/{id}')}
-
-				<span class="repost-indicator">
-					<svg
-						width="16"
-						height="16"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-					>
-						<path d="M17 1l4 4-4 4" />
-						<path d="M3 11V9a4 4 0 0 1 4-4h14" />
-						<path d="M7 23l-4-4 4-4" />
-						<path d="M21 13v2a4 4 0 0 1-4 4H3" />
-					</svg>
-				</span>
+				{#if note}
+					<span class="repost-indicator">
+						<ReactionIcon event={note} />
+					</span>{/if}
 
 				<UserAvatar src={profile?.picture} size={20} />
 

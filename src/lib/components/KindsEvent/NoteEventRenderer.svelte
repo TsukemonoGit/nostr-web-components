@@ -3,6 +3,7 @@
 	import * as Nostr from 'nostr-typedef';
 	import Kind1 from './Kind1.svelte';
 	import Repost from './Repost.svelte';
+	import Reaction from './Reaction.svelte';
 
 	interface Props {
 		note: Nostr.Event | null;
@@ -48,7 +49,21 @@
 		{target}
 		{href}
 		{theme}
-	/>{:else}
+	/>{:else if note && note.kind === 7}
+	<Reaction
+		{note}
+		{profile}
+		{themeClass}
+		{height}
+		{noLink}
+		{linkUrl}
+		{display}
+		{className}
+		{target}
+		{href}
+		{theme}
+	/>
+{:else}
 	<Kind1
 		{note}
 		{profile}

@@ -4,7 +4,7 @@
 
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 
-	export let id: string;
+	export let id: string | undefined;
 	export let relays: string[];
 
 	let status: Status = 'init';
@@ -20,7 +20,7 @@
 		//まずstatusリセット
 		status = 'loading';
 		note = null;
-
+		if (!id) return;
 		try {
 			const client = await ensureClient(relays);
 			// console.log('[nostr-note] Client obtained:', client);
