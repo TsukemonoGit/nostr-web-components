@@ -34,6 +34,8 @@
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
 
+	$: parsedItemsPerPage = typeof itemsPerPage === 'string' ? Number(itemsPerPage) : itemsPerPage;
+
 	let pubkey: string = '';
 
 	let themeClass = '';
@@ -105,7 +107,7 @@
 					{href}
 					{theme}
 					{status}
-					{itemsPerPage}
+					{parsedItemsPerPage}
 				/>{:else}<!---->{/if}
 		</Profile></Naddr
 	>

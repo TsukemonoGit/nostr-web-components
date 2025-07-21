@@ -25,7 +25,7 @@
 		theme: Theme;
 		status: Status;
 		sortOrder?: 'normal' | 'reverse';
-		itemsPerPage?: number;
+		parsedItemsPerPage?: number;
 	}
 
 	let {
@@ -42,7 +42,7 @@
 		theme,
 		status,
 		sortOrder = 'normal',
-		itemsPerPage = 10
+		parsedItemsPerPage = 10
 	}: Props = $props();
 
 	let currentPage = $state(1);
@@ -61,11 +61,17 @@
 	});
 
 	// ページネーション計算
-	const totalItems = $derived(filteredTags.length);
-	const totalPages = $derived(Math.ceil(totalItems / itemsPerPage));
-	const startIndex = $derived((currentPage - 1) * itemsPerPage);
-	const endIndex = $derived(Math.min(startIndex + itemsPerPage, totalItems));
-	const currentItems = $derived(filteredTags.slice(startIndex, endIndex));
+	let totalItems = $derived(filteredTags.length);
+	let totalPages = $derived(Math.ceil(totalItems / parsedItemsPerPage));
+
+	const pagination = $derived.by(() => {
+		const start = (currentPage - 1) * parsedItemsPerPage;
+
+		const end = Math.min(start + parsedItemsPerPage, filteredTags.length);
+
+		const items = filteredTags.slice(start, end);
+		return { start, end, items };
+	});
 
 	function goToPage(page: number) {
 		if (page >= 1 && page <= totalPages) {
@@ -143,7 +149,7 @@
 			</div>
 		{/if}
 		<div class="list-content">
-			{#each currentItems as tag}
+			{#each pagination.items as tag}
 				<ListTagItem {tag} {href} {themeClass} {theme} {display} />
 			{/each}
 		</div>
@@ -151,7 +157,7 @@
 		{#if totalPages > 1}
 			<div class="pagination">
 				<div class="pagination-info">
-					{startIndex + 1}-{endIndex} / {totalItems}件
+					{pagination.start + 1}-{pagination.end} / {totalItems}件
 				</div>
 
 				<div class="pagination-controls">
