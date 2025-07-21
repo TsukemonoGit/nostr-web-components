@@ -1,5 +1,12 @@
 // src/core/NostrClient.ts
-import { createRxBackwardReq, createRxNostr, type EventPacket, type RxNostr, uniq } from 'rx-nostr';
+import {
+	createRxBackwardReq,
+	createRxNostr,
+	type EventPacket,
+	latest,
+	type RxNostr,
+	uniq
+} from 'rx-nostr';
 import { nip05, nip19, type NostrEvent } from 'nostr-tools';
 import { verifier } from '@rx-nostr/crypto';
 import type { UserProfile, NostrClientConfig } from 'nostr-web-components/types/index.js';
@@ -11,6 +18,7 @@ export class NostrClient {
 	private config: NostrClientConfig;
 	private profileCache = new Map<string, UserProfile>();
 	private noteCache = new Map<string, NostrEvent>();
+	private naddrCache = new Map<string, NostrEvent>();
 
 	constructor(config: NostrClientConfig) {
 		this.config = {
@@ -50,34 +58,37 @@ export class NostrClient {
 				(this.config.timeout || 5000) + 5000
 			);
 
-			const subscription = (
+			const observable =
 				(relays || []).length > 0
 					? this.rxNostr.use(rxReq, { relays: relays })
-					: this.rxNostr.use(rxReq)
-			)
-				.pipe(uniq())
-				.subscribe({
-					next: (packet: EventPacket) => {
-						//console.log(packet);
-						if (packet.event) {
-							events.push(packet.event);
-							// 単一のイベントを期待する場合は即座に完了
-							if (expectSingle) {
-								clearTimeout(timeout);
-								subscription.unsubscribe(); // subscription を明示的に終了
-								resolve([packet.event]);
-							}
+					: this.rxNostr.use(rxReq);
+
+			const pipeOperators = expectSingle
+				? observable.pipe(uniq(), latest())
+				: observable.pipe(uniq());
+
+			const subscription = pipeOperators.subscribe({
+				next: (packet: EventPacket) => {
+					//console.log(packet);
+					if (packet.event) {
+						events.push(packet.event);
+						// 単一のイベントを期待する場合は即座に完了
+						if (expectSingle) {
+							clearTimeout(timeout);
+							subscription.unsubscribe(); // subscription を明示的に終了
+							resolve([packet.event]);
 						}
-					},
-					error: (error: any) => {
-						clearTimeout(timeout);
-						reject(error);
-					},
-					complete: () => {
-						clearTimeout(timeout);
-						resolve(events.sort((a, b) => b.created_at - a.created_at));
 					}
-				});
+				},
+				error: (error: any) => {
+					clearTimeout(timeout);
+					reject(error);
+				},
+				complete: () => {
+					clearTimeout(timeout);
+					resolve(events.sort((a, b) => b.created_at - a.created_at));
+				}
+			});
 
 			//	console.log('emit filters:', filters);
 			rxReq.emit(filters);
@@ -112,6 +123,54 @@ export class NostrClient {
 			this.noteCache.set(actualNoteId, event);
 		}
 		return event;
+	}
+
+	async fetchNaddr(naddrAddress: string, relays?: string[]): Promise<NostrEvent | null> {
+		// キャッシュチェック
+		if (this.naddrCache.has(naddrAddress)) {
+			return this.naddrCache.get(naddrAddress)!;
+		}
+
+		try {
+			// naddrアドレスをデコード
+			const decoded = nip19.decode(naddrAddress);
+			if (decoded.type !== 'naddr') {
+				console.warn('Invalid naddr address:', naddrAddress);
+				return null;
+			}
+
+			const { kind, pubkey, identifier } = decoded.data;
+
+			// パラメータを構築してフィルタ作成
+			const filter: Filter = {
+				kinds: [kind],
+				authors: [pubkey],
+				limit: 1
+			};
+
+			// identifierが存在する場合は#dタグでフィルタ
+			if (identifier) {
+				filter['#d'] = [identifier];
+			}
+
+			// 指定されたリレーがある場合は使用、なければnaddrに含まれるリレーまたはデフォルト
+			const targetRelays =
+				relays || (decoded.data.relays?.length ? decoded.data.relays : undefined);
+
+			// イベントを取得（最新の1つを期待）
+			const results = await this.fetchByFilters([filter], targetRelays, true);
+			const event = results[0] ?? null;
+
+			// キャッシュに保存
+			if (event) {
+				this.naddrCache.set(naddrAddress, event);
+			}
+
+			return event;
+		} catch (e) {
+			console.warn('Failed to decode or fetch naddr:', naddrAddress, e);
+			return null;
+		}
 	}
 
 	async fetchProfile(user: string, relays?: string[]): Promise<UserProfile | null> {

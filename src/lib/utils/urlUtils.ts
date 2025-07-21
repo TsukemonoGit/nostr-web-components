@@ -56,7 +56,8 @@ export function resolveUrl(
 	}
 	const replacements: Record<string, string> = {
 		id,
-		user: id // user も同じ値で置き換える（npubなど）
+		user: id, // user も同じ値で置き換える（npubなど）,
+		naddr: id
 	};
 
 	const template = href ?? defaultUrlTemplate;
@@ -101,10 +102,45 @@ export const encodeNpub = (hex: string): string | undefined => {
 	} catch (error) {}
 	return undefined;
 };
-export function encodeNevent(note: Nostr.Event): string | undefined {
+
+export function encodeEventToNevent(note: Nostr.Event): string | undefined {
+	return encodeToNevent({ id: note.id, author: note.pubkey });
+}
+
+export function encodeToNevent({
+	id,
+	author
+}: {
+	id: string;
+	author?: string;
+}): string | undefined {
 	try {
-		return nip19.neventEncode({ id: note.id, author: note.pubkey });
+		return nip19.neventEncode({ id, ...(author && { author }) });
 	} catch (error) {
 		return undefined;
 	}
+}
+
+/**
+ * `a`タグから `naddr` をエンコード
+ * @param aTagValue フォーマット: `<kind>:<pubkey>:<identifier>`
+ * @returns naddr文字列 (例: naddr1...)
+ */
+export function encodeNaddr(aTagValue: string): string {
+	const [kindStr, pubkey, identifier] = aTagValue.split(':');
+
+	if (!kindStr || !pubkey || !identifier) {
+		throw new Error(`Invalid a-tag format: ${aTagValue}`);
+	}
+
+	const kind = parseInt(kindStr, 10);
+	if (isNaN(kind)) {
+		throw new Error(`Invalid kind in a-tag: ${kindStr}`);
+	}
+
+	return nip19.naddrEncode({
+		kind,
+		pubkey,
+		identifier
+	});
 }

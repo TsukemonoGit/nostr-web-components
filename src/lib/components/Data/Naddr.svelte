@@ -1,26 +1,26 @@
 <script lang="ts">
 	import * as Nostr from 'nostr-typedef';
-	import type { Status, UserProfile } from 'nostr-web-components/index.js';
+	import type { Status } from 'nostr-web-components/index.js';
+
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 
-	export let pubkey: string | undefined;
+	export let naddr: string | undefined;
 	export let relays: string[];
 
 	let status: Status = 'init';
-	let profile: UserProfile | null = null;
+	let note: Nostr.Event | null = null;
 
 	$: {
-		if (pubkey) {
-			loadProfile();
+		if (naddr) {
+			loadNote();
 		}
 	}
 
-	async function loadProfile() {
-		if (!pubkey) return;
+	async function loadNote() {
 		//まずstatusリセット
 		status = 'loading';
-		profile = null;
-
+		note = null;
+		if (!naddr) return;
 		try {
 			const client = await ensureClient(relays);
 			// console.log('[nostr-note] Client obtained:', client);
@@ -31,10 +31,10 @@
 				return;
 			}
 
-			profile = await client.fetchProfile(pubkey, relays);
+			note = await client.fetchNaddr(naddr, relays);
 			// console.log('[nostr-note] Fetched note:', fetchedNote);
 
-			if (!profile) {
+			if (!note) {
 				status = 'nodata';
 				return;
 			}
@@ -49,8 +49,8 @@
 		}
 	}
 	interface $$Slots {
-		default: { profile: UserProfile | null; status: Status };
+		default: { note: Nostr.Event | null; status: Status };
 	}
 </script>
 
-<slot {profile} {status} />
+<slot {note} {status} />

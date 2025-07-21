@@ -1,0 +1,375 @@
+<script lang="ts">
+	import * as Nostr from 'nostr-typedef';
+
+	import type { Display, Status, Theme, UserProfile } from 'nostr-web-components/index.js';
+	import {
+		getKindDisplayName,
+		isListKind,
+		listSupportedTags
+	} from 'nostr-web-components/utils/kinds.js';
+	import ListTagItem from './ListTagItem.svelte';
+
+	import Kind0 from './Kind0.svelte';
+
+	interface Props {
+		note: Nostr.Event;
+		profile: UserProfile | null;
+		className: string;
+		themeClass: string;
+		noLink: boolean;
+		height: string | undefined;
+		display: Display;
+		linkUrl: string | undefined;
+		target: string;
+		href: string | null;
+		theme: Theme;
+		status: Status;
+		sortOrder?: 'normal' | 'reverse';
+		itemsPerPage?: number;
+	}
+
+	let {
+		note,
+		profile,
+		className,
+		themeClass,
+		noLink,
+		height,
+		display,
+		linkUrl,
+		target,
+		href,
+		theme,
+		status,
+		sortOrder = 'normal',
+		itemsPerPage = 10
+	}: Props = $props();
+
+	let currentPage = $state(1);
+
+	//let dtag = $derived(note.tags.find((tag) => tag[0] === 'd')?.[1]);
+	let title = $derived(note.tags.find((tag) => tag[0] === 'title')?.[1]);
+	let desc = $derived(
+		note.tags.find((tag) => tag[0] === 'description' || tag[0] === 'summary')?.[1]
+	);
+	$inspect(title);
+	let image = $derived(note.tags.find((tag) => tag[0] === 'image')?.[1]);
+	// フィルタリングとソート
+	const filteredTags = $derived.by(() => {
+		const filtered = note.tags.filter((tag) => listSupportedTags.includes(tag[0]));
+		return sortOrder === 'reverse' ? filtered.slice().reverse() : filtered;
+	});
+
+	// ページネーション計算
+	const totalItems = $derived(filteredTags.length);
+	const totalPages = $derived(Math.ceil(totalItems / itemsPerPage));
+	const startIndex = $derived((currentPage - 1) * itemsPerPage);
+	const endIndex = $derived(Math.min(startIndex + itemsPerPage, totalItems));
+	const currentItems = $derived(filteredTags.slice(startIndex, endIndex));
+
+	function goToPage(page: number) {
+		if (page >= 1 && page <= totalPages) {
+			currentPage = page;
+		}
+	}
+
+	function goToPrevious() {
+		goToPage(currentPage - 1);
+	}
+
+	function goToNext() {
+		goToPage(currentPage + 1);
+	}
+</script>
+
+{#if isListKind(note.kind)}
+	<div class="list-container {className} {themeClass}">
+		<!-- svelte-ignore a11y_consider_explicit_label -->
+		{#if !noLink && linkUrl}
+			<a
+				href={linkUrl}
+				{target}
+				referrerpolicy="no-referrer"
+				class="external-link"
+				title="Open in new tab"
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="16"
+					height="16"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="lucide lucide-external-link-icon lucide-external-link"
+				>
+					<path d="M15 3h6v6" />
+					<path d="M10 14 21 3" />
+					<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+				</svg>
+			</a>{/if}
+		<header class="list-header">
+			<h3 class="list-title">{getKindDisplayName(note.kind)}</h3>
+
+			{#if profile}
+				<Kind0
+					{profile}
+					{themeClass}
+					{noLink}
+					{linkUrl}
+					display={'name'}
+					{className}
+					{target}
+					{status}
+				/>
+			{/if}
+		</header>
+		{#if title || desc || image}
+			<div class="list-summary-card">
+				{#if image}
+					<img class="list-summary-image" src={image} alt={title || 'image'} />
+				{/if}
+
+				<div class="list-summary-text">
+					{#if title}
+						<h4 class="list-summary-title">{title}</h4>
+					{/if}
+					{#if desc}
+						<p class="list-summary-desc">{desc}</p>
+					{/if}
+				</div>
+			</div>
+		{/if}
+		<div class="list-content">
+			{#each currentItems as tag}
+				<ListTagItem {tag} {href} {themeClass} {theme} {display} />
+			{/each}
+		</div>
+
+		{#if totalPages > 1}
+			<div class="pagination">
+				<div class="pagination-info">
+					{startIndex + 1}-{endIndex} / {totalItems}件
+				</div>
+
+				<div class="pagination-controls">
+					<button class="pagination-btn" disabled={currentPage === 1} onclick={goToPrevious}>
+						◀
+					</button>
+
+					{#if totalPages <= 7}
+						{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+							<button
+								class="pagination-btn {currentPage === page ? 'active' : ''}"
+								onclick={() => goToPage(page)}
+							>
+								{page}
+							</button>
+						{/each}
+					{:else}
+						{#if currentPage > 3}
+							<button class="pagination-btn" onclick={() => goToPage(1)}>1</button>
+							{#if currentPage > 4}
+								<span class="pagination-ellipsis">...</span>
+							{/if}
+						{/if}
+
+						{#each Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+							const start = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
+							return start + i;
+						}) as page}
+							{#if page >= 1 && page <= totalPages}
+								<button
+									class="pagination-btn {currentPage === page ? 'active' : ''}"
+									onclick={() => goToPage(page)}
+								>
+									{page}
+								</button>
+							{/if}
+						{/each}
+
+						{#if currentPage < totalPages - 2}
+							{#if currentPage < totalPages - 3}
+								<span class="pagination-ellipsis">...</span>
+							{/if}
+							<button class="pagination-btn" onclick={() => goToPage(totalPages)}>
+								{totalPages}
+							</button>
+						{/if}
+					{/if}
+
+					<button class="pagination-btn" disabled={currentPage === totalPages} onclick={goToNext}>
+						▶
+					</button>
+				</div>
+			</div>
+		{/if}
+
+		<!-- {#if note.content}
+			<div class="list-description">
+				{note.content}
+			</div>
+		{/if} -->
+	</div>
+{:else}
+	<div class="note-container {className} {themeClass}">
+		<!--ほか-->
+	</div>
+{/if}
+
+<style>
+	.list-container {
+		position: relative;
+		background-color: var(--bg-color);
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		padding: 16px;
+		margin: 8px 0;
+	}
+
+	.list-header {
+		color: var(--text-color);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 1px solid var(--border-light);
+		padding-bottom: 8px;
+	}
+
+	.list-title {
+		font-size: 1.1em;
+		font-weight: 600;
+		margin: 0;
+	}
+
+	.list-author {
+		font-size: 0.9em;
+		color: var(--text-secondary);
+	}
+
+	.list-content {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.pagination {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 16px;
+		padding-top: 12px;
+		border-top: 1px solid var(--border-light);
+	}
+
+	.pagination-info {
+		font-size: 0.9em;
+		color: var(--text-color);
+	}
+
+	.pagination-controls {
+		display: flex;
+		gap: 4px;
+		align-items: center;
+	}
+
+	.pagination-btn {
+		padding: 6px 12px;
+		border: 1px solid var(--border-color);
+		background: var(--background);
+		color: var(--text-color);
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 0.9em;
+		transition: all 0.2s ease;
+	}
+
+	.pagination-btn:hover:not(:disabled) {
+		background: var(--background-hover);
+		border-color: var(--border-hover);
+	}
+
+	.pagination-btn:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.pagination-btn.active {
+		background: var(--bg-color);
+		color: var(--text-color);
+		border-color: var(--border-color);
+	}
+
+	.pagination-ellipsis {
+		padding: 6px 8px;
+		color: var(--text-color);
+		font-size: 0.9em;
+	}
+
+	.list-description {
+		margin-top: 12px;
+		padding-top: 8px;
+		border-top: 1px solid var(--border-light);
+		font-size: 0.9em;
+		color: var(--text-color);
+	}
+	.list-summary-card {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 12px;
+		margin-bottom: 16px;
+	}
+
+	.list-summary-image {
+		width: 80px;
+		height: 80px;
+		object-fit: cover;
+		border-radius: 8px;
+		border: 1px solid var(--border-color);
+		flex-shrink: 0;
+	}
+
+	.list-summary-text {
+		display: flex;
+		flex-direction: column;
+		color: var(--text-color);
+	}
+
+	.list-summary-title {
+		font-size: 1em;
+		font-weight: bold;
+		margin: 0 0 4px 0;
+	}
+
+	.list-summary-desc {
+		font-size: 0.9em;
+		color: var(--text-color);
+		margin: 0;
+	}
+	.external-link {
+		position: absolute;
+		top: 0;
+		right: 0;
+		overflow: visible;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none;
+		padding: 0;
+		color: var(--external-link-color);
+		opacity: 0.8;
+		border-radius: 20%;
+		transition: all 0.3s ease;
+		transform: scale(1);
+	}
+
+	.external-link:hover {
+		opacity: 1;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		transform: scale(1.1);
+	}
+</style>

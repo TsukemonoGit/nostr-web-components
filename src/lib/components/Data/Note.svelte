@@ -45,7 +45,7 @@
 			status = 'error';
 			console.error('[nostr-note] Exception:', e);
 		} finally {
-			console.log('[nostr-note] loading complete');
+			//console.log('[nostr-note] loading complete');
 		}
 	}
 	interface $$Slots {
