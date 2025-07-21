@@ -87,7 +87,7 @@
 	function goToNext() {
 		goToPage(currentPage + 1);
 	}
-	console.log(note);
+	//console.log(note);
 </script>
 
 <div class="list-container {className} {themeClass}">

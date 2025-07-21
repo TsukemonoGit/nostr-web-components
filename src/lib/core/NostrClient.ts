@@ -158,7 +158,8 @@ export class NostrClient {
 				relays || (decoded.data.relays?.length ? decoded.data.relays : undefined);
 
 			// イベントを取得（最新の1つを期待）
-			const results = await this.fetchByFilters([filter], targetRelays, true);
+			const results = await this.fetchByFilters([filter], targetRelays);
+			console.log(results);
 			const event = results[0] ?? null;
 
 			// キャッシュに保存
