@@ -267,7 +267,6 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-top: 16px;
-		padding-top: 12px;
 		border-top: 1px solid var(--border-light);
 	}
 
@@ -304,9 +303,9 @@
 	}
 
 	.pagination-btn.active {
-		background: var(--bg-color);
-		color: var(--text-color);
-		border-color: var(--border-color);
+		background-color: var(--pagination-active-bg);
+		color: var(--pagination-active-text);
+		border-color: var(--pagination-active-border);
 	}
 
 	.pagination-ellipsis {
