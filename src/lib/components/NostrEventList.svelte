@@ -7,8 +7,8 @@
 	import { connected } from 'nostr-web-components/core/connected.js';
 	import { encodeEventToNevent, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
-	import type { Display, Theme, UserProfile } from 'nostr-web-components/types';
 	import NoteEventRenderer from './KindsEvent/NoteEventRenderer.svelte';
+	import type { Display, Theme, UserProfile } from 'nostr-web-components/index.js';
 
 	export let filters: string = '[]';
 	export let relays: string[] = [];
@@ -201,6 +201,11 @@
 
 		--external-link-color: #1a0dabb7;
 		--external-link-hover-color: #541a8bb4;
+
+		/* ページネーションアクティブ用カラー */
+		--pagination-active-bg: #3b82f6;
+		--pagination-active-text: #fff;
+		--pagination-active-border: #3b82f6;
 	}
 
 	.theme-dark {
@@ -212,15 +217,20 @@
 		--error-text: #ffb3b3;
 		--loading-color: #aaa;
 		--empty-color: #999;
-		/* 追加: ダークテーマ用リンクカラー */
-		--link-color: #8ab4f8;
-		--link-hover-color: #a3d0ff;
+
 		/* ダークテーマ用メンションカラー */
 		--mention-line-color: #60a5fa; /* 明るめ青で視認性良 */
 		--mention-bg-color: #1e3a8a22; /* 透過感ある青背景 */
+		/* 追加: ダークテーマ用リンクカラー */
+		--link-color: #8ab4f8;
+		--link-hover-color: #a3d0ff;
 
 		--external-link-color: #8ab4f8c4;
 		--external-link-hover-color: #a3cfffd2;
+
+		--pagination-active-bg: #60a5fa;
+		--pagination-active-text: #000;
+		--pagination-active-border: #60a5fa;
 	}
 
 	.theme-light {
@@ -232,15 +242,18 @@
 		--error-text: #842029;
 		--loading-color: #666;
 		--empty-color: #888;
-		/* 追加: リンクカラー */
+		/* ライトテーマ用リンクカラー */
 		--link-color: #1a0dab;
 		--link-hover-color: #551a8b;
 		/* ライトテーマ用メンションカラー */
-		--link-color: #1a0dab;
-		--link-hover-color: #551a8b;
+		--mention-line-color: #3b82f6;
+		--mention-bg-color: #e0f5ff;
 
 		--external-link-color: #1a0dabb7;
 		--external-link-hover-color: #541a8bb4;
+		--pagination-active-bg: #3b82f6;
+		--pagination-active-text: #fff;
+		--pagination-active-border: #3b82f6;
 	}
 	.nostr-list-wrapper {
 		width: 100%;

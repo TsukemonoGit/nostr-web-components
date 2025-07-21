@@ -132,6 +132,11 @@
 
 		--external-link-color: #1a0dabb7;
 		--external-link-hover-color: #541a8bb4;
+
+		/* ページネーションアクティブ用カラー */
+		--pagination-active-bg: #3b82f6;
+		--pagination-active-text: #fff;
+		--pagination-active-border: #3b82f6;
 	}
 
 	.theme-dark {
@@ -153,6 +158,10 @@
 
 		--external-link-color: #8ab4f8c4;
 		--external-link-hover-color: #a3cfffd2;
+
+		--pagination-active-bg: #60a5fa;
+		--pagination-active-text: #000;
+		--pagination-active-border: #60a5fa;
 	}
 
 	.theme-light {
@@ -173,6 +182,9 @@
 
 		--external-link-color: #1a0dabb7;
 		--external-link-hover-color: #541a8bb4;
+		--pagination-active-bg: #3b82f6;
+		--pagination-active-text: #fff;
+		--pagination-active-border: #3b82f6;
 	}
 	.external-link {
 		display: flex;
