@@ -83,7 +83,7 @@ export const hexRegex = /^[0-9a-f]{64}$/;
 export const repostedId = (
 	tags: string[][]
 ): { tag: string[] | undefined; kind: number | undefined } => {
-	console.log(tags);
+	//console.log(tags);
 	const kindtag = tags.find((tag) => tag[0] === 'k');
 	const kind = kindtag ? Number(kindtag[1]) : undefined;
 	return {

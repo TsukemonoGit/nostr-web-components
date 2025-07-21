@@ -5,7 +5,7 @@
 	import type { NostrEvent, Filter as NostrFilter } from 'nostr-tools';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import { connected } from 'nostr-web-components/core/connected.js';
-	import { resolveUrl, encodeNevent } from 'nostr-web-components/utils/urlUtils.js';
+	import { encodeEventToNevent, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
 	import type { Display, Theme, UserProfile } from 'nostr-web-components/types';
 	import NoteEventRenderer from './KindsEvent/NoteEventRenderer.svelte';
@@ -58,7 +58,7 @@
 			return;
 		}
 
-		console.log('[nostr-list] Loading events with filters:', filters);
+		//console.log('[nostr-list] Loading events with filters:', filters);
 		loading = true;
 		error = null;
 		events = [];
@@ -160,11 +160,8 @@
 	{:else}
 		<div class="nostr-wrapper {themeClass} {className}">
 			{#each events as note (note.id)}
-				{@const replyUserList = note?.tags
-					?.filter((tag) => tag[0] === 'p' && typeof tag[1] === 'string')
-					?.map((tag) => tag[1])}
 				{@const metadata = getMetadata(note.pubkey)}
-				{@const nevent = encodeNevent(note)}
+				{@const nevent = encodeEventToNevent(note)}
 				{@const linkUrl = nevent ? resolveUrl(href, nevent, 'https://njump.me/{id}') : undefined}
 				<NoteEventRenderer
 					{note}

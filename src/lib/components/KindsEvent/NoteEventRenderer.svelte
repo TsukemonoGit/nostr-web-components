@@ -4,6 +4,9 @@
 	import Kind1 from './Kind1.svelte';
 	import Repost from './Repost.svelte';
 	import Reaction from './Reaction.svelte';
+	import Kind0 from './Kind0.svelte';
+	import { isAddressableKind, isReplaceableKind } from 'nostr-tools/kinds';
+	import AddrOrReplaceable from './AddrOrReplaceable.svelte';
 
 	interface Props {
 		note: Nostr.Event | null;
@@ -62,6 +65,33 @@
 		{target}
 		{href}
 		{theme}
+	/>
+{:else if note && note.kind === 0}
+	<Kind0
+		{profile}
+		{themeClass}
+		{height}
+		{noLink}
+		{linkUrl}
+		{display}
+		{className}
+		{target}
+		{status}
+	/>
+{:else if note && (isAddressableKind(note.kind) || isReplaceableKind(note.kind))}
+	<AddrOrReplaceable
+		{note}
+		{profile}
+		{themeClass}
+		{height}
+		{noLink}
+		{linkUrl}
+		{display}
+		{className}
+		{target}
+		{href}
+		{theme}
+		{status}
 	/>
 {:else}
 	<Kind1

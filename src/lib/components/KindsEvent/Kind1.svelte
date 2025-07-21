@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Display, Status, Theme, UserProfile } from 'nostr-web-components/index.js';
+	import type { Display, Status, Theme, UserProfile } from 'nostr-web-components/types';
 	import * as Nostr from 'nostr-typedef';
 	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils';
 	import Content from '../content/Content.svelte';
