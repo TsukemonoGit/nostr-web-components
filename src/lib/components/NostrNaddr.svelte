@@ -24,6 +24,7 @@
 
 	export let sortOrder: 'normal' | 'reverse' = 'normal';
 
+	export let itemsPerPage: number = 10;
 	export let relays: string[] = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
@@ -104,6 +105,7 @@
 					{href}
 					{theme}
 					{status}
+					{itemsPerPage}
 				/>{:else}<!---->{/if}
 		</Profile></Naddr
 	>
