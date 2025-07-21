@@ -10,6 +10,7 @@
 	import ListTagItem from './ListTagItem.svelte';
 
 	import Kind0 from './Kind0.svelte';
+	import Content from '../content/Content.svelte';
 
 	interface Props {
 		note: Nostr.Event;
@@ -86,69 +87,69 @@
 	function goToNext() {
 		goToPage(currentPage + 1);
 	}
-	console.log(note);
+	//console.log(note);
 </script>
 
-{#if isListKind(note.kind)}
-	<div class="list-container {className} {themeClass}">
-		<!-- svelte-ignore a11y_consider_explicit_label -->
-		{#if !noLink && linkUrl}
-			<a
-				href={linkUrl}
-				{target}
-				referrerpolicy="no-referrer"
-				class="external-link"
-				title="Open in new tab"
+<div class="list-container {className} {themeClass}">
+	<!-- svelte-ignore a11y_consider_explicit_label -->
+	{#if !noLink && linkUrl}
+		<a
+			href={linkUrl}
+			{target}
+			referrerpolicy="no-referrer"
+			class="external-link"
+			title="Open in new tab"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="16"
+				height="16"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				class="lucide lucide-external-link-icon lucide-external-link"
 			>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="16"
-					height="16"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="lucide lucide-external-link-icon lucide-external-link"
-				>
-					<path d="M15 3h6v6" />
-					<path d="M10 14 21 3" />
-					<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-				</svg>
-			</a>{/if}
-		<header class="list-header">
-			<h3 class="list-title">{getKindDisplayName(note.kind)}</h3>
+				<path d="M15 3h6v6" />
+				<path d="M10 14 21 3" />
+				<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+			</svg>
+		</a>{/if}
+	<header class="list-header">
+		<h3 class="list-title">{getKindDisplayName(note.kind)}</h3>
 
-			{#if profile}
-				<Kind0
-					{profile}
-					{themeClass}
-					{noLink}
-					{linkUrl}
-					display={'name'}
-					{className}
-					{target}
-					{status}
-				/>
-			{/if}
-		</header>
-		{#if title || desc || image}
-			<div class="list-summary-card">
-				{#if image}
-					<img class="list-summary-image" src={image} alt={title || 'image'} />
-				{/if}
-
-				<div class="list-summary-text">
-					{#if title}
-						<h4 class="list-summary-title">{title}</h4>
-					{/if}
-					{#if desc}
-						<p class="list-summary-desc">{desc}</p>
-					{/if}
-				</div>
-			</div>
+		{#if profile}
+			<Kind0
+				{profile}
+				{themeClass}
+				{noLink}
+				{linkUrl}
+				display={'name'}
+				{className}
+				{target}
+				{status}
+			/>
 		{/if}
+	</header>
+	{#if title || desc || image}
+		<div class="list-summary-card">
+			{#if image}
+				<img class="list-summary-image" src={image} alt={title || 'image'} />
+			{/if}
+
+			<div class="list-summary-text">
+				{#if title}
+					<h4 class="list-summary-title">{title}</h4>
+				{/if}
+				{#if desc}
+					<p class="list-summary-desc">{desc}</p>
+				{/if}
+			</div>
+		</div>
+	{/if}
+	{#if isListKind(note.kind)}
 		<div class="list-content">
 			{#each pagination.items as tag}
 				<ListTagItem {tag} {href} {themeClass} {theme} {display} />
@@ -213,18 +214,10 @@
 				</div>
 			</div>
 		{/if}
-
-		<!-- {#if note.content}
-			<div class="list-description">
-				{note.content}
-			</div>
-		{/if} -->
-	</div>
-{:else}
-	<div class="note-container {className} {themeClass}">
-		<!--ほか-->
-	</div>
-{/if}
+	{:else}
+		<div class="unsupported-kind {className} {themeClass}">Unsupported kind</div>
+	{/if}
+</div>
 
 <style>
 	.list-container {
@@ -377,5 +370,9 @@
 		opacity: 1;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		transform: scale(1.1);
+	}
+	.unsupported-kind {
+		color: var(--empty-color);
+		font-style: italic;
 	}
 </style>

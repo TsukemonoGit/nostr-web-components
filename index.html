@@ -61,7 +61,11 @@
 				<!-- NostrNote デモ -->
 				<div class="demo-section">
 					<h2>NostrNote コンポーネント</h2>
-
+					<nostr-list
+						filters='[{"kinds":[30003],"authors":["84b0c46ab699ac35eb2ca286470b85e081db2087cdef63932236c397417782f5"],"limit":5}]'
+						limit="5"
+						display="card"
+					></nostr-list>
 					<div class="demo-item">
 						<h3>カード表示（デフォルト）</h3>
 						<div class="demo-controls">
@@ -310,11 +314,11 @@
   itemsPerPage="3"&gt;
 &lt;/nostr-naddr&gt;</code></pre>
 						<nostr-naddr
-							kind="10003"
-							user="mono@tsukemonogit.github.io"
+							naddr="naddr1qvzqqqr4xvpzpp9sc34tdxdvxh4jeg5xgu9ctcypmvsg0n00vwfjydkrjaqh0qh4qqyx6mmwdakk76nfhw6njd"
 							display="card"
 							sortOrder="reverse"
-							itemsPerPage="3"
+							theme="dark"
+							itemsPerPage="10"
 						></nostr-naddr>
 					</div>
 
