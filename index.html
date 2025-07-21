@@ -53,21 +53,6 @@
 			</div>
 
 			<nostr-container relays='["wss://nos.lol","wss://yabu.me","wss://relay.nostr.band"]'>
-				<nostr-naddr
-					kind="10003"
-					user="mono@tsukemonogit.github.io"
-					display="card"
-					sortOrder="reverse"
-					itemsPerPage="3"
-				></nostr-naddr>
-				<nostr-naddr
-					kind="30003"
-					user="mono@tsukemonogit.github.io"
-					identifier="toriaezu"
-					display="card"
-					theme="dark"
-					itemsPerPage="20"
-				></nostr-naddr>
 				<!-- NostrNote デモ -->
 				<div class="demo-section">
 					<h2>NostrNote コンポーネント</h2>
@@ -303,7 +288,55 @@
 						></nostr-list>
 					</div>
 				</div>
+				<div class="demo-section">
+					<h2>NostrNaddr コンポーネント</h2>
 
+					<div class="demo-item">
+						<h3>kind="10003" (ブックマーク) sortOrder="reverse"新しいのが上</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-naddr
+  kind="10003"
+  user="mono@tsukemonogit.github.io"
+  display="card"
+  sortOrder="reverse"
+  itemsPerPage="3"&gt;
+&lt;/nostr-naddr&gt;</code></pre>
+						<nostr-naddr
+							kind="10003"
+							user="mono@tsukemonogit.github.io"
+							display="card"
+							sortOrder="reverse"
+							itemsPerPage="3"
+						></nostr-naddr>
+					</div>
+
+					<div class="demo-item">
+						<h3>kind="30003" (ブックマークセット) sortOrder="normal"古いのが上</h3>
+						<div class="demo-controls">
+							<button class="code-toggle" onclick="toggleCode(this)">コードを見る</button>
+							<button class="copy-button" onclick="copyCode(this)">コピー</button>
+						</div>
+						<pre class="code-block"><code>&lt;nostr-naddr
+  kind="30003"
+  user="mono@tsukemonogit.github.io"
+  identifier="toriaezu"
+  display="card"
+  theme="dark"
+  itemsPerPage="20"&gt;
+&lt;/nostr-naddr&gt;</code></pre>
+						<nostr-naddr
+							kind="30003"
+							user="mono@tsukemonogit.github.io"
+							identifier="toriaezu"
+							display="card"
+							theme="dark"
+							itemsPerPage="20"
+						></nostr-naddr>
+					</div>
+				</div>
 				<!-- 応用例 -->
 				<div class="demo-section">
 					<h2>応用例</h2>
@@ -485,7 +518,7 @@
 				</div>
 			</nostr-container>
 		</div>
-
+		<script src="./script.js"></script>
 		<script>
 			// コードブロック表示/非表示切り替え
 			function toggleCode(button) {
