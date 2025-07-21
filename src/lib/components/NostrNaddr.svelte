@@ -108,7 +108,7 @@
 					{theme}
 					{status}
 					{parsedItemsPerPage}
-				/>{:else}<!---->{/if}
+				/>{:else}<span class="loading-text">Loading Event ...</span><!---->{/if}
 		</Profile></Naddr
 	>
 </div>
@@ -203,5 +203,9 @@
 		opacity: 1;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		transform: scale(1.1);
+	}
+	.loading-text {
+		font-style: italic;
+		color: car(--loading-color);
 	}
 </style>
