@@ -110,7 +110,7 @@
 			console.error('[nostr-list] Exception:', e);
 		} finally {
 			loading = false;
-			console.log('[nostr-list] loading complete');
+			//console.log('[nostr-list] loading complete');
 		}
 	}
 
