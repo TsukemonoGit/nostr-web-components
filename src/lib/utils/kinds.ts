@@ -19,8 +19,6 @@ export const isListKind = (kind: number): boolean => {
 		30015, // Interest sets - t tags
 		30017, // Create stall - e, a tags
 		30018, // Create product - e, a tags
-		30023, // Long-form content - e, a, t, p, r tags
-		30024, // Draft long-form - e, a, t, p, r tags
 		30030, // Emoji packs - emoji tags
 		30078, // Arbitrary custom app data - various tags
 		31923, // Article curation sets - a tags

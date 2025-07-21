@@ -52,7 +52,7 @@
 	let desc = $derived(
 		note.tags.find((tag) => tag[0] === 'description' || tag[0] === 'summary')?.[1]
 	);
-	$inspect(title);
+	//$inspect(title);
 	let image = $derived(note.tags.find((tag) => tag[0] === 'image')?.[1]);
 	// フィルタリングとソート
 	const filteredTags = $derived.by(() => {
@@ -86,6 +86,7 @@
 	function goToNext() {
 		goToPage(currentPage + 1);
 	}
+	console.log(note);
 </script>
 
 {#if isListKind(note.kind)}
