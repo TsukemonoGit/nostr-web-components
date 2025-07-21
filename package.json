@@ -1,6 +1,6 @@
 {
 	"name": "@konemono/nostr-web-components",
-	"version": "0.1.20",
+	"version": "0.1.21",
 	"type": "module",
 	"scripts": {
 		"prepare": "npm run build",
