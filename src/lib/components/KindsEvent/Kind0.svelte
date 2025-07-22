@@ -140,6 +140,15 @@
 	>{/if}
 
 <style>
+	.nostr-wrapper {
+		border: 1px solid var(--border-color);
+		border-radius: 6px;
+		padding: 6px;
+		background-color: var(--bg-color);
+		color: var(--text-color);
+		font-family: sans-serif;
+		position: relative;
+	}
 	.external-link {
 		display: flex;
 		align-items: center;
