@@ -102,7 +102,7 @@
 				return;
 			}
 
-			events = fetchedEvents.sort((a, b) => b.created_at - a.created_at);
+			events = fetchedEvents.sort((a, b) => b.created_at - a.created_at).slice(0, limit);
 			if (parsedLimit > 0) {
 				events = events.slice(0, parsedLimit);
 			}
