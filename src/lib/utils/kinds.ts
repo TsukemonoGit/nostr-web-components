@@ -1,6 +1,7 @@
 export const listSupportedTags = ['e', 'a', 't', 'url', 'p', 'url', 'relay'];
 export const isListKind = (kind: number): boolean => {
 	return [
+		3,
 		10000, // Mute list - p, e, a, t tags
 		10001, // Pin list - e, a tags
 		10002, // Relay list metadata - r tags
@@ -29,6 +30,7 @@ export const isListKind = (kind: number): boolean => {
 };
 
 export const kindNameMap: Record<number, string> = {
+	3: 'Follow List',
 	10000: 'Mute List',
 	10001: 'Pin List',
 	10002: 'Relay List Metadata',
