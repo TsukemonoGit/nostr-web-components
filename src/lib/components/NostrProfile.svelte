@@ -36,7 +36,7 @@
 	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{id}');
 </script>
 
-<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
+<div use:connected={initialize} class=" {themeClass} {className}">
 	{#await resolveToPubkey(user) then pubkey}
 		<Profile pubkey={pubkey || undefined} {relays} let:profile let:status>
 			<Kind0
@@ -112,15 +112,6 @@
 		--external-link-hover-color: #541a8bb4;
 	}
 
-	.nostr-wrapper {
-		border: 1px solid var(--border-color);
-		border-radius: 6px;
-		padding: 6px;
-		background-color: var(--bg-color);
-		color: var(--text-color);
-		font-family: sans-serif;
-		position: relative;
-	}
 	.external-link {
 		display: flex;
 		align-items: center;
