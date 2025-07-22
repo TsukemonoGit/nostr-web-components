@@ -12,7 +12,6 @@
 
 	export let filters: string = '[]';
 	export let relays: string[] = [];
-	export let className: string = '';
 	export let theme: Theme = 'auto';
 	export let limit: any = 50;
 	export let height: string | undefined = undefined;
@@ -154,7 +153,7 @@
 	}
 </script>
 
-<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
+<div use:connected={initialize} class="nostr-wrapper {themeClass} ">
 	{#if loading}
 		<div class="loading">Loading events...</div>
 	{:else if error}
@@ -162,7 +161,7 @@
 	{:else if events.length === 0}
 		<div class="empty">No events found</div>
 	{:else}
-		<div class="nostr-wrapper {themeClass} {className}">
+		<div class="nostr-wrapper {themeClass} ">
 			{#each events as note (note.id)}
 				{@const metadata = getMetadata(note.pubkey)}
 				{@const nevent = encodeEventToNevent(note)}
@@ -175,7 +174,6 @@
 					{noLink}
 					{linkUrl}
 					{display}
-					{className}
 					{target}
 					{href}
 					{theme}

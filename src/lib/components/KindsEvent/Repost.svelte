@@ -25,12 +25,11 @@
 		theme?: Theme;
 		linkUrl: string | undefined;
 		display: Display;
-		className: string;
 	}
 
 	let {
 		note,
-		class: className = '',
+
 		themeClass = '',
 		noLink = false,
 		height,
@@ -49,7 +48,7 @@
 	} = $derived(note ? repostedId(note.tags) : { tag: undefined, kind: undefined });
 </script>
 
-<ReactionDisplay {className} {themeClass} {noLink} hasError={!repoId || !repoId.tag}>
+<ReactionDisplay {themeClass} {noLink} hasError={!repoId || !repoId.tag}>
 	{#snippet error()}
 		<span class="error-text">Error: Invalid repost tag</span>
 	{/snippet}
@@ -132,7 +131,6 @@
 					{noLink}
 					{linkUrl}
 					{display}
-					{className}
 					{target}
 					{href}
 					{theme}

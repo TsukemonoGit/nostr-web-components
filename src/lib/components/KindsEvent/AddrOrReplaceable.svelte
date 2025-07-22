@@ -15,7 +15,7 @@
 	interface Props {
 		note: Nostr.Event;
 		profile: UserProfile | null;
-		className: string;
+
 		themeClass: string;
 		noLink: boolean;
 		height: string | undefined;
@@ -32,7 +32,7 @@
 	let {
 		note,
 		profile,
-		className,
+
 		themeClass,
 		noLink,
 		height,
@@ -90,7 +90,7 @@
 	//console.log(note);
 </script>
 
-<div class="list-container {className} {themeClass}">
+<div class="list-container {themeClass}">
 	<!-- svelte-ignore a11y_consider_explicit_label -->
 	{#if !noLink && linkUrl}
 		<a
@@ -121,22 +121,13 @@
 		<h3 class="list-title">{getKindDisplayName(note.kind)}</h3>
 
 		{#if profile}
-			<Kind0
-				{profile}
-				{themeClass}
-				{noLink}
-				{linkUrl}
-				display={'name'}
-				{className}
-				{target}
-				{status}
-			/>
+			<Kind0 {profile} {themeClass} {noLink} {linkUrl} display={'name'} {target} {status} />
 		{/if}
 	</header>
 	{#if title || desc || image}
 		<div class="list-summary-card">
 			{#if image}
-				<img class="list-summary-image" src={image} alt={title || 'image'} />
+				<img loading="lazy" class="list-summary-image" src={image} alt={title || 'image'} />
 			{/if}
 
 			<div class="list-summary-text">
@@ -225,7 +216,7 @@
 			</div>
 		{/if}
 	{:else}
-		<div class="unsupported-kind {className} {themeClass}">Unsupported kind</div>
+		<div class="unsupported-kind {themeClass}">Unsupported kind</div>
 	{/if}
 </div>
 

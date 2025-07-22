@@ -18,7 +18,6 @@
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
 	export let display: Display = 'card';
-	export let className: string = '';
 	export let theme: Theme = 'auto';
 
 	let mounted = false;
@@ -36,19 +35,10 @@
 	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{id}');
 </script>
 
-<div use:connected={initialize} class=" {themeClass} {className}">
+<div use:connected={initialize} class=" {themeClass}">
 	{#await resolveToPubkey(user) then pubkey}
 		<Profile pubkey={pubkey || undefined} {relays} let:profile let:status>
-			<Kind0
-				{profile}
-				{themeClass}
-				{noLink}
-				{linkUrl}
-				{display}
-				{className}
-				{target}
-				{status}
-			/></Profile
+			<Kind0 {profile} {themeClass} {noLink} {linkUrl} {display} {target} {status} /></Profile
 		>{/await}
 </div>
 

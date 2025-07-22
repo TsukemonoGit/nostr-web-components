@@ -2,7 +2,6 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		className?: string;
 		themeClass?: string;
 		noLink?: boolean;
 		showPlaceholders?: boolean;
@@ -16,7 +15,6 @@
 	}
 
 	let {
-		className = '',
 		themeClass = '',
 		noLink = false,
 		showPlaceholders = false,
@@ -30,7 +28,7 @@
 	}: Props = $props();
 </script>
 
-<div class="repost-container {themeClass} {className}">
+<div class="repost-container {themeClass} ">
 	{#if hasError}
 		<div class="error-container">
 			{#if error}

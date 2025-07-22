@@ -2,7 +2,6 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		class?: string;
 		noLink?: boolean;
 		showPlaceholders?: boolean;
 		hasError?: boolean;
@@ -15,7 +14,6 @@
 	}
 
 	let {
-		class: className = '',
 		noLink = false,
 		showPlaceholders = false,
 		hasError = false,
@@ -28,7 +26,7 @@
 	}: Props = $props();
 </script>
 
-<div class="compact-wrapper {className} {themeClass}">
+<div class="compact-wrapper {themeClass}">
 	<div class="compact-content">
 		<div class="compact-avatar">
 			{#if avatar}

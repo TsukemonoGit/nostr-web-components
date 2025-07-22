@@ -2,7 +2,6 @@
 	import type { Snippet } from 'svelte';
 	import 'nostr-web-components/style.css';
 	interface Props {
-		class?: string;
 		noLink?: boolean;
 		showPlaceholders?: boolean;
 		hasError?: boolean;
@@ -18,7 +17,6 @@
 	}
 
 	let {
-		class: className = '',
 		noLink = false,
 		showPlaceholders = false,
 		hasError = false,
@@ -35,7 +33,7 @@
 </script>
 
 {#if hasError}
-	<div class="note-error {className}">
+	<div class="note-error">
 		{#if error}
 			{@render error()}
 		{:else}
@@ -43,7 +41,7 @@
 		{/if}
 	</div>
 {:else}
-	<div class="nostr-wrapper {className} {themeClass}">
+	<div class="nostr-wrapper {themeClass}">
 		<div class="note-content">
 			<div class="note-avatar">
 				{#if avatar}

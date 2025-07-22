@@ -11,7 +11,7 @@
 	interface Props {
 		note: Nostr.Event | null;
 		profile: UserProfile | null;
-		className: string;
+
 		themeClass: string;
 		noLink: boolean;
 		height: string | undefined;
@@ -26,7 +26,7 @@
 	let {
 		note,
 		profile,
-		className,
+
 		themeClass,
 		noLink,
 		height,
@@ -48,7 +48,6 @@
 		{noLink}
 		{linkUrl}
 		{display}
-		{className}
 		{target}
 		{href}
 		{theme}
@@ -61,23 +60,12 @@
 		{noLink}
 		{linkUrl}
 		{display}
-		{className}
 		{target}
 		{href}
 		{theme}
 	/>
 {:else if note && note.kind === 0}
-	<Kind0
-		{profile}
-		{themeClass}
-		{height}
-		{noLink}
-		{linkUrl}
-		{display}
-		{className}
-		{target}
-		{status}
-	/>
+	<Kind0 {profile} {themeClass} {height} {noLink} {linkUrl} {display} {target} {status} />
 {:else if note && (isAddressableKind(note.kind) || isReplaceableKind(note.kind))}
 	<AddrOrReplaceable
 		{note}
@@ -87,7 +75,6 @@
 		{noLink}
 		{linkUrl}
 		{display}
-		{className}
 		{target}
 		{href}
 		{theme}
@@ -102,7 +89,6 @@
 		{noLink}
 		{linkUrl}
 		{display}
-		{className}
 		{target}
 		{href}
 		{theme}
