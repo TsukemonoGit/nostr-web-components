@@ -7,6 +7,7 @@
 
 {#if src && !isError}
 	<img
+		loading="lazy"
 		{src}
 		onerror={() => (isError = true)}
 		alt="avatar"

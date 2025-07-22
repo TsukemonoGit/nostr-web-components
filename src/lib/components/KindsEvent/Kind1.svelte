@@ -11,7 +11,7 @@
 	interface Props {
 		note: Nostr.Event | null;
 		profile: UserProfile | null;
-		className: string;
+
 		themeClass: string;
 		noLink: boolean;
 		height: string | undefined;
@@ -26,7 +26,7 @@
 	let {
 		note,
 		profile,
-		className,
+
 		themeClass,
 		noLink,
 		height,
@@ -40,13 +40,7 @@
 </script>
 
 {#if display === 'card'}
-	<NoteLayout1
-		class={className}
-		{themeClass}
-		{noLink}
-		{height}
-		showPlaceholders={status === 'loading' || !note}
-	>
+	<NoteLayout1 {themeClass} {noLink} {height} showPlaceholders={status === 'loading' || !note}>
 		{#snippet link()}
 			{#if !noLink && linkUrl}
 				<!-- svelte-ignore a11y_consider_explicit_label -->
@@ -106,7 +100,6 @@
 	</NoteLayout1>
 {:else if display === 'compact'}
 	<NoteLayoutCompact
-		class={className}
 		{themeClass}
 		{noLink}
 		{height}

@@ -9,7 +9,7 @@
 
 	interface Props {
 		profile: UserProfile | null;
-		className: string;
+
 		themeClass: string;
 		noLink: boolean;
 		height?: string | undefined;
@@ -20,18 +20,12 @@
 		status: Status;
 	}
 
-	let { profile, className, themeClass, noLink, height, display, linkUrl, target, status }: Props =
-		$props();
+	let { profile, themeClass, noLink, height, display, linkUrl, target, status }: Props = $props();
 </script>
 
 {#if display === 'card'}
 	<div class="nostr-wrapper">
-		<ProfileLayout1
-			class={`${className}`}
-			{themeClass}
-			{noLink}
-			showPlaceholders={status === 'loading' || !profile}
-		>
+		<ProfileLayout1 {themeClass} {noLink} showPlaceholders={status === 'loading' || !profile}>
 			{#snippet link()}
 				<!-- svelte-ignore a11y_consider_explicit_label -->
 				<a
@@ -79,12 +73,7 @@
 		</ProfileLayout1>
 	</div>
 {:else if display === 'compact'}
-	<ProfileLayoutCompact
-		class={className}
-		{themeClass}
-		{noLink}
-		showPlaceholders={status === 'loading' || !profile}
-	>
+	<ProfileLayoutCompact {themeClass} {noLink} showPlaceholders={status === 'loading' || !profile}>
 		{#snippet avatar()}
 			<UserAvatar src={profile?.picture} />
 		{/snippet}

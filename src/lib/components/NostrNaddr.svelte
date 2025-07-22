@@ -29,7 +29,6 @@
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
-	export let className: string = '';
 	export let theme: Theme = 'auto';
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
@@ -89,7 +88,7 @@
 </script>
 
 <!-- Web Components として mount 時に initialize() を実行 -->
-<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
+<div use:connected={initialize} class="nostr-wrapper {themeClass} ">
 	<Naddr naddr={actualNaddr} {relays} let:note let:status>
 		<Profile pubkey={note?.pubkey} {relays} let:profile>
 			{#if note}
@@ -102,7 +101,6 @@
 					{noLink}
 					{linkUrl}
 					{display}
-					{className}
 					{target}
 					{href}
 					{theme}

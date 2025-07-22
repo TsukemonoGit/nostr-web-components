@@ -19,7 +19,6 @@
 	}
 
 	let {
-		class: className = '',
 		noLink = false,
 		showPlaceholders = false,
 		hasError = false,
@@ -36,7 +35,7 @@
 </script>
 
 {#if hasError}
-	<div class="note-error {className}">
+	<div class="note-error">
 		{#if error}
 			{@render error()}
 		{:else}
@@ -44,7 +43,7 @@
 		{/if}
 	</div>
 {:else}
-	<div class="compact-note {className} {themeClass}">
+	<div class="compact-note {themeClass}">
 		<div class="note-row">
 			<!-- 左: アバター -->
 			<div class="note-avatar">
