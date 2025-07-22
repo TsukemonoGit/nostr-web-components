@@ -4,14 +4,10 @@
 	import type { Display, Theme } from 'nostr-web-components/index.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
-	import ProfileLayout1 from './Layout/ProfileLayout1.svelte';
-	import Content from './content/Content.svelte';
-	import Link from './content/Link.svelte';
-	import UserAvatar from './Layout/UserAvatar.svelte';
 	import { connected } from 'nostr-web-components/core/connected.js';
-	import ProfileLayoutCompact from './Layout/ProfileLayoutCompact.svelte';
+
 	import Profile from './Data/Profile.svelte';
-	import { resolveToPubkey } from 'nostr-web-components/utils/utils';
+	import { resolveToPubkey } from 'nostr-web-components/utils/utils.js';
 	import Kind0 from './KindsEvent/Kind0.svelte';
 
 	//export let id: string = '';
@@ -40,7 +36,7 @@
 	$: linkUrl = resolveUrl(href, user, 'https://njump.me/{id}');
 </script>
 
-<div use:connected={initialize} class="profile {themeClass} {className}">
+<div use:connected={initialize} class="nostr-wrapper {themeClass} {className}">
 	{#await resolveToPubkey(user) then pubkey}
 		<Profile pubkey={pubkey || undefined} {relays} let:profile let:status>
 			<Kind0
@@ -142,8 +138,5 @@
 		opacity: 1;
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		transform: scale(1.1);
-	}
-	.profile {
-		width: fit-content;
 	}
 </style>

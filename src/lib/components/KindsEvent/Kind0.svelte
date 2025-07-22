@@ -138,3 +138,24 @@
 			size={20}
 		/></Link
 	>{/if}
+
+<style>
+	.external-link {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-decoration: none;
+		padding: 0;
+		color: var(--external-link-color);
+		opacity: 0.8;
+		border-radius: 20%;
+		transition: all 0.3s ease;
+		transform: scale(1);
+	}
+
+	.external-link:hover {
+		opacity: 1;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		transform: scale(1.1);
+	}
+</style>
