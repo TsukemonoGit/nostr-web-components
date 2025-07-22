@@ -163,52 +163,62 @@
 				</div>
 
 				<div class="pagination-controls">
-					<button class="pagination-btn" disabled={currentPage === 1} onclick={goToPrevious}>
+					<button
+						class="pagination-btn nav-btn"
+						disabled={currentPage === 1}
+						onclick={goToPrevious}
+					>
 						◀
 					</button>
 
-					{#if totalPages <= 7}
-						{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-							<button
-								class="pagination-btn {currentPage === page ? 'active' : ''}"
-								onclick={() => goToPage(page)}
-							>
-								{page}
-							</button>
-						{/each}
-					{:else}
-						{#if currentPage > 3}
-							<button class="pagination-btn" onclick={() => goToPage(1)}>1</button>
-							{#if currentPage > 4}
-								<span class="pagination-ellipsis">...</span>
-							{/if}
-						{/if}
-
-						{#each Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-							const start = Math.max(1, Math.min(currentPage - 2, totalPages - 4));
-							return start + i;
-						}) as page}
-							{#if page >= 1 && page <= totalPages}
+					<div class="page-numbers">
+						{#if totalPages <= 5}
+							{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
 								<button
-									class="pagination-btn {currentPage === page ? 'active' : ''}"
+									class="pagination-btn page-btn {currentPage === page ? 'active' : ''}"
 									onclick={() => goToPage(page)}
 								>
 									{page}
 								</button>
+							{/each}
+						{:else}
+							{#if currentPage > 2}
+								<button class="pagination-btn page-btn" onclick={() => goToPage(1)}>1</button>
+								{#if currentPage > 3}
+									<span class="pagination-ellipsis">...</span>
+								{/if}
 							{/if}
-						{/each}
 
-						{#if currentPage < totalPages - 2}
-							{#if currentPage < totalPages - 3}
-								<span class="pagination-ellipsis">...</span>
+							{#each Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
+								const start = Math.max(1, Math.min(currentPage - 1, totalPages - 2));
+								return start + i;
+							}) as page}
+								{#if page >= 1 && page <= totalPages}
+									<button
+										class="pagination-btn page-btn {currentPage === page ? 'active' : ''}"
+										onclick={() => goToPage(page)}
+									>
+										{page}
+									</button>
+								{/if}
+							{/each}
+
+							{#if currentPage < totalPages - 1}
+								{#if currentPage < totalPages - 2}
+									<span class="pagination-ellipsis">...</span>
+								{/if}
+								<button class="pagination-btn page-btn" onclick={() => goToPage(totalPages)}>
+									{totalPages}
+								</button>
 							{/if}
-							<button class="pagination-btn" onclick={() => goToPage(totalPages)}>
-								{totalPages}
-							</button>
 						{/if}
-					{/if}
+					</div>
 
-					<button class="pagination-btn" disabled={currentPage === totalPages} onclick={goToNext}>
+					<button
+						class="pagination-btn nav-btn"
+						disabled={currentPage === totalPages}
+						onclick={goToNext}
+					>
 						▶
 					</button>
 				</div>
@@ -256,33 +266,55 @@
 
 	.pagination {
 		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		align-items: center;
+		flex-direction: column;
+		gap: 8px;
 		margin-top: 16px;
 		border-top: 1px solid var(--border-light);
+		padding-top: 12px;
 	}
 
 	.pagination-info {
-		font-size: 0.9em;
+		font-size: 0.85em;
 		color: var(--text-color);
+		text-align: center;
 	}
 
 	.pagination-controls {
 		display: flex;
-		gap: 4px;
+		justify-content: center;
 		align-items: center;
+		gap: 4px;
+		flex-wrap: wrap;
+	}
+
+	.page-numbers {
+		display: flex;
+		gap: 2px;
+		align-items: center;
+		flex-shrink: 1;
+		min-width: 0;
 	}
 
 	.pagination-btn {
-		padding: 6px 12px;
 		border: 1px solid var(--border-color);
 		background: var(--background);
 		color: var(--text-color);
 		border-radius: 4px;
 		cursor: pointer;
-		font-size: 0.9em;
 		transition: all 0.2s ease;
+		font-size: 0.85em;
+		min-width: 0;
+		flex-shrink: 0;
+	}
+
+	.nav-btn {
+		padding: 6px 8px;
+		font-weight: bold;
+	}
+
+	.page-btn {
+		padding: 4px 8px;
+		min-width: 32px;
 	}
 
 	.pagination-btn:hover:not(:disabled) {
@@ -299,12 +331,14 @@
 		background-color: var(--pagination-active-bg);
 		color: var(--pagination-active-text);
 		border-color: var(--pagination-active-border);
+		font-weight: bold;
 	}
 
 	.pagination-ellipsis {
-		padding: 6px 8px;
+		padding: 4px 2px;
 		color: var(--text-color);
-		font-size: 0.9em;
+		font-size: 0.85em;
+		flex-shrink: 0;
 	}
 
 	.list-description {
@@ -314,6 +348,7 @@
 		font-size: 0.9em;
 		color: var(--text-color);
 	}
+
 	.list-summary-card {
 		display: flex;
 		flex-direction: row;
@@ -348,6 +383,7 @@
 		color: var(--text-color);
 		margin: 0;
 	}
+
 	.external-link {
 		position: absolute;
 		top: 0;
@@ -370,8 +406,78 @@
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 		transform: scale(1.1);
 	}
+
 	.unsupported-kind {
 		color: var(--empty-color);
 		font-style: italic;
+	}
+
+	/* スマホサイズでの調整 */
+	@media (max-width: 480px) {
+		.list-container {
+			padding: 12px;
+		}
+
+		.pagination {
+			gap: 6px;
+		}
+
+		.pagination-controls {
+			gap: 3px;
+			justify-content: space-between;
+		}
+
+		.page-numbers {
+			gap: 1px;
+		}
+
+		.nav-btn {
+			padding: 4px 6px;
+			font-size: 0.8em;
+		}
+
+		.page-btn {
+			padding: 3px 6px;
+			min-width: 28px;
+			font-size: 0.8em;
+		}
+
+		.pagination-ellipsis {
+			padding: 3px 1px;
+			font-size: 0.8em;
+		}
+
+		.pagination-info {
+			font-size: 0.8em;
+		}
+
+		.list-summary-card {
+			gap: 8px;
+		}
+
+		.list-summary-image {
+			width: 60px;
+			height: 60px;
+		}
+
+		.list-summary-title {
+			font-size: 0.95em;
+		}
+
+		.list-summary-desc {
+			font-size: 0.85em;
+		}
+	}
+
+	/* 非常に小さい画面での調整 */
+	@media (max-width: 320px) {
+		.page-btn {
+			min-width: 24px;
+			padding: 2px 4px;
+		}
+
+		.nav-btn {
+			padding: 3px 5px;
+		}
 	}
 </style>
