@@ -1,4 +1,4 @@
-export const listSupportedTags = ['e', 'a', 't', 'url', 'p', 'url', 'relay'];
+export const listSupportedTags = ['e', 'a', 't', 'r', 'p', 'url', 'relay'];
 export const isListKind = (kind: number): boolean => {
 	return [
 		3,
