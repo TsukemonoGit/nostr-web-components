@@ -11,7 +11,11 @@ import { nip05, nip19, type NostrEvent } from 'nostr-tools';
 import { verifier } from '@rx-nostr/crypto';
 import type { UserProfile, NostrClientConfig } from 'nostr-web-components/types/index.js';
 import type { Filter } from 'nostr-typedef';
-import { defaultRelays, resolveToPubkey } from 'nostr-web-components/utils/utils.js';
+import {
+	defaultRelays,
+	resolveToNoteId,
+	resolveToPubkey
+} from 'nostr-web-components/utils/utils.js';
 
 export class NostrClient {
 	rxNostr: RxNostr;
@@ -97,19 +101,10 @@ export class NostrClient {
 		});
 	}
 	async fetchNote(noteId: string, relays?: string[]): Promise<NostrEvent | null> {
-		let actualNoteId = noteId;
-		//	console.log('fetchnote');
-		try {
-			if (noteId.startsWith('nevent') || noteId.startsWith('note')) {
-				const decoded = nip19.decode(noteId);
-				if (decoded.type === 'nevent') {
-					actualNoteId = decoded.data.id;
-				} else if (decoded.type === 'note') {
-					actualNoteId = decoded.data;
-				}
-			}
-		} catch (e) {
-			console.warn('Failed to decode note id:', noteId);
+		const actualNoteId = resolveToNoteId(noteId);
+
+		if (!actualNoteId) {
+			return null; // 解決失敗
 		}
 
 		if (this.noteCache.has(actualNoteId)) {
