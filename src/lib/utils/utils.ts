@@ -61,7 +61,8 @@ function resolveNip19(user: string): string | null {
 /**
  * user string を pubkey (hex) に解決する
  */
-export async function resolveToPubkey(user: string): Promise<string | null> {
+export async function resolveToPubkey(user: string | undefined): Promise<string | null> {
+	if (!user) return null;
 	let pubkey: string | null = user;
 
 	if (nip05.isNip05(user)) {
@@ -75,6 +76,32 @@ export async function resolveToPubkey(user: string): Promise<string | null> {
 	}
 
 	return pubkey;
+}
+/**
+ * user string を pubkey (hex) に解決する
+ */
+export function resolveToNoteId(noteId: string | undefined): string | null {
+	if (!noteId) return null;
+	let actualNoteId: string | null = noteId;
+
+	//	console.log('fetchnote');
+	try {
+		if (noteId.startsWith('nevent') || noteId.startsWith('note')) {
+			const decoded = nip19.decode(noteId);
+			if (decoded.type === 'nevent') {
+				actualNoteId = decoded.data.id;
+			} else if (decoded.type === 'note') {
+				actualNoteId = decoded.data;
+			}
+		}
+	} catch (e) {
+		console.warn('Failed to decode note id:', noteId);
+	}
+
+	if (!actualNoteId || !/^[0-9a-f]{64}$/i.test(actualNoteId)) {
+		return null;
+	}
+	return actualNoteId;
 }
 
 export const nip33Regex = /^([0-9]{1,9}):([0-9a-fA-F]{64}):(.*)$/;
