@@ -69,7 +69,11 @@
 		try {
 			const f = JSON.parse(filters);
 			if (!Array.isArray(f)) throw new Error('filters must be an array');
-			parsedFilters = f;
+
+			parsedFilters = f.map((filter) => ({
+				...filter,
+				limit: filter.limit ?? parsedLimit
+			}));
 		} catch (err: any) {
 			error = `Invalid filters: ${err.message}`;
 			loading = false;
