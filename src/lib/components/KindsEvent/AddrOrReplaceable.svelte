@@ -226,7 +226,6 @@
 		border: 1px solid var(--border-color);
 		border-radius: 8px;
 		padding: 16px;
-		margin: 8px 0;
 	}
 
 	.list-header {
