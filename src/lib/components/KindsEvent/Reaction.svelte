@@ -137,7 +137,6 @@
 		gap: 4px;
 		font-size: 0.875rem;
 		color: var(--text-color);
-		opacity: 0.7;
 	}
 
 	.external-link {

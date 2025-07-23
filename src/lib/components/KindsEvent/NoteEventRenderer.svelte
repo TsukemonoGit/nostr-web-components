@@ -5,8 +5,9 @@
 	import Repost from './Repost.svelte';
 	import Reaction from './Reaction.svelte';
 	import Kind0 from './Kind0.svelte';
-	import { isAddressableKind, isReplaceableKind } from 'nostr-tools/kinds';
+	import { isAddressableKind, isEphemeralKind, isReplaceableKind } from 'nostr-tools/kinds';
 	import AddrOrReplaceable from './AddrOrReplaceable.svelte';
+	import Ephemeral from './Ephemeral.svelte';
 
 	interface Props {
 		note: Nostr.Event | null;
@@ -80,6 +81,21 @@
 		{theme}
 		{status}
 	/>
+{:else if note && isEphemeralKind(note.kind)}<div class="unsupported-kind {themeClass}">
+		<Ephemeral
+			{note}
+			{profile}
+			{themeClass}
+			{height}
+			{noLink}
+			{linkUrl}
+			{display}
+			{target}
+			{href}
+			{theme}
+			{status}
+		/>
+	</div>
 {:else}
 	<Kind1
 		{note}
@@ -95,3 +111,10 @@
 		{status}
 	/>
 {/if}
+
+<style>
+	.unsupported-kind {
+		color: var(--empty-color);
+		font-style: italic;
+	}
+</style>
