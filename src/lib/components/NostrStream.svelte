@@ -82,9 +82,9 @@
 				return;
 			}
 			const { rxReq, events: evs } = client.createUpstream(parsedLimit, relays);
-			// イベントを購読して `id` に一致するものを抽出
+
 			sub = evs.subscribe((e) => {
-				console.log(e);
+				//	console.log(e);
 				events = e;
 				status = 'success';
 			});
