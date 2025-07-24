@@ -10,7 +10,6 @@
 	import { resolveToPubkey } from 'nostr-web-components/utils/utils.js';
 	import Kind0 from './KindsEvent/Kind0.svelte';
 
-	//export let id: string = '';
 	// Nostrの識別子（npub1~、nevent1~、またはNIP-05アドレス）
 	export let user: string = '';
 	export let relays: string[] = [];
@@ -19,6 +18,7 @@
 	export let noLink: boolean = false;
 	export let display: Display = 'card';
 	export let theme: Theme = 'auto';
+	export let height: string | undefined = undefined;
 
 	let mounted = false;
 
@@ -43,7 +43,16 @@
 <div use:connected={initialize} class=" {themeClass}">
 	{#await resolveToPubkey(user) then pubkey}
 		<Profile pubkey={pubkey || undefined} {relays} let:profile let:status>
-			<Kind0 {profile} {themeClass} {noLink} {linkUrl} {display} {target} {status} /></Profile
+			<Kind0
+				{profile}
+				{themeClass}
+				{noLink}
+				{linkUrl}
+				{display}
+				{target}
+				{status}
+				{height}
+			/></Profile
 		>{/await}
 </div>
 

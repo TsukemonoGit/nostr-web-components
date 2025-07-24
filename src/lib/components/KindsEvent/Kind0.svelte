@@ -25,7 +25,12 @@
 
 {#if display === 'card'}
 	<div class="nostr-wrapper">
-		<ProfileLayout1 {themeClass} {noLink} showPlaceholders={status === 'loading' || !profile}>
+		<ProfileLayout1
+			{themeClass}
+			{noLink}
+			{height}
+			showPlaceholders={status === 'loading' || !profile}
+		>
 			{#snippet link()}
 				<!-- svelte-ignore a11y_consider_explicit_label -->
 				<a
@@ -73,7 +78,12 @@
 		</ProfileLayout1>
 	</div>
 {:else if display === 'compact'}
-	<ProfileLayoutCompact {themeClass} {noLink} showPlaceholders={status === 'loading' || !profile}>
+	<ProfileLayoutCompact
+		{themeClass}
+		{noLink}
+		{height}
+		showPlaceholders={status === 'loading' || !profile}
+	>
 		{#snippet avatar()}
 			<UserAvatar src={profile?.picture} />
 		{/snippet}

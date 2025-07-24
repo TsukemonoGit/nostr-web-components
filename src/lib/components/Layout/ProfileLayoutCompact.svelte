@@ -11,6 +11,7 @@
 		about?: Snippet;
 		error?: Snippet;
 		themeClass?: string;
+		height?: string;
 	}
 
 	let {
@@ -22,7 +23,8 @@
 		name,
 		about,
 		error,
-		themeClass
+		themeClass,
+		height
 	}: Props = $props();
 </script>
 
@@ -46,7 +48,7 @@
 			</div>
 
 			{#if about || showPlaceholders}
-				<div class="compact-about">
+				<div class="compact-about" style={`max-height: ${height ?? 'none'}; overflow-y: auto;`}>
 					{#if about}
 						{@render about()}
 					{:else if showPlaceholders}
