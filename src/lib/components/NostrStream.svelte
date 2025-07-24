@@ -9,7 +9,6 @@
 
 	import Profile from './Data/Profile.svelte';
 
-	import { onDestroy } from 'svelte';
 	import type { Display, Status, Theme } from 'nostr-web-components/index.js';
 
 	import type { Subscription } from 'rxjs';
@@ -98,10 +97,6 @@
 			//console.log('[nostr-note] loading complete');
 		}
 	}
-
-	onDestroy(() => {
-		if (sub) sub.unsubscribe?.();
-	});
 </script>
 
 <div use:connected={initialize} class="nostr-wrapper {themeClass}">
