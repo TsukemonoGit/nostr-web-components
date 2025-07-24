@@ -59,7 +59,7 @@
 
 	async function loadEvents() {
 		if (loading) {
-			console.warn('[nostr-list] loadEvents() skipped: already loading');
+			//console.warn('[nostr-list] loadEvents() skipped: already loading');
 			return;
 		}
 

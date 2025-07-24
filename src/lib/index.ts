@@ -4,9 +4,9 @@ import NostrNote from 'nostr-web-components/components/NostrNote.svelte';
 import NostrProfile from 'nostr-web-components/components/NostrProfile.svelte';
 import NostrEventList from './components/NostrEventList.svelte';
 import NostrNaddr from 'nostr-web-components/components/NostrNaddr.svelte';
-
+import NostrStream from 'nostr-web-components/components/NostrStream.svelte';
 export * from 'nostr-web-components/types/index.js';
-export { NostrContainer, NostrNote, NostrProfile, NostrEventList, NostrNaddr };
+export { NostrContainer, NostrNote, NostrProfile, NostrEventList, NostrNaddr, NostrStream };
 
 export interface NostrClientConfig {
 	relays: string[];
