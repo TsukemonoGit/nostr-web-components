@@ -10,7 +10,6 @@
 	import ListTagItem from './ListTagItem.svelte';
 
 	import Kind0 from './Kind0.svelte';
-	import Content from '../content/Content.svelte';
 
 	interface Props {
 		note: Nostr.Event;
@@ -143,7 +142,7 @@
 	{#if isListKind(note.kind)}
 		<div class="list-content">
 			{#each pagination.items as tag}
-				<ListTagItem {tag} {href} {themeClass} {theme} {display} />
+				<ListTagItem {tag} {href} {themeClass} {theme} {display} {noLink} />
 			{/each}
 		</div>
 

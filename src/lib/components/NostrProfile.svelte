@@ -10,7 +10,6 @@
 	import { resolveToPubkey } from 'nostr-web-components/utils/utils.js';
 	import Kind0 from './KindsEvent/Kind0.svelte';
 
-	//export let id: string = '';
 	// Nostrの識別子（npub1~、nevent1~、またはNIP-05アドレス）
 	export let user: string = '';
 	export let relays: string[] = [];
@@ -19,12 +18,18 @@
 	export let noLink: boolean = false;
 	export let display: Display = 'card';
 	export let theme: Theme = 'auto';
+	export let height: string | undefined = undefined;
 
 	let mounted = false;
 
 	let themeClass = '';
-	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
+	$: if (theme === 'auto') {
+		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+		themeClass = prefersDark ? 'theme-dark' : 'theme-light';
+	} else {
+		themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
+	}
 	// 接続時の初期化処理（onMountの代替）
 	function initialize() {
 		if (mounted || !user) return;
@@ -38,7 +43,16 @@
 <div use:connected={initialize} class=" {themeClass}">
 	{#await resolveToPubkey(user) then pubkey}
 		<Profile pubkey={pubkey || undefined} {relays} let:profile let:status>
-			<Kind0 {profile} {themeClass} {noLink} {linkUrl} {display} {target} {status} /></Profile
+			<Kind0
+				{profile}
+				{themeClass}
+				{noLink}
+				{linkUrl}
+				{display}
+				{target}
+				{status}
+				{height}
+			/></Profile
 		>{/await}
 </div>
 
@@ -62,8 +76,7 @@
 		--external-link-hover-color: #541a8bb4;
 	}
 
-	.theme-dark,
-	:host(.dark) {
+	.theme-dark {
 		--bg-color: #1e1e1e;
 		--text-color: #ddd;
 		--border-color: #444;

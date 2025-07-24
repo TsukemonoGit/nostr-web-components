@@ -1,10 +1,5 @@
 <script lang="ts">
-	import {
-		encodeNaddr,
-		encodeNpub,
-		encodeToNevent,
-		resolveUrl
-	} from 'nostr-web-components/utils/urlUtils.js';
+	import { encodeNaddr, encodeNpub, encodeToNevent } from 'nostr-web-components/utils/urlUtils.js';
 	import type { Display, Theme } from 'nostr-web-components/index.js';
 	import Link from '../content/Link.svelte';
 	import CustomEmoji from '../content/CustomEmoji.svelte';
@@ -16,22 +11,24 @@
 		themeClass: string;
 		theme: Theme;
 		display: Display;
+		noLink: boolean;
 	}
 
-	let { tag, href, themeClass, theme, display }: Props = $props();
+	let { tag, href, themeClass, theme, display, noLink }: Props = $props();
 </script>
 
 {#if tag[0] === 'e'}{@const nevent = encodeToNevent({ id: tag[1] })}{#if nevent}<nostr-note
 			{display}
 			{theme}
+			{noLink}
 			id={nevent}
 		></nostr-note>{/if}
 {:else if tag[0] === 'a'}
 	{@const naddr = encodeNaddr(tag[1])}{#if naddr}
-		<nostr-naddr {display} {theme} {naddr}></nostr-naddr>{/if}
+		<nostr-naddr {display} {theme} {naddr} {noLink}></nostr-naddr>{/if}
 {:else if tag[0] === 'p'}
 	{@const npub = encodeNpub(tag[1])}{#if npub}<div class="container">
-			<nostr-profile display="name" {theme} user={npub}></nostr-profile>
+			<nostr-profile display="name" {theme} user={npub} {noLink}></nostr-profile>
 		</div>{/if}
 {:else if tag[0] === 't'}
 	hashtag: {tag[1]}

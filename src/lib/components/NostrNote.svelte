@@ -22,7 +22,13 @@
 	export let display: Display = 'card';
 
 	let themeClass = '';
-	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
+
+	$: if (theme === 'auto') {
+		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+		themeClass = prefersDark ? 'theme-dark' : 'theme-light';
+	} else {
+		themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
+	}
 
 	let mounted = false;
 
