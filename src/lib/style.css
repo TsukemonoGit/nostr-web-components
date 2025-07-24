@@ -17,8 +17,7 @@
 	--external-link-hover-color: #541a8bb4;
 }
 
-.theme-dark,
-:host(.dark) {
+.theme-dark {
 	--bg-color: #1e1e1e;
 	--text-color: #ddd;
 	--border-color: #444;

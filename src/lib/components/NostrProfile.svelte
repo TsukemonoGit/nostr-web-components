@@ -23,8 +23,13 @@
 	let mounted = false;
 
 	let themeClass = '';
-	$: themeClass = theme === 'dark' ? 'theme-dark' : theme === 'light' ? 'theme-light' : '';
 
+	$: if (theme === 'auto') {
+		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+		themeClass = prefersDark ? 'theme-dark' : 'theme-light';
+	} else {
+		themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
+	}
 	// 接続時の初期化処理（onMountの代替）
 	function initialize() {
 		if (mounted || !user) return;
@@ -62,8 +67,7 @@
 		--external-link-hover-color: #541a8bb4;
 	}
 
-	.theme-dark,
-	:host(.dark) {
+	.theme-dark {
 		--bg-color: #1e1e1e;
 		--text-color: #ddd;
 		--border-color: #444;
