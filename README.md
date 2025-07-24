@@ -61,6 +61,12 @@ You can also specify the relays attribute on individual components to override t
 - Relay configuration in a container does **not** create separate or isolated Nostr clients.
 - For advanced use cases requiring isolated clients or multiple relay sets, consider managing clients programmatically with the JavaScript API.
 
+### Important Notes About <nostr-stream>
+
+- When multiple `<nostr-stream>` components are placed on the same page, the older components may be ignored or cause unexpected behavior.
+- Currently, only one `<nostr-stream>` component per page is supported.
+- If you need to switch filters dynamically or control behavior, consider managing it with custom logic or replacing the component as needed.
+
 ---
 
 ## Components

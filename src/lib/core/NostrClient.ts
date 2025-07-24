@@ -1,13 +1,16 @@
 // src/core/NostrClient.ts
 import {
 	createRxBackwardReq,
+	createRxForwardReq,
 	createRxNostr,
 	type EventPacket,
 	latest,
 	type RxNostr,
 	uniq
 } from 'rx-nostr';
-import { nip05, nip19, type NostrEvent } from 'nostr-tools';
+import { type Observable } from 'rxjs';
+import * as Nostr from 'nostr-typedef';
+import { nip19, type NostrEvent } from 'nostr-tools';
 import { verifier } from '@rx-nostr/crypto';
 import type { UserProfile, NostrClientConfig } from 'nostr-web-components/types/index.js';
 import type { Filter } from 'nostr-typedef';
@@ -16,6 +19,7 @@ import {
 	resolveToNoteId,
 	resolveToPubkey
 } from 'nostr-web-components/utils/utils.js';
+import { scanArray } from './operator.js';
 
 export class NostrClient {
 	rxNostr: RxNostr;
@@ -199,7 +203,30 @@ export class NostrClient {
 		return null;
 	}
 
-	disconnect(): void {
-		this.rxNostr.dispose();
+	// NostrClient.ts に追加するメソッド
+	createUpstream(
+		limit: number,
+		relays?: string[]
+	): {
+		rxReq: ReturnType<typeof createRxForwardReq>;
+		events: Observable<Nostr.Event[]>;
+	} {
+		const rxReq = createRxForwardReq();
+
+		const currentRelays = this.rxNostr.getDefaultRelays();
+		if (Object.keys(currentRelays).length === 0) {
+			this.rxNostr.setDefaultRelays(this.config.relays || defaultRelays);
+		}
+
+		const observable =
+			(relays?.length ?? 0) > 0 ? this.rxNostr.use(rxReq, { relays }) : this.rxNostr.use(rxReq);
+
+		// オペレータで整形した observable を返す
+		const events$ = observable.pipe(uniq(), scanArray(limit));
+
+		return {
+			rxReq,
+			events: events$
+		};
 	}
 }
