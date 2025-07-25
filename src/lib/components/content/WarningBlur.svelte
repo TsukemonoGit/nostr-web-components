@@ -69,15 +69,15 @@
 		width: 100%;
 		overflow-y: auto;
 		text-align: center;
-		font-size: 0.875rem; /* text-sm */
+		font-size: 0.875rem;
 		color: var(--text-color);
 	}
 	.blur-bar {
-		position: relative; /* relative */
-		display: flex; /* flex */
-		height: 24px; /* h-[24px] */
-		width: calc(100% - 24px); /* w-[calc(100%-24px)] */
-		margin-left: auto; /* mx-auto = margin-left/right: auto */
+		position: relative;
+		display: flex;
+		height: 24px;
+		width: calc(100% - 24px);
+		margin-left: auto;
 		margin-right: auto;
 		align-items: center;
 		bottom: 8px;
