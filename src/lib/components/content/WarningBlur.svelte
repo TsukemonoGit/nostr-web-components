@@ -1,30 +1,24 @@
 <script lang="ts">
 	import TriangleAlert from './TriangleAlert.svelte';
 
-	interface Props {
-		text: string;
-	}
+	export let text: string = '';
 
-	let { text }: Props = $props();
+	let value = 0;
 
-	let value = $state(0);
-
-	let blurStyle = $derived(`
+	$: blurStyle = `
 		backdrop-filter: blur(${(1 - value / 100) ** 2 * 30}px);
 		${value >= 50 ? 'pointer-events: none;' : ''}
-	`);
-	let opacityStyle = $derived(
-		`opacity:${1 - value / 100}; text-shadow: 0.5px 0.5px 1px rgb(0 0 0);`
-	);
+	`;
+	$: opacityStyle = `opacity:${1 - value / 100}; text-shadow: 0.5px 0.5px 1px rgb(0 0 0);`;
 </script>
 
-<div class="blur-overlay" style={blurStyle || ''}>
+<div class="blur-overlay" style={blurStyle}>
 	<!-- スクロール可能なテキスト領域 -->
-	<div class="blur-warning" style={opacityStyle || ''}>
+	<div class="blur-warning" style={opacityStyle}>
 		<TriangleAlert size="16" />WARNING<TriangleAlert size="16" />
 	</div>
 
-	<div class="blur-text" style={opacityStyle || ''}>
+	<div class="blur-text" style={opacityStyle}>
 		{text ?? ''}
 	</div>
 </div>
