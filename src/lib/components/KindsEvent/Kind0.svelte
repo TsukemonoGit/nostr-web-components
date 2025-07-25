@@ -6,6 +6,7 @@
 	import ProfileLayout1 from '../Layout/ProfileLayout1.svelte';
 	import ProfileLayoutCompact from '../Layout/ProfileLayoutCompact.svelte';
 	import Link from '../content/Link.svelte';
+	import { getWarningTag } from 'nostr-web-components/utils/utils.js';
 
 	interface Props {
 		profile: UserProfile | null;

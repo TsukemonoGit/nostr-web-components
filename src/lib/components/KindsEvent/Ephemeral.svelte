@@ -2,15 +2,9 @@
 	import * as Nostr from 'nostr-typedef';
 
 	import type { Display, Status, Theme, UserProfile } from 'nostr-web-components/index.js';
-	import {
-		getKindDisplayName,
-		isListKind,
-		listSupportedTags
-	} from 'nostr-web-components/utils/kinds.js';
-	import ListTagItem from './ListTagItem.svelte';
+	import { getKindDisplayName, listSupportedTags } from 'nostr-web-components/utils/kinds.js';
 
 	import Kind0 from './Kind0.svelte';
-	import Content from '../content/Content.svelte';
 
 	interface Props {
 		note: Nostr.Event;

@@ -5,7 +5,7 @@
 
 	import CustomEmoji from './CustomEmoji.svelte';
 
-	import { parseNaddr } from 'nostr-web-components/utils/utils.js';
+	import { getWarningTag, parseNaddr } from 'nostr-web-components/utils/utils.js';
 	import Link from './Link.svelte';
 	import DecodedContent from './DecodedContent.svelte';
 	import Image from './Image.svelte';
@@ -20,13 +20,13 @@
 		themeClass?: string;
 		theme?: string;
 		display: Display;
-		warningTag: string[] | undefined;
 	}
 
-	let { text, tags, themeClass, theme, display, warningTag }: Props = $props();
+	let { text, tags, themeClass, theme, display }: Props = $props();
 
 	let parts: Token[] = $derived(parseContent(text, tags));
 
+	let warningTag = $derived(getWarningTag(tags));
 	const nip19Decode = (content: string | undefined): nip19.DecodedResult | undefined => {
 		if (content === undefined) {
 			return undefined;

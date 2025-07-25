@@ -7,6 +7,7 @@
 	import NoteLayout1 from '../Layout/NoteLayout1.svelte';
 	import NoteLayoutCompact from '../Layout/NoteLayoutCompact.svelte';
 	import UserAvatar from '../Layout/UserAvatar.svelte';
+	import { getWarningTag } from 'nostr-web-components/utils/utils.js';
 
 	interface Props {
 		note: Nostr.Event | null;
@@ -94,14 +95,7 @@
 				></nostr-profile>{/each}
 		{/snippet}
 		{#snippet content()}
-			{#if note}<Content
-					warningTag={note.tags.find((tag) => tag[0] === 'content-warning')}
-					text={note.content}
-					{display}
-					{themeClass}
-					{theme}
-					tags={note.tags}
-				/>{/if}
+			{#if note}<Content text={note.content} {display} {themeClass} {theme} tags={note.tags} />{/if}
 		{/snippet}
 		{#snippet error()}<span>Error: {error}</span>{/snippet}
 	</NoteLayout1>
@@ -164,14 +158,7 @@
 				></nostr-profile>{/each}
 		{/snippet}
 		{#snippet content()}
-			{#if note}<Content
-					text={note.content}
-					{display}
-					{themeClass}
-					{theme}
-					tags={note.tags}
-					warningTag={note.tags.find((tag) => tag[0] === 'content-warning')}
-				/>{/if}
+			{#if note}<Content text={note.content} {display} {themeClass} {theme} tags={note.tags} />{/if}
 		{/snippet}
 		{#snippet error()}<span>Error: {error}</span>{/snippet}
 	</NoteLayoutCompact>
