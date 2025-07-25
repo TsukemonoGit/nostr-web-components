@@ -198,9 +198,11 @@
 	}
 
 	.profile-about {
+		position: relative;
 		white-space: pre-wrap;
 		word-break: normal;
 		word-break: break-word;
+		overflow: hidden;
 	}
 
 	.placeholder {

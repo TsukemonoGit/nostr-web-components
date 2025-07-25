@@ -94,7 +94,14 @@
 				></nostr-profile>{/each}
 		{/snippet}
 		{#snippet content()}
-			{#if note}<Content text={note.content} {display} {themeClass} {theme} tags={note.tags} />{/if}
+			{#if note}<Content
+					warningTag={note.tags.find((tag) => tag[0] === 'content-warning')}
+					text={note.content}
+					{display}
+					{themeClass}
+					{theme}
+					tags={note.tags}
+				/>{/if}
 		{/snippet}
 		{#snippet error()}<span>Error: {error}</span>{/snippet}
 	</NoteLayout1>
@@ -157,7 +164,14 @@
 				></nostr-profile>{/each}
 		{/snippet}
 		{#snippet content()}
-			{#if note}<Content text={note.content} {display} {themeClass} {theme} tags={note.tags} />{/if}
+			{#if note}<Content
+					text={note.content}
+					{display}
+					{themeClass}
+					{theme}
+					tags={note.tags}
+					warningTag={note.tags.find((tag) => tag[0] === 'content-warning')}
+				/>{/if}
 		{/snippet}
 		{#snippet error()}<span>Error: {error}</span>{/snippet}
 	</NoteLayoutCompact>

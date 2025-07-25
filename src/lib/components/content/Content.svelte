@@ -12,6 +12,7 @@
 	import Video from './Video.svelte';
 	import Audio from './Video.svelte';
 	import type { Display } from 'nostr-web-components/types/index.js';
+	import WarningBlur from './WarningBlur.svelte';
 
 	interface Props {
 		text: string;
@@ -19,9 +20,10 @@
 		themeClass?: string;
 		theme?: string;
 		display: Display;
+		warningTag: string[] | undefined;
 	}
 
-	let { text, tags, themeClass, theme, display }: Props = $props();
+	let { text, tags, themeClass, theme, display, warningTag }: Props = $props();
 
 	let parts: Token[] = $derived(parseContent(text, tags));
 
@@ -98,3 +100,7 @@
 	{:else if part.type === TokenType.CUSTOM_EMOJI}<CustomEmoji
 			{part}
 		/>{:else}{part.content}{/if}{/each}
+
+{#if warningTag !== undefined}
+	<WarningBlur text={warningTag[1] || ''} />
+{/if}

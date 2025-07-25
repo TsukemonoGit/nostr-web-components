@@ -218,8 +218,8 @@
 	}
 
 	.note-body {
+		position: relative;
 		white-space: pre-wrap;
-		word-break: normal;
 		word-break: break-word;
 	}
 
