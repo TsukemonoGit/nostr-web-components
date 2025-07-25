@@ -18,13 +18,13 @@
 	);
 </script>
 
-<div class="blur-overlay" style={blurStyle}>
+<div class="blur-overlay" style={blurStyle || ''}>
 	<!-- スクロール可能なテキスト領域 -->
-	<div class="blur-warning" style={opacityStyle}>
+	<div class="blur-warning" style={opacityStyle || ''}>
 		<TriangleAlert size="16" />WARNING<TriangleAlert size="16" />
 	</div>
 
-	<div class="blur-text" style={opacityStyle}>
+	<div class="blur-text" style={opacityStyle || ''}>
 		{text ?? ''}
 	</div>
 </div>
@@ -40,7 +40,7 @@
 		left: 0;
 		height: 100%;
 		width: 100%;
-		border-radius: 0.375rem; /* rounded-md */
+		border-radius: 0.375rem;
 		border: 1px solid var(--error-text);
 	}
 
@@ -52,7 +52,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 0.25rem;
-		font-size: 0.75rem; /* text-xs */
+		font-size: 0.75rem;
 		font-weight: bold;
 		color: var(--error-text);
 	}

@@ -126,5 +126,9 @@ export const repostedId = (
 };
 
 export const getWarningTag = (tags: string[][]): string[] | undefined => {
-	return tags?.find((tag) => tag[0] === 'content-warning');
+	try {
+		return tags?.find((tag) => tag[0] === 'content-warning');
+	} catch (error) {
+		return undefined;
+	}
 };
