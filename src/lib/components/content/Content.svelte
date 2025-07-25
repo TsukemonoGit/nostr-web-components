@@ -101,7 +101,6 @@
 			{part}
 		/>{:else}{part.content}{/if}{/each}
 
-<!-- {#if warningTag !== undefined}
+{#if warningTag !== undefined}
 	<WarningBlur text={warningTag[1] || ''} />
 {/if}
- -->

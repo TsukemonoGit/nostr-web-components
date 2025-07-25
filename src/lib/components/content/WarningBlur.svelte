@@ -8,26 +8,23 @@
 	let { text }: Props = $props();
 
 	let value = $state(0);
+
+	let blurStyle = $derived(`
+		backdrop-filter: blur(${(1 - value / 100) ** 2 * 30}px);
+		${value >= 50 ? 'pointer-events: none;' : ''}
+	`);
+	let opacityStyle = $derived(
+		`opacity:${1 - value / 100}; text-shadow: 0.5px 0.5px 1px rgb(0 0 0);`
+	);
 </script>
 
-<div
-	class="blur-overlay"
-	style="backdrop-filter: blur({(1 - value / 100) ** 2 * 30}px); {value >= 50
-		? 'pointer-events: none;'
-		: ''}"
->
+<div class="blur-overlay" style={blurStyle}>
 	<!-- スクロール可能なテキスト領域 -->
-	<div
-		class="blur-warning"
-		style="opacity:{1 - value / 100}; text-shadow: 0.5px 0.5px 1px rgb(0 0 0);"
-	>
+	<div class="blur-warning" style={opacityStyle}>
 		<TriangleAlert size="16" />WARNING<TriangleAlert size="16" />
 	</div>
 
-	<div
-		class="blur-text"
-		style="opacity:{1 - value / 100}; text-shadow: 0.5px 0.5px 1px rgb(0 0 0);"
-	>
+	<div class="blur-text" style={opacityStyle}>
 		{text ?? ''}
 	</div>
 </div>
