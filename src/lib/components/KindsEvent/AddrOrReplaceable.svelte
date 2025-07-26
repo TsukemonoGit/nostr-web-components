@@ -119,9 +119,16 @@
 	<header class="list-header">
 		<h3 class="list-title">{getKindDisplayName(note.kind)}</h3>
 
-		{#if profile}
-			<Kind0 {profile} {themeClass} {noLink} {linkUrl} display={'name'} {target} {status} />
-		{/if}
+		<Kind0
+			pubkey={note.pubkey}
+			{profile}
+			{themeClass}
+			{noLink}
+			{linkUrl}
+			display={'name'}
+			{target}
+			{status}
+		/>
 	</header>
 	{#if title || desc || image}
 		<div class="list-summary-card">

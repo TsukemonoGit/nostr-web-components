@@ -12,15 +12,9 @@
 
 		themeClass: string;
 		noLink: boolean;
-		height: string | undefined;
-		display: Display;
 		linkUrl: string | undefined;
 		target: string;
-		href: string | null;
-		theme: Theme;
 		status: Status;
-		sortOrder?: 'normal' | 'reverse';
-		parsedItemsPerPage?: number;
 	}
 
 	let {
@@ -29,18 +23,12 @@
 
 		themeClass,
 		noLink,
-		height,
-		display,
+
 		linkUrl,
 		target,
-		href,
-		theme,
-		status,
-		sortOrder = 'normal',
-		parsedItemsPerPage = 10
-	}: Props = $props();
 
-	let currentPage = $state(1);
+		status
+	}: Props = $props();
 
 	//let dtag = $derived(note.tags.find((tag) => tag[0] === 'd')?.[1]);
 	let title = $derived(note.tags.find((tag) => tag[0] === 'title')?.[1]);
@@ -50,37 +38,7 @@
 	//$inspect(title);
 	let image = $derived(note.tags.find((tag) => tag[0] === 'image')?.[1]);
 	// フィルタリングとソート
-	const filteredTags = $derived.by(() => {
-		const filtered = note.tags.filter((tag) => listSupportedTags.includes(tag[0]));
-		return sortOrder === 'reverse' ? filtered.slice().reverse() : filtered;
-	});
 
-	// ページネーション計算
-	let totalItems = $derived(filteredTags.length);
-	let totalPages = $derived(Math.ceil(totalItems / parsedItemsPerPage));
-
-	const pagination = $derived.by(() => {
-		const start = (currentPage - 1) * parsedItemsPerPage;
-
-		const end = Math.min(start + parsedItemsPerPage, filteredTags.length);
-
-		const items = filteredTags.slice(start, end);
-		return { start, end, items };
-	});
-
-	function goToPage(page: number) {
-		if (page >= 1 && page <= totalPages) {
-			currentPage = page;
-		}
-	}
-
-	function goToPrevious() {
-		goToPage(currentPage - 1);
-	}
-
-	function goToNext() {
-		goToPage(currentPage + 1);
-	}
 	//console.log(note);
 </script>
 
@@ -114,9 +72,16 @@
 	<header class="list-header">
 		<h3 class="list-title">{getKindDisplayName(note.kind)}</h3>
 
-		{#if profile}
-			<Kind0 {profile} {themeClass} {noLink} {linkUrl} display={'name'} {target} {status} />
-		{/if}
+		<Kind0
+			pubkey={note.pubkey}
+			{profile}
+			{themeClass}
+			{noLink}
+			{linkUrl}
+			display={'name'}
+			{target}
+			{status}
+		/>
 	</header>
 	{#if title || desc || image}
 		<div class="list-summary-card">

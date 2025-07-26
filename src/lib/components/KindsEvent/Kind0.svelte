@@ -6,9 +6,10 @@
 	import ProfileLayout1 from '../Layout/ProfileLayout1.svelte';
 	import ProfileLayoutCompact from '../Layout/ProfileLayoutCompact.svelte';
 	import Link from '../content/Link.svelte';
-	import { getWarningTag } from 'nostr-web-components/utils/utils.js';
+	import { createTruncatedNpub, encodeNpub } from 'nostr-web-components/utils/urlUtils.js';
 
 	interface Props {
+		pubkey: string | null;
 		profile: UserProfile | null;
 
 		themeClass: string;
@@ -21,7 +22,11 @@
 		status: Status;
 	}
 
-	let { profile, themeClass, noLink, height, display, linkUrl, target, status }: Props = $props();
+	let { profile, themeClass, noLink, height, display, linkUrl, target, status, pubkey }: Props =
+		$props();
+
+	let pub = $derived(pubkey ? encodeNpub(pubkey) : undefined);
+	let truncatedNpub = $derived(createTruncatedNpub(pub));
 </script>
 
 {#if display === 'card'}
@@ -64,7 +69,10 @@
 				<UserAvatar src={profile?.picture} />
 			{/snippet}
 
-			{#snippet name()}{profile?.display_name || ''}@{profile?.name || 'no name'}
+			{#snippet name()}{#if profile}{profile?.display_name || ''}@{profile?.name || 'no name'}
+				{:else}
+					{truncatedNpub}
+				{/if}
 			{/snippet}
 
 			{#snippet about()}
@@ -90,7 +98,10 @@
 		{/snippet}
 
 		{#snippet name()}
-			{profile?.display_name || ''}@{profile?.name || 'no name'}
+			{#if profile}{profile?.display_name || ''}@{profile?.name || 'no name'}
+			{:else}
+				{truncatedNpub}
+			{/if}
 		{/snippet}
 
 		{#snippet about()}
@@ -128,12 +139,12 @@
 		{/snippet}
 	</ProfileLayoutCompact>
 {:else if noLink}
-	{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
+	{profile?.name || profile?.display_name || truncatedNpub}<UserAvatar
 		src={profile?.picture}
 		size={20}
 	/>
 {:else}<Link {themeClass} href={linkUrl}
-		>{profile?.name || profile?.display_name || 'Unknown User'}<UserAvatar
+		>{profile?.name || profile?.display_name || truncatedNpub}<UserAvatar
 			src={profile?.picture}
 			size={20}
 		/></Link

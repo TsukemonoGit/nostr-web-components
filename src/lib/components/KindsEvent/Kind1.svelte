@@ -1,13 +1,16 @@
 <script lang="ts">
 	import type { Display, Status, Theme, UserProfile } from 'nostr-web-components/index.js';
 	import * as Nostr from 'nostr-typedef';
-	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
+	import {
+		createTruncatedNpub,
+		encodeNpub,
+		resolveUrl
+	} from 'nostr-web-components/utils/urlUtils.js';
 	import Content from '../content/Content.svelte';
 	import NameDisplay from '../Layout/NameDisplay.svelte';
 	import NoteLayout1 from '../Layout/NoteLayout1.svelte';
 	import NoteLayoutCompact from '../Layout/NoteLayoutCompact.svelte';
 	import UserAvatar from '../Layout/UserAvatar.svelte';
-	import { getWarningTag } from 'nostr-web-components/utils/utils.js';
 
 	interface Props {
 		note: Nostr.Event | null;
@@ -76,12 +79,15 @@
 			{@const encodedNpub = note ? encodeNpub(note.pubkey) : undefined}
 			{@const userUrl = encodedNpub
 				? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
-				: undefined}
-			<NameDisplay
-				{themeClass}
-				href={userUrl}
-				name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
-			/>{/snippet}
+				: undefined}{#if profile}
+				<NameDisplay
+					{themeClass}
+					href={userUrl}
+					name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
+				/>{:else}
+				{@const truncatedNpub = createTruncatedNpub(encodedNpub)}
+				{truncatedNpub}
+			{/if}{/snippet}
 		{#snippet createdAt()}
 			{#if note}<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span
 				>{/if}
@@ -140,14 +146,18 @@
 			{@const userUrl = encodedNpub
 				? resolveUrl(href, encodedNpub, 'https://njump.me/{id}')
 				: undefined}
-			<NameDisplay
-				{themeClass}
-				href={userUrl}
-				name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
-			/>{/snippet}
-		{#snippet createdAt()}
-			{#if note}<span class="timestamp">{new Date(note.created_at * 1000).toLocaleString()}</span
-				>{/if}
+			{@const truncatedNpub = createTruncatedNpub(encodedNpub)}
+
+			{#if profile}
+				<NameDisplay
+					{themeClass}
+					href={userUrl}
+					name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
+				/>
+			{:else if encodedNpub}
+				<NameDisplay {themeClass} href={userUrl} name={truncatedNpub} />
+			{:else}no name
+			{/if}
 		{/snippet}
 		{#snippet replyUser()}
 			{@const replyUserList = note?.tags

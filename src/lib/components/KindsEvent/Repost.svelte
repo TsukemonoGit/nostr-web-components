@@ -1,7 +1,12 @@
 <script lang="ts">
 	import * as Nostr from 'nostr-typedef';
 
-	import { encodeNpub, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
+	import {
+		createTruncatedNpub,
+		encodeNpub,
+		encodeToNevent,
+		resolveUrl
+	} from 'nostr-web-components/utils/urlUtils.js';
 
 	import NameDisplay from 'nostr-web-components/components/Layout/NameDisplay.svelte';
 	import UserAvatar from 'nostr-web-components/components/Layout/UserAvatar.svelte';
@@ -46,48 +51,62 @@
 		tag: string[] | undefined;
 		kind: number | undefined;
 	} = $derived(note ? repostedId(note.tags) : { tag: undefined, kind: undefined });
+
+	let encodedNpub = $derived(note ? encodeNpub(note.pubkey) : undefined);
+	let userUrl = $derived(
+		encodedNpub ? resolveUrl(href, encodedNpub, 'https://njump.me/{id}') : undefined
+	);
+	let truncatedNpub = $derived(createTruncatedNpub(encodedNpub));
 </script>
 
-<ReactionDisplay {themeClass} {noLink} hasError={!repoId || !repoId.tag}>
-	{#snippet error()}
-		<span class="error-text">Error: Invalid repost tag</span>
-	{/snippet}
+<Note id={repoId.tag?.[1]} {relays} let:note={repostedNote} let:status={repostStatus}>
+	<Profile
+		pubkey={repostedNote?.pubkey}
+		{relays}
+		let:profile={repostedMetadata}
+		let:status={repoStatus}
+	>
+		{@const repostUrl = repostedNote
+			? resolveUrl(
+					href,
+					encodeToNevent({
+						id: repostedNote.id,
+						kind: repostedNote.kind,
+						author: repostedNote.pubkey
+					}),
+					'https://njump.me/{id}'
+				)
+			: undefined}
+		<ReactionDisplay {themeClass} {noLink} hasError={!repoId || !repoId.tag}>
+			{#snippet error()}
+				<span class="error-text">Error: Invalid repost tag</span>
+			{/snippet}
 
-	{#snippet link()}
-		<!-- svelte-ignore a11y_consider_explicit_label -->
-		<a
-			href={linkUrl}
-			{target}
-			referrerpolicy="no-referrer"
-			class="external-link"
-			title="Open repost in new tab"
-		>
-			<svg
-				width="16"
-				height="16"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path d="M15 3h6v6" />
-				<path d="M10 14 21 3" />
-				<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-			</svg>
-		</a>
-	{/snippet}
+			{#snippet link()}
+				<!-- svelte-ignore a11y_consider_explicit_label -->
+				<a
+					href={linkUrl}
+					{target}
+					referrerpolicy="no-referrer"
+					class="external-link"
+					title="Open repost in new tab"
+				>
+					<svg
+						width="16"
+						height="16"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path d="M15 3h6v6" />
+						<path d="M10 14 21 3" />
+						<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+					</svg>
+				</a>
+			{/snippet}
 
-	{#snippet header()}
-		<Note id={repoId.tag?.[1]} {relays} let:note={repostedNote} let:status={repostStatus}>
-			<Profile
-				pubkey={repostedNote?.pubkey}
-				{relays}
-				let:profile={repostedMetadata}
-				let:status={repoStatus}
-			>
-				{@const encodedRepostNpub = repostedNote ? encodeNpub(repostedNote.pubkey) : ''}
-				{@const userRepostUrl = resolveUrl(href, encodedRepostNpub, 'https://njump.me/{id}')}
-
+			{#snippet header()}
 				<span class="repost-indicator">
 					<svg
 						width="16"
@@ -105,41 +124,43 @@
 				</span>
 
 				<UserAvatar src={profile?.picture} size={20} />
+				{#if profile}
+					<NameDisplay
+						{themeClass}
+						href={userUrl}
+						name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
+					/>{:else}
+					{truncatedNpub}
+				{/if}
+			{/snippet}
 
-				<NameDisplay
-					{themeClass}
-					href={userRepostUrl}
-					name={`${profile?.display_name || ''}@${profile?.name || 'no name'}`}
-				/>
-			</Profile>
-		</Note>
-	{/snippet}
-
-	{#snippet content()}
-		<Note id={repoId.tag?.[1]} {relays} let:note={repostedNote} let:status={repostStatus}>
-			<Profile
-				pubkey={repostedNote?.pubkey}
-				{relays}
-				let:profile={repostedMetadata}
-				let:status={repoStatus}
-			>
-				<NoteEventRenderer
-					note={repostedNote}
-					profile={repostedMetadata}
-					{themeClass}
-					{height}
-					{noLink}
-					{linkUrl}
-					{display}
-					{target}
-					{href}
-					{theme}
-					status={repostStatus}
-				/>
-			</Profile>
-		</Note>
-	{/snippet}
-</ReactionDisplay>
+			{#snippet content()}
+				<Note id={repoId.tag?.[1]} {relays} let:note={repostedNote} let:status={repostStatus}>
+					<Profile
+						pubkey={repostedNote?.pubkey}
+						{relays}
+						let:profile={repostedMetadata}
+						let:status={repoStatus}
+					>
+						<NoteEventRenderer
+							note={repostedNote}
+							profile={repostedMetadata}
+							{themeClass}
+							{height}
+							{noLink}
+							linkUrl={repostUrl}
+							{display}
+							{target}
+							{href}
+							{theme}
+							status={repostStatus}
+						/>
+					</Profile>
+				</Note>
+			{/snippet}
+		</ReactionDisplay>
+	</Profile>
+</Note>
 
 <style>
 	.repost-indicator {

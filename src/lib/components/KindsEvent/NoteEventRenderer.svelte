@@ -66,7 +66,17 @@
 		{theme}
 	/>
 {:else if note && note.kind === 0}
-	<Kind0 {profile} {themeClass} {height} {noLink} {linkUrl} {display} {target} {status} />
+	<Kind0
+		pubkey={note.pubkey}
+		{profile}
+		{themeClass}
+		{height}
+		{noLink}
+		{linkUrl}
+		{display}
+		{target}
+		{status}
+	/>
 {:else if note && (isAddressableKind(note.kind) || isReplaceableKind(note.kind))}
 	<AddrOrReplaceable
 		{note}
@@ -82,19 +92,7 @@
 		{status}
 	/>
 {:else if note && isEphemeralKind(note.kind)}<div class="unsupported-kind {themeClass}">
-		<Ephemeral
-			{note}
-			{profile}
-			{themeClass}
-			{height}
-			{noLink}
-			{linkUrl}
-			{display}
-			{target}
-			{href}
-			{theme}
-			{status}
-		/>
+		<Ephemeral {note} {profile} {themeClass} {noLink} {linkUrl} {target} {status} />
 	</div>
 {:else}
 	<Kind1

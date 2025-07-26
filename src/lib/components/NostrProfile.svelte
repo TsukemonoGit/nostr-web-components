@@ -44,6 +44,7 @@
 	{#await resolveToPubkey(user) then pubkey}
 		<Profile pubkey={pubkey || undefined} {relays} let:profile let:status>
 			<Kind0
+				{pubkey}
 				{profile}
 				{themeClass}
 				{noLink}

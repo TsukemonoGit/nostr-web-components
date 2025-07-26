@@ -107,15 +107,9 @@ export function encodeEventToNevent(note: Nostr.Event): string | undefined {
 	return encodeToNevent({ id: note.id, author: note.pubkey });
 }
 
-export function encodeToNevent({
-	id,
-	author
-}: {
-	id: string;
-	author?: string;
-}): string | undefined {
+export function encodeToNevent(props: nip19.EventPointer): string | undefined {
 	try {
-		return nip19.neventEncode({ id, ...(author && { author }) });
+		return nip19.neventEncode(props);
 	} catch (error) {
 		return undefined;
 	}
@@ -144,3 +138,7 @@ export function encodeNaddr(aTagValue: string): string {
 		identifier
 	});
 }
+
+export const createTruncatedNpub = (npub: string | undefined) => {
+	return npub ? `${npub.slice(0, 8)}...${npub.slice(-8)}` : 'Unknown';
+};
