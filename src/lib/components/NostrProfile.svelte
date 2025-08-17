@@ -12,14 +12,28 @@
 
 	// Nostrの識別子（npub1~、nevent1~、またはNIP-05アドレス）
 	export let user: string = '';
-	export let relays: string[] = [];
+	export let relays: string[] | string = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
 	export let display: Display = 'card';
 	export let theme: Theme = 'auto';
 	export let height: string | undefined = undefined;
-
+	let relaysArray: string[] = [];
+	// propsからリレー配列に変換
+	$: {
+		try {
+			if (typeof relays === 'string') {
+				relaysArray = JSON.parse(relays);
+			} else if (Array.isArray(relays)) {
+				relaysArray = relays;
+			} else {
+				relaysArray = [];
+			}
+		} catch {
+			relaysArray = [];
+		}
+	}
 	let mounted = false;
 
 	let themeClass = '';
@@ -42,7 +56,7 @@
 
 <div use:connected={initialize} class=" {themeClass}">
 	{#await resolveToPubkey(user) then pubkey}
-		<Profile pubkey={pubkey || undefined} {relays} let:profile let:status>
+		<Profile pubkey={pubkey || undefined} relays={relaysArray} let:profile let:status>
 			<Kind0
 				{pubkey}
 				{profile}

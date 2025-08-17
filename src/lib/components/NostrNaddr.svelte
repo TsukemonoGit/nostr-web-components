@@ -25,14 +25,28 @@
 	export let sortOrder: 'normal' | 'reverse' = 'normal';
 
 	export let itemsPerPage: number = 10;
-	export let relays: string[] = [];
+	export let relays: string[] | string = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
 	export let theme: Theme = 'auto';
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
-
+	let relaysArray: string[] = [];
+	// propsからリレー配列に変換
+	$: {
+		try {
+			if (typeof relays === 'string') {
+				relaysArray = JSON.parse(relays);
+			} else if (Array.isArray(relays)) {
+				relaysArray = relays;
+			} else {
+				relaysArray = [];
+			}
+		} catch {
+			relaysArray = [];
+		}
+	}
 	$: parsedItemsPerPage = typeof itemsPerPage === 'string' ? Number(itemsPerPage) : itemsPerPage;
 
 	let pubkey: string = '';
@@ -68,7 +82,7 @@
 					kind,
 					pubkey,
 					identifier: identifier ?? '',
-					relays: relays.length > 0 ? relays : undefined
+					relays: relaysArray.length > 0 ? relaysArray : undefined
 				});
 			} catch (e) {
 				console.warn('Failed to encode naddr:', e);
@@ -95,8 +109,8 @@
 
 <!-- Web Components として mount 時に initialize() を実行 -->
 <div use:connected={initialize} class="nostr-wrapper {themeClass} ">
-	<Naddr naddr={actualNaddr} {relays} let:note let:status>
-		<Profile pubkey={note?.pubkey} {relays} let:profile>
+	<Naddr naddr={actualNaddr} relays={relaysArray} let:note let:status>
+		<Profile pubkey={note?.pubkey} relays={[...relaysArray, 'wss://directory.yabu.me']} let:profile>
 			{#if note}
 				<AddrOrReplaceable
 					{sortOrder}

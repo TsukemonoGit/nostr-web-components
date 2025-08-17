@@ -11,7 +11,7 @@
 	import type { Display, Theme, UserProfile } from 'nostr-web-components/index.js';
 
 	export let filters: string = '[]';
-	export let relays: string[] = [];
+	export let relays: string[] | string[] = [];
 	export let theme: Theme = 'auto';
 	export let limit: any = 50;
 	export let height: string | undefined = undefined;
@@ -19,7 +19,21 @@
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
 	export let display: Display = 'card';
-
+	let relaysArray: string[] = [];
+	// propsからリレー配列に変換
+	$: {
+		try {
+			if (typeof relays === 'string') {
+				relaysArray = JSON.parse(relays);
+			} else if (Array.isArray(relays)) {
+				relaysArray = relays;
+			} else {
+				relaysArray = [];
+			}
+		} catch {
+			relaysArray = [];
+		}
+	}
 	// 変換された数値を格納する変数
 	let parsedLimit = 50;
 	$: {
@@ -136,7 +150,10 @@
 			// 並行してメタデータを取得
 			const metadataPromises = uniquePubkeys.map(async (pubkey) => {
 				try {
-					const metadata = await client.fetchProfile(pubkey, relays);
+					const metadata = await client.fetchProfile(pubkey, [
+						...relaysArray,
+						'wss://directory.yabu.me'
+					]);
 					if (metadata) {
 						metadataMap.set(pubkey, metadata);
 					}

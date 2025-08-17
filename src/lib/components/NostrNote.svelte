@@ -13,14 +13,28 @@
 	import type { Display, Theme } from 'nostr-web-components/index.js';
 
 	export let id: string = '';
-	export let relays: string[] = [];
+	export let relays: string[] | string = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
 	export let theme: Theme = 'auto';
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
-
+	let relaysArray: string[] = [];
+	// propsからリレー配列に変換
+	$: {
+		try {
+			if (typeof relays === 'string') {
+				relaysArray = JSON.parse(relays);
+			} else if (Array.isArray(relays)) {
+				relaysArray = relays;
+			} else {
+				relaysArray = [];
+			}
+		} catch {
+			relaysArray = [];
+		}
+	}
 	let themeClass = '';
 
 	$: if (theme === 'auto') {
@@ -48,8 +62,8 @@
 
 <!-- Web Components として mount 時に initialize() を実行 -->
 <div use:connected={initialize} class="nostr-wrapper {themeClass} ">
-	<Note {id} {relays} let:note let:status>
-		<Profile pubkey={note?.pubkey} {relays} let:profile>
+	<Note {id} relays={relaysArray} let:note let:status>
+		<Profile pubkey={note?.pubkey} relays={[...relaysArray, 'wss://directory.yabu.me']} let:profile>
 			<NoteEventRenderer
 				{note}
 				{profile}

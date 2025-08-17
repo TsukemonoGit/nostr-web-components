@@ -17,7 +17,7 @@
 	import * as Nostr from 'nostr-typedef';
 
 	export let filters: string = '[]';
-	export let relays: string[] = [];
+	export let relays: string[] | string = [];
 	export let href: string | null = null;
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
@@ -25,7 +25,21 @@
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
 	export let limit: any = 50;
-
+	let relaysArray: string[] = [];
+	// propsからリレー配列に変換
+	$: {
+		try {
+			if (typeof relays === 'string') {
+				relaysArray = JSON.parse(relays);
+			} else if (Array.isArray(relays)) {
+				relaysArray = relays;
+			} else {
+				relaysArray = [];
+			}
+		} catch {
+			relaysArray = [];
+		}
+	}
 	// 変換された数値を格納する変数
 	let parsedLimit = 50;
 	$: {
@@ -72,7 +86,7 @@
 		}
 
 		try {
-			const client = await ensureClient(relays);
+			const client = await ensureClient(relaysArray);
 			// console.log('[nostr-note] Client obtained:', client);
 
 			if (!client) {
@@ -80,7 +94,7 @@
 				console.error('[nostr-stream] Client is null');
 				return;
 			}
-			const { rxReq, events: evs } = client.createUpstream(parsedLimit, relays);
+			const { rxReq, events: evs } = client.createUpstream(parsedLimit, relaysArray);
 
 			sub = evs.subscribe((e) => {
 				//	console.log(e);
@@ -109,7 +123,11 @@
 	{:else}
 		<div class="nostr-wrapper {themeClass} ">
 			{#each events as note (note.id)}
-				<Profile pubkey={note?.pubkey} {relays} let:profile>
+				<Profile
+					pubkey={note?.pubkey}
+					relays={[...relaysArray, 'wss://directory.yabu.me']}
+					let:profile
+				>
 					{@const nevent = encodeEventToNevent(note)}
 					{@const linkUrl = nevent ? resolveUrl(href, nevent, 'https://njump.me/{id}') : undefined}
 					<NoteEventRenderer
