@@ -4,6 +4,7 @@
 	import 'nostr-web-components/style.css';
 	import type { NostrEvent, Filter as NostrFilter } from 'nostr-tools';
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
+	import { parseRelays, getThemeClass } from 'nostr-web-components/utils/utils.js';
 	import { connected } from 'nostr-web-components/core/connected.js';
 	import { encodeEventToNevent, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
 
@@ -11,7 +12,7 @@
 	import type { Display, Theme, UserProfile } from 'nostr-web-components/index.js';
 
 	export let filters: string = '[]';
-	export let relays: string[] | string[] = [];
+	export let relays: string[] | string = [];
 	export let theme: Theme = 'auto';
 	export let limit: any = 50;
 	export let height: string | undefined = undefined;
@@ -19,23 +20,8 @@
 	export let target: string = '_blank';
 	export let noLink: boolean = false;
 	export let display: Display = 'card';
-	let relaysArray: string[] = [];
-	// propsからリレー配列に変換
-	$: {
-		try {
-			if (typeof relays === 'string') {
-				relaysArray = JSON.parse(relays);
-			} else if (Array.isArray(relays)) {
-				relaysArray = relays;
-			} else {
-				relaysArray = [];
-			}
-		} catch {
-			relaysArray = [];
-		}
-	}
-	// 変換された数値を格納する変数
-	let parsedLimit = 50;
+
+	$: relaysArray = parseRelays(relays);
 	$: {
 		try {
 			const n = Number(limit);
@@ -44,14 +30,9 @@
 			parsedLimit = 50;
 		}
 	}
-	let themeClass = '';
+	$: themeClass = getThemeClass(theme);
 
-	$: if (theme === 'auto') {
-		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-		themeClass = prefersDark ? 'theme-dark' : 'theme-light';
-	} else {
-		themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
-	}
+	let parsedLimit = 50;
 
 	let events: NostrEvent[] = [];
 	let metadataMap: Map<string, UserProfile> = new Map();

@@ -4,8 +4,8 @@
 	import 'nostr-web-components/style.css';
 
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
-
-	import { connected } from 'nostr-web-components/core/connected.js'; // initialize呼び出し用アクション
+	import { parseRelays, getThemeClass } from 'nostr-web-components/utils/utils.js';
+	import { connected } from 'nostr-web-components/core/connected.js';
 
 	import Note from './Data/Note.svelte';
 	import Profile from './Data/Profile.svelte';
@@ -20,40 +20,16 @@
 	export let theme: Theme = 'auto';
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
-	let relaysArray: string[] = [];
-	// propsからリレー配列に変換
-	$: {
-		try {
-			if (typeof relays === 'string') {
-				relaysArray = JSON.parse(relays);
-			} else if (Array.isArray(relays)) {
-				relaysArray = relays;
-			} else {
-				relaysArray = [];
-			}
-		} catch {
-			relaysArray = [];
-		}
-	}
-	let themeClass = '';
 
-	$: if (theme === 'auto') {
-		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-		themeClass = prefersDark ? 'theme-dark' : 'theme-light';
-	} else {
-		themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
-	}
+	$: relaysArray = parseRelays(relays);
+	$: themeClass = getThemeClass(theme);
 
 	let mounted = false;
 
 	$: linkUrl = resolveUrl(href, id, 'https://njump.me/{id}');
 
 	function initialize() {
-		//console.log('[nostr-note] initialize called');
-		//	console.log('[nostr-note] id =', id);
-
 		if (mounted || !id) {
-			console.warn('[nostr-note] Skipping initialize: mounted =', mounted, ', id =', id);
 			return;
 		}
 		mounted = true;

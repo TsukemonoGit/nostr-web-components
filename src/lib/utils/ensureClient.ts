@@ -1,4 +1,4 @@
-// utils/ensureClient.ts
+// src/lib/utils/ensureClient.ts
 import { NostrClient } from 'nostr-web-components/core/NostrClient.js';
 import { get } from 'svelte/store';
 import { nostrClient } from './store.js';

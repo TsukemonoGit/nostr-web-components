@@ -3,14 +3,12 @@
 <script lang="ts">
 	import type { Display, Theme } from 'nostr-web-components/index.js';
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
-
+	import { parseRelays, getThemeClass, resolveToPubkey } from 'nostr-web-components/utils/utils.js';
 	import { connected } from 'nostr-web-components/core/connected.js';
 
 	import Profile from './Data/Profile.svelte';
-	import { resolveToPubkey } from 'nostr-web-components/utils/utils.js';
 	import Kind0 from './KindsEvent/Kind0.svelte';
 
-	// Nostrの識別子（npub1~、nevent1~、またはNIP-05アドレス）
 	export let user: string = '';
 	export let relays: string[] | string = [];
 	export let href: string | null = null;
@@ -19,32 +17,12 @@
 	export let display: Display = 'card';
 	export let theme: Theme = 'auto';
 	export let height: string | undefined = undefined;
-	let relaysArray: string[] = [];
-	// propsからリレー配列に変換
-	$: {
-		try {
-			if (typeof relays === 'string') {
-				relaysArray = JSON.parse(relays);
-			} else if (Array.isArray(relays)) {
-				relaysArray = relays;
-			} else {
-				relaysArray = [];
-			}
-		} catch {
-			relaysArray = [];
-		}
-	}
+
 	let mounted = false;
 
-	let themeClass = '';
+	$: relaysArray = parseRelays(relays);
+	$: themeClass = getThemeClass(theme);
 
-	$: if (theme === 'auto') {
-		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-		themeClass = prefersDark ? 'theme-dark' : 'theme-light';
-	} else {
-		themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
-	}
-	// 接続時の初期化処理（onMountの代替）
 	function initialize() {
 		if (mounted || !user) return;
 		mounted = true;
