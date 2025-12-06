@@ -35,6 +35,10 @@
 		"./style.css": "./dist/nostr-web-components.css"
 	},
 	"types": "./dist/types/index.d.ts",
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
 	"peerDependencies": {
 		"svelte": "^5.0.0"
 	},
