@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
+          # OIDCを使用する場合、always-authをtrueに設定
+          always-auth: true
 
       - run: npm ci
 
@@ -24,5 +26,6 @@ jobs:
       - run: npm run build
 
       # ビルドが成功したら公開
-      # OIDCを使用する場合、NODE_AUTH_TOKENは不要（setup-nodeが自動的にOIDCトークンを使用）
+      # OIDCを使用する場合、setup-nodeが自動的にOIDCトークンを使用
+      # npm側でOIDCプロバイダーを設定する必要があります
       - run: npm publish --provenance --access public
