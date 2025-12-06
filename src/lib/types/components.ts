@@ -1,5 +1,7 @@
-import { type Event as NostrEvent } from 'nostr-typedef';
 // src/types/components.ts
+import { type Event as NostrEvent } from 'nostr-typedef';
+import type { NostrClient } from 'nostr-web-components/core/NostrClient.js';
+
 export interface NostrComponentConfig {
 	relays?: string[];
 	timeout?: number;
@@ -9,7 +11,7 @@ export interface NostrComponentConfig {
 }
 
 export interface NostrContainerElement extends HTMLElement {
-	getClient(): import('nostr-web-components/core/NostrClient.ts').NostrClient | null;
+	getClient(): NostrClient | null;
 }
 
 export interface NostrNoteElement extends HTMLElement {
@@ -24,7 +26,7 @@ export interface NostrProfileElement extends HTMLElement {
 
 export interface NostrClientReadyEvent extends CustomEvent {
 	detail: {
-		client: import('nostr-web-components/core/NostrClient.ts').NostrClient;
+		client: NostrClient;
 	};
 }
 
