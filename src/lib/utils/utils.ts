@@ -3,10 +3,9 @@ import { nip05, nip19 } from 'nostr-tools';
 export const defaultRelays = ['wss://relay.nostr.band', 'wss://nos.lol'];
 
 export function parseNaddr(tag: string[]): nip19.AddressPointer {
-	const [, reference, relay] = tag; // 配列の2番目の要素を取り出す
-	const [kind, pubkey, ...identifierParts] = reference.split(':'); // referenceをコロンで分割, identifierの中に:が含まれる可能性がある
-	const identifier = identifierParts.join(':'); // identifierの部分を結合する
-	//console.log(identifier);
+	const [, reference, relay] = tag;
+	const [kind, pubkey, ...identifierParts] = reference.split(':');
+	const identifier = identifierParts.join(':');
 	return relay !== undefined && relay !== ''
 		? {
 				kind: Number(kind),
@@ -78,13 +77,12 @@ export async function resolveToPubkey(user: string | undefined): Promise<string 
 	return pubkey;
 }
 /**
- * user string を pubkey (hex) に解決する
+ * noteId string を note ID (hex) に解決する
  */
 export function resolveToNoteId(noteId: string | undefined): string | null {
 	if (!noteId) return null;
 	let actualNoteId: string | null = noteId;
 
-	//	console.log('fetchnote');
 	try {
 		if (noteId.startsWith('nevent') || noteId.startsWith('note')) {
 			const decoded = nip19.decode(noteId);
@@ -110,7 +108,6 @@ export const hexRegex = /^[0-9a-f]{64}$/;
 export const repostedId = (
 	tags: string[][]
 ): { tag: string[] | undefined; kind: number | undefined } => {
-	//console.log(tags);
 	const kindtag = tags.find((tag) => tag[0] === 'k');
 	const kind = kindtag ? Number(kindtag[1]) : undefined;
 	return {
@@ -132,3 +129,31 @@ export const getWarningTag = (tags: string[][]): string[] | undefined => {
 		return undefined;
 	}
 };
+
+/**
+ * Parse relays prop from string or array to string array
+ */
+export function parseRelays(relays: string[] | string | undefined): string[] {
+	if (!relays) return [];
+	if (Array.isArray(relays)) return relays;
+	if (typeof relays === 'string') {
+		try {
+			const parsed = JSON.parse(relays);
+			return Array.isArray(parsed) ? parsed : [];
+		} catch {
+			return [];
+		}
+	}
+	return [];
+}
+
+/**
+ * Get theme class based on theme prop
+ */
+export function getThemeClass(theme: 'light' | 'dark' | 'auto'): string {
+	if (theme === 'auto') {
+		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+		return prefersDark ? 'theme-dark' : 'theme-light';
+	}
+	return theme === 'dark' ? 'theme-dark' : 'theme-light';
+}

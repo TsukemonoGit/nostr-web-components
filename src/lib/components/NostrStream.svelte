@@ -4,15 +4,12 @@
 <script lang="ts">
 	import 'nostr-web-components/style.css';
 	import { encodeEventToNevent, resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
+	import { parseRelays, getThemeClass } from 'nostr-web-components/utils/utils.js';
 	import { connected } from 'nostr-web-components/core/connected.js';
 	import NoteEventRenderer from './KindsEvent/NoteEventRenderer.svelte';
-
 	import Profile from './Data/Profile.svelte';
-
 	import type { Display, Status, Theme } from 'nostr-web-components/index.js';
-
 	import type { Subscription } from 'rxjs';
-
 	import { ensureClient } from 'nostr-web-components/utils/ensureClient.js';
 	import * as Nostr from 'nostr-typedef';
 
@@ -25,23 +22,8 @@
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
 	export let limit: any = 50;
-	let relaysArray: string[] = [];
-	// propsからリレー配列に変換
-	$: {
-		try {
-			if (typeof relays === 'string') {
-				relaysArray = JSON.parse(relays);
-			} else if (Array.isArray(relays)) {
-				relaysArray = relays;
-			} else {
-				relaysArray = [];
-			}
-		} catch {
-			relaysArray = [];
-		}
-	}
-	// 変換された数値を格納する変数
-	let parsedLimit = 50;
+
+	$: relaysArray = parseRelays(relays);
 	$: {
 		try {
 			const n = Number(limit);
@@ -50,15 +32,9 @@
 			parsedLimit = 50;
 		}
 	}
-	let themeClass = '';
-	$: {
-		if (theme === 'auto') {
-			const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-			themeClass = prefersDark ? 'theme-dark' : 'theme-light';
-		} else {
-			themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
-		}
-	}
+	$: themeClass = getThemeClass(theme);
+
+	let parsedLimit = 50;
 	let error: string;
 	let mounted = false;
 	let sub: Subscription;

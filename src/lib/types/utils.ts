@@ -1,6 +1,5 @@
+// src/lib/types/utils.ts
 import { type Event as NostrEvent } from 'nostr-typedef';
-
-// src/types/utils.ts
 
 export interface ParsedContent {
 	text: string;

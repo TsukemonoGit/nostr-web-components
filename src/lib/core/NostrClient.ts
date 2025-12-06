@@ -1,4 +1,4 @@
-// src/core/NostrClient.ts
+// src/lib/core/NostrClient.ts
 import {
 	createRxBackwardReq,
 	createRxForwardReq,
@@ -36,11 +36,6 @@ export class NostrClient {
 		};
 		this.rxNostr = createRxNostr({ verifier, eoseTimeout: config.timeout || 5000 });
 		this.rxNostr.setDefaultRelays(this.config.relays || defaultRelays);
-		//	console.log(this.rxNostr.getDefaultRelays());
-
-		// this.rxNostr.createConnectionStateObservable().subscribe((packet) => {
-		// 	console.log(`${packet.from} の接続状況が ${packet.state} に変化しました。`);
-		// });
 	}
 	setDefaultRelays(list: string[]) {
 		this.rxNostr.setDefaultRelays(list);
@@ -51,12 +46,10 @@ export class NostrClient {
 		expectSingle = false
 	): Promise<NostrEvent[]> {
 		const currentRelays = this.rxNostr.getDefaultRelays();
-		//console.log(currentRelays);
 		if (Object.keys(currentRelays).length === 0) {
 			this.rxNostr.setDefaultRelays(this.config.relays || defaultRelays);
 		}
 		const rxReq = createRxBackwardReq();
-		//console.log('fetch', filters, relays, this.rxNostr.getAllRelayStatus());
 		return new Promise(async (resolve, reject) => {
 			const events: NostrEvent[] = [];
 			const timeout = setTimeout(
@@ -77,13 +70,11 @@ export class NostrClient {
 
 			const subscription = pipeOperators.subscribe({
 				next: (packet: EventPacket) => {
-					//console.log(packet);
 					if (packet.event) {
 						events.push(packet.event);
-						// 単一のイベントを期待する場合は即座に完了
 						if (expectSingle) {
 							clearTimeout(timeout);
-							subscription.unsubscribe(); // subscription を明示的に終了
+							subscription.unsubscribe();
 							resolve([packet.event]);
 						}
 					}
@@ -98,9 +89,7 @@ export class NostrClient {
 				}
 			});
 
-			//	console.log('emit filters:', filters);
 			rxReq.emit(filters);
-			//	console.log('called rxReq.over()');
 			rxReq.over();
 		});
 	}
@@ -114,7 +103,6 @@ export class NostrClient {
 		if (this.noteCache.has(actualNoteId)) {
 			return this.noteCache.get(actualNoteId)!;
 		}
-		//	console.log(actualNoteId, relays);
 		const results = await this.fetchByFilters([{ ids: [actualNoteId], limit: 1 }], relays, true);
 		const event = results[0] ?? null;
 
@@ -156,9 +144,7 @@ export class NostrClient {
 			const targetRelays =
 				relays || (decoded.data.relays?.length ? decoded.data.relays : undefined);
 
-			// イベントを取得（最新の1つを期待）
 			const results = await this.fetchByFilters([filter], targetRelays);
-			console.log(results);
 			const event = results[0] ?? null;
 
 			// キャッシュに保存
@@ -203,7 +189,6 @@ export class NostrClient {
 		return null;
 	}
 
-	// NostrClient.ts に追加するメソッド
 	createUpstream(
 		limit: number,
 		relays?: string[]
@@ -221,7 +206,6 @@ export class NostrClient {
 		const observable =
 			(relays?.length ?? 0) > 0 ? this.rxNostr.use(rxReq, { relays }) : this.rxNostr.use(rxReq);
 
-		// オペレータで整形した observable を返す
 		const events$ = observable.pipe(uniq(), scanArray(limit));
 
 		return {

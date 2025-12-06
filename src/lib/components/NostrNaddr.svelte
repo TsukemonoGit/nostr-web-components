@@ -2,28 +2,20 @@
 
 <script lang="ts">
 	import 'nostr-web-components/style.css';
-
 	import { resolveUrl } from 'nostr-web-components/utils/urlUtils.js';
-
-	import { connected } from 'nostr-web-components/core/connected.js'; // initialize呼び出し用アクション
-	import { resolveToPubkey } from 'nostr-web-components/utils/utils.js';
+	import { parseRelays, getThemeClass, resolveToPubkey } from 'nostr-web-components/utils/utils.js';
+	import { connected } from 'nostr-web-components/core/connected.js';
 	import Profile from './Data/Profile.svelte';
-
 	import type { Display, Theme } from 'nostr-web-components/index.js';
 	import Naddr from './Data/Naddr.svelte';
 	import { nip19 } from 'nostr-tools';
 	import AddrOrReplaceable from './KindsEvent/AddrOrReplaceable.svelte';
 
-	// naddr文字列パラメータ
 	export let naddr: string = '';
-
-	// 個別パラメータ
 	export let kind: number | undefined = undefined;
-	export let user: string = ''; //これをuserに
+	export let user: string = '';
 	export let identifier: string = '';
-
 	export let sortOrder: 'normal' | 'reverse' = 'normal';
-
 	export let itemsPerPage: number = 10;
 	export let relays: string[] | string = [];
 	export let href: string | null = null;
@@ -32,33 +24,12 @@
 	export let theme: Theme = 'auto';
 	export let height: string | undefined = undefined;
 	export let display: Display = 'card';
-	let relaysArray: string[] = [];
-	// propsからリレー配列に変換
-	$: {
-		try {
-			if (typeof relays === 'string') {
-				relaysArray = JSON.parse(relays);
-			} else if (Array.isArray(relays)) {
-				relaysArray = relays;
-			} else {
-				relaysArray = [];
-			}
-		} catch {
-			relaysArray = [];
-		}
-	}
+
+	$: relaysArray = parseRelays(relays);
 	$: parsedItemsPerPage = typeof itemsPerPage === 'string' ? Number(itemsPerPage) : itemsPerPage;
+	$: themeClass = getThemeClass(theme);
 
 	let pubkey: string = '';
-
-	let themeClass = '';
-
-	$: if (theme === 'auto') {
-		const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-		themeClass = prefersDark ? 'theme-dark' : 'theme-light';
-	} else {
-		themeClass = theme === 'dark' ? 'theme-dark' : 'theme-light';
-	}
 
 	let mounted = false;
 

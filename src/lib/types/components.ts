@@ -1,4 +1,4 @@
-// src/types/components.ts
+// src/lib/types/components.ts
 import { type Event as NostrEvent } from 'nostr-typedef';
 import type { NostrClient } from 'nostr-web-components/core/NostrClient.js';
 

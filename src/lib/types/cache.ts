@@ -1,4 +1,4 @@
-// src/types/cache.ts
+// src/lib/types/cache.ts
 export interface CacheEntry<T> {
   data: T;
   timestamp: number;

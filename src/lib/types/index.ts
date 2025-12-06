@@ -1,4 +1,4 @@
-// src/types/index.ts
+// src/lib/types/index.ts
 import { type Event as NostrEvent } from 'nostr-typedef';
 export * from 'nostr-web-components/types/components.js';
 export * from 'nostr-web-components/types/utils.js';
