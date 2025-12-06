@@ -23,9 +23,6 @@ jobs:
       # 追加: ビルド実行
       - run: npm run build
 
-  
-
       # ビルドが成功したら公開
+      # OIDCを使用する場合、NODE_AUTH_TOKENは不要（setup-nodeが自動的にOIDCトークンを使用）
       - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
