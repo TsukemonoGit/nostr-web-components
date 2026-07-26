@@ -125,7 +125,7 @@
 			{themeClass}
 			{noLink}
 			{linkUrl}
-			display={'name'}
+			display={'name' as Display}
 			{target}
 			{status}
 		/>
@@ -148,7 +148,7 @@
 	{/if}
 	{#if isListKind(note.kind)}
 		<div class="list-content">
-			{#each pagination.items as tag}
+			{#each pagination.items as tag, index (`${tag.join(':')}-${index}`)}
 				<ListTagItem {tag} {href} {themeClass} {theme} {display} {noLink} />
 			{/each}
 		</div>
@@ -170,7 +170,7 @@
 
 					<div class="page-numbers">
 						{#if totalPages <= 5}
-							{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+							{#each Array.from({ length: totalPages }, (_, i) => i + 1) as page, index (index)}
 								<button
 									class="pagination-btn page-btn {currentPage === page ? 'active' : ''}"
 									onclick={() => goToPage(page)}
@@ -189,7 +189,7 @@
 							{#each Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
 								const start = Math.max(1, Math.min(currentPage - 1, totalPages - 2));
 								return start + i;
-							}) as page}
+							}) as page, index (index)}
 								{#if page >= 1 && page <= totalPages}
 									<button
 										class="pagination-btn page-btn {currentPage === page ? 'active' : ''}"
@@ -221,7 +221,7 @@
 				</div>
 			</div>
 		{/if}
-	{:else}
+	{:else if note.kind !== 30023 && note.kind !== 30024}
 		<div class="unsupported-kind {themeClass}">Unsupported kind</div>
 	{/if}
 </div>
