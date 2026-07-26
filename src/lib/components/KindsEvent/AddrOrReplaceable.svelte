@@ -148,7 +148,7 @@
 	{/if}
 	{#if isListKind(note.kind)}
 		<div class="list-content">
-			{#each pagination.items as tag, index (index)}
+			{#each pagination.items as tag, index (`${tag.join(':')}-${index}`)}
 				<ListTagItem {tag} {href} {themeClass} {theme} {display} {noLink} />
 			{/each}
 		</div>
